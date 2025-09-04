@@ -3,12 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Basic Web Page</title>
+    <title>Musical Chord Progression Generator</title>
 </head>
+
+
 <body>
+
+    <!-- loads script randomGen.js for use inside this HTML file -->
+    <script src="randomGen.js"></script>
+
     <header>
-        <h1>Basic webpage</h1>
+        <h1>Musical Chord Progression Generator</h1>
     </header>
+
+    <!-- id="ranNum" comes form genRandomNumber function in randomGen.js -->
+    <!-- onclick runs function genRandomNumber() from randomGen.js -->
+    <h1>Random Number</h1>
+    <p id="ranNum"></p>
+    <button onclick="genRandomNumber()">Generate Number</button>
+
 
     <main>
     </main>
