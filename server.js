@@ -8,7 +8,7 @@ const PORT = 3000;
 const URL = 'http://localhost:' + PORT;
 const PAGES_DIR = path.join(__dirname, 'src/pages');
 
-app.use(express.static(PAGES_DIR)); // Work only with files in 'public' folder
+app.use(express.static('src')); // Work only with files in 'src'
 
 /* ------------------------------------------- Routes ------------------------------------------- */
 
