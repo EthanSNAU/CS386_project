@@ -9,6 +9,9 @@
 
 <body>
 
+    <!-- loads script romanNumGen.js for use inside this HTML file -->
+    <script src="scripts/romanNumGen.js"></script>
+
     <!-- loads script randomGen.js for use inside this HTML file -->
     <script src="scripts/randomGen.js"></script>
 
@@ -22,6 +25,11 @@
     <p id="ranNum"></p>
     <button onclick="genRandomNumber()">Generate Number</button>
 
+    <!-- id="romanNum" comes from genRomanNumeral function in romanNumGen.js-->
+    <!-- onclick runs function genRomanNumeral() from romanNumGen.js-->
+    <h1>Random Roman Number Numeral</h1>
+    <p id="romanNum"></p>
+    <button onclick="genRomanNumeral()">Generate Roman Numeral</button>
 
     <main>
     </main>
@@ -29,4 +37,5 @@
 </body>
 
 </html>
+
 
