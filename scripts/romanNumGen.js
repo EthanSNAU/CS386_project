@@ -10,16 +10,30 @@ function genRomanNumeral() {
     // roman numerals from I to VII
     const romanNumerals = ["I", "II", "III", "IV", "V", "VI", "VII"];
 
-    // generate a random index between 0 and 6
-    const index = Math.floor(Math.random() * romanNumerals.length);
+    let result = "";
 
-    // get the Roman numeral
-    const romanNumeral = romanNumerals[index];
+    //loop 4 times to build the string
+    for(let i = 0; i < 4; i++){
+        // generate a random index between 0 and 6
+        const index = Math.floor(Math.random() * romanNumerals.length);
+
+        // get the Roman numeral
+        const romanNumeral = romanNumerals[index];
+
+        // add it to the result string
+        result += romanNumeral + " ";
+    }
+
 
     // display it on the webpage
     const displayElement = document.getElementById('romanNum');
-    displayElement.textContent = romanNumeral;
-
+    displayElement.textContent = result.trim();
+    
+    //get rid of any whitespace
+    complete_string = result.trim();
+    
     // return
-    return romanNumeral;
+    return complete_string;
 }
+
+
