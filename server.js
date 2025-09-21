@@ -6,9 +6,9 @@ const path = require('path'); // File path utilities
 const app = express(); // create Express instance
 const PORT = 3000;
 const URL = 'http://localhost:' + PORT;
-const PAGES_DIR = path.join(__dirname, 'src/pages');
+const PAGES_DIR = path.join(__dirname, 'public/pages');
 
-app.use(express.static('src')); // Work only with files in 'src'
+app.use(express.static('public')); // Work only with files in 'public'
 
 /* ------------------------------------------- Routes ------------------------------------------- */
 
