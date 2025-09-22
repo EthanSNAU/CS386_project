@@ -31,7 +31,10 @@ function genRomanNumeral() {
     
     //get rid of any whitespace
     complete_string = result.trim();
-    
+
+    console.log(result);
+
+
     // return
     return complete_string;
 }
