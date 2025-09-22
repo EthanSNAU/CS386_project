@@ -83,6 +83,6 @@ Interview 09
 **Interviewed:** Dominic Laubacher  
 **Interviewer:** Marcus Luca**Date:** 09/18/25**Customer Segment:** Voice Performance major at NAU**  
 Key Insights:** Most of their time is spent performing and even though certain homework assignments for music theory require him to use different chord progressions there are lists readily available for him to pick and choose from.**Representative quotes:** “This sort of software doesn't really help me with homework assignments and doesn’t have a practical use in my life something like this i can quickly ”**  
-Assessment:** Must have / Nice to have / Don’t care
+Assessment:** Must have / Nice to have / Don’t care /
 
 ## **4\.** Final value proposition and customer segments
