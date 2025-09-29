@@ -92,3 +92,35 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
     <li>The system displays an error message identifying invalid parameters
     <li>The system allows the musician to place new parameters and try again
 </ol>
+
+**Use Case:** Interacting with Live Player <br>
+**Actors:** Musician <br>
+**Description:** The musician interacts with a live audio player to play, pause, stop, or adjust the chord progression in real time. <br>
+
+**Pre-Condition:** 
+<ol>
+<li>The musician enters the website
+<li>The musician is logged in
+<li>A chord progression is available for playback
+</ol>
+
+**Post-Condition:** 
+<ol>
+<li>The live player reflects the musician’s interactions
+<li>The musician hears real-time adjustments to playback
+</ol>
+
+**Main flow:**
+<ol>
+<li>The musician selects desire chord progression
+<li>The musician selects “Play in Live Player” option
+<li>The musician performs actions (play, pause, stop, adjust volume, etc.)
+<li>The system applies changes instantly in playback
+</ol>
+
+**Alternative flows:**
+3a. Live player fails to load
+<ol>
+<li>The system displays an error message
+<li>The musician is asked to try again
+</ol>
