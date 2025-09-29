@@ -59,3 +59,36 @@ Other similar apps set the bar for what [app name] should provide to the user.  
 
 ## 5. MVP
 The minimum viable product (MVP) for [app name] will prioritize the user's ability to create, modify, and listen to their chord progressions.  This means that key/scale/complexity selection, individual note modification and listening will come first, with the piano being the default instrument. From there, we’ll perform interviews revolving around the product and play it by ear, asking if they are satisfied with their experience and what else they’d want to see in the app, if anything.  In the absence of user feedback, functional requirements will be implemented going down the list (with the topmost ones holding more priority).  If feedback is present, functional requirements will be modified to suit the needs of a wider user base.  Afterwards, the process will be repeated, gathering more user feedback via interviews or online means (eg. Google Forms).
+
+## 6. Use Cases
+### 6.1 use case diagram
+### 6.2 Use case descriptions and interface sketch
+**Use Case:** Generate Chord Progression <br>
+**Actors:** Musician <br>
+**Description:** This use case allows the musician to automatically generate a new chord progression based on chosen parameters such as key, style, and complexity. The system provides a starting point for musical ideas that the musician can further adjust, save, and use in their creative process. <br>
+
+**Pre-Condition:**
+<ol>
+    <li>The musician enters the website
+    <li>The musician is logged in
+</ol>
+
+**Post-Condition:**
+<ol>
+    <li>The musician can see the generated chord progression 
+    <li>The musician is able to modify it to their needs
+    <li>The musician can save the chord progression to their account
+</ol>
+
+**Alternative flows:** <br>
+
+2a. The musician closes the generate window
+<ol>
+     <li>The system brings the musician back to the main page
+</ol>
+3a.	Invalid parameters provided
+<ol>
+    <li>The system can’t generate the chord progression
+    <li>The system displays an error message identifying invalid parameters
+    <li>The system allows the musician to place new parameters and try again
+</ol>
