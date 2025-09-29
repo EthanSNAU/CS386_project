@@ -68,59 +68,151 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 **Description:** This use case allows the musician to automatically generate a new chord progression based on chosen parameters such as key, style, and complexity. The system provides a starting point for musical ideas that the musician can further adjust, save, and use in their creative process. <br>
 
 **Pre-Condition:**
-<ol>
-    <li>The musician enters the website
-    <li>The musician is logged in
-</ol>
+
+- The musician enters the website
+- The musician is logged in
 
 **Post-Condition:**
-<ol>
-    <li>The musician can see the generated chord progression 
-    <li>The musician is able to modify it to their needs
-    <li>The musician can save the chord progression to their account
-</ol>
+
+- The musician can see the generated chord progression 
+- The musician is able to modify it to their needs
+- The musician can save the chord progression to their account
 
 **Alternative flows:** <br>
 
 2a. The musician closes the generate window
-<ol>
-     <li>The system brings the musician back to the main page
-</ol>
+
+     -The system brings the musician back to the main page
+     
 3a.	Invalid parameters provided
-<ol>
-    <li>The system can’t generate the chord progression
-    <li>The system displays an error message identifying invalid parameters
-    <li>The system allows the musician to place new parameters and try again
-</ol>
+
+- The system can’t generate the chord progression
+- The system displays an error message identifying invalid parameters
+- The system allows the musician to place new parameters and try again
 
 **Use Case:** Interacting with Live Player <br>
 **Actors:** Musician <br>
 **Description:** The musician interacts with a live audio player to play, pause, stop, or adjust the chord progression in real time. <br>
 
 **Pre-Condition:** 
-<ol>
-<li>The musician enters the website
-<li>The musician is logged in
-<li>A chord progression is available for playback
-</ol>
+
+- The musician enters the website
+- The musician is logged in
+- A chord progression is available for playback
 
 **Post-Condition:** 
-<ol>
-<li>The live player reflects the musician’s interactions
-<li>The musician hears real-time adjustments to playback
-</ol>
+
+- The live player reflects the musician’s interactions
+- The musician hears real-time adjustments to playback
 
 **Main flow:**
-<ol>
-<li>The musician selects desire chord progression
-<li>The musician selects “Play in Live Player” option
-<li>The musician performs actions (play, pause, stop, adjust volume, etc.)
-<li>The system applies changes instantly in playback
-</ol>
+
+- The musician selects desire chord progression
+- The musician selects “Play in Live Player” option
+- The musician performs actions (play, pause, stop, adjust volume, etc.)
+- The system applies changes instantly in playback
 
 **Alternative flows:**
 3a. Live player fails to load
-<ol>
-<li>The system displays an error message
-<li>The musician is asked to try again
-</ol>
+- The system displays an error message
+- The musician is asked to try again
+
+
+**Use Case:** Export to relevant Audio format <br>
+**Actors:** Musician <br>
+**Description:** This use case enables the musician to convert a generated or saved chord progression into a downloadable audio file (e.g., WAV, MP3, MIDI). The exported file can then be stored on the musician's personal device for playback, sharing, or integration into other music software. <br>
+
+**Pre-Condition:**
+
+- The musician enters the website
+- The musician is logged in
+- The musician has a chord progression ready to be exported
+
+**Post-Condition:**
+
+- The musician will have their chord progression as a file
+- The musician is able to save this file on their personal device
+
+**Main flow:**
+
+- The musician selects desired chord progression
+- The musician selects "Export as…" option
+- The musician selects desired parameters of the export (name, file extension, etc.)
+- The musician selects "Export" option
+- The system creates the file
+- The musician selects "Download" option
+
+**Alternative flows:**
+
+3a. Musician cancels export
+
+- The system brings the musician back to the previous window
+
+4a. Invalid parameters provided
+
+- The system can't export chord progression
+- The system displays an error message identifying invalid parameters
+- The system allows the musician to place new parameters and try again
+
+5a. Website not responding
+
+- The system displays an error message and ask the musician to try again
+
+**Use Case:** Access previous saved chord progressions <br>
+**Actors:** Musician <br>
+**Description:** The musician retrieves and reviews chord progressions saved in their account. <br>
+
+**Pre-Condition:**
+
+- The musician enters the website
+- The musician is logged in
+- The musician has previously saved chord progressions
+
+**Post-Condition:**
+
+- The musician can view, play, adjust, or export saved chord progressions
+
+**Main flow:**
+
+- The musician selects "My Saved Progressions"
+- The system displays a list of previously saved chord progressions
+- The musician selects desired chord progression
+- The system loads the chord progression for review or editing
+
+**Alternative flows:**
+
+3a. No saved chord progressions exist
+
+- The system displays a message
+- The musician is given the option to create a new chord progression
+
+**Use Case:** Adjust Parameters <br>
+**Actors:** Musician <br>
+**Description:** The musician customizes the generated chord progression by modifying the parameters such as tempo, key, style, or instrument sound. <br>
+
+**Pre-Condition:**
+
+- The musician enters the website
+- The musician is logged in
+- The musician has a chord progression already generated
+
+**Post-Condition:**
+
+- The chord progression is updated to reflect new parameters
+- The musician can continue playback, export, or save the adjusted progression
+
+**Main flow:**
+
+- The musician opens desired chord progression
+- The musician opens the parameter adjustment window
+- The musician adjust parameters of the chord progression
+- The system applies changes and updates the chord progression
+- The musician confirms adjustments
+
+**Alternative flows:**
+
+3a. Invalid parameter values provided
+
+- The system displays an error message
+- The system allows the musician to correct the values and try again
+
