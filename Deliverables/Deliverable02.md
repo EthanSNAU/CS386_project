@@ -216,3 +216,40 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 - The system displays an error message
 - The system allows the musician to correct the values and try again
 
+**Use Case:** Log in <br>
+**Actors:** Musician <br>
+**Description:** The musician authenticates with the system to access features requiring an account <br>
+
+**Pre-Condition:**
+
+- The musician enters the website
+
+**Post-Condition:**
+
+- The musician is able to log into their account and can access all features tied to the account
+
+**Main flow:**
+
+- The musician selects "Log In" option
+- The system prompts for username/email and password
+- The musician enters valid credentials
+- The system verifies the credentials
+- The musician gains access to their account
+
+**Alternative flows:**
+
+3a. Invalid credentials provided
+
+- The system displays an error message
+- The system allows the musician to retry
+
+3b. Forgot password selected
+
+- The system directs the musician to password recovery
+
+3c. Sign up selected
+
+- The system directs the musician to create a new account
+- The musician provides their credentials
+- The system validates these credentials
+- The system brings the musician to the log in screen to log in
