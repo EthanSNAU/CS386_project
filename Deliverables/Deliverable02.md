@@ -253,3 +253,53 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 - The musician provides their credentials
 - The system validates these credentials
 - The system brings the musician to the log in screen to log in
+
+## 7. User Stories
+
+1. As a Musician, I want to decide the key of the chord progression so that I can narrow in on the emotional tonality I desire
+- Priority: 8/10
+- Number of hours: 1
+
+2. As a Musician, I want to export my generated chord progression to midi so that I can use it in my DAW
+- Priority: 5/10
+- Number of hours: 20
+
+3. As a Musician, I want to be able to hear the chord progression in real time so that I can decide if I like it
+- Priority: 2/10
+- Number of hours: 256
+
+4. As a Musician, I want to save my chord progression so that I can use it later to create a piece using that progression
+- Priority: 3/10
+- Number of hours: 20
+
+5. As a Musician, I want to use inversions so that I can get more complex emotions from my chords
+- Priority: 7/10
+- Number of hours: 5
+
+6. As a Piano student, I want a tool to help me practice chord naming so that I can work on my chord naming proficiency
+- Priority: 7/10
+- Number of hours: 3
+
+7. As a Worship Group Leader, I want to change the key of songs that have chords so that the whole church can sing certain songs.
+- Priority: 4 /10
+- Number of hours: 4
+
+8. As a Song Writer, I want chord progressions that I don't normally use so that the music I write does not use the same chords repeatedly.
+- Priority: 5/10
+- Number of hours: 3
+
+9. As a Jazz musician, I want to practice using less common chord progressions so that I can change keys smoothly and play well in the new key
+- Priority: 7 /10
+- Number of hours: 7
+
+10. As a music educator, I want create multiple chords progressions so that i can test students on their chord progression, and key understanding
+- Priority: 3 /10
+- Number of hours: 2
+
+11. As a beginner musician, I want to generate random chords so that I can quickly find inspiration for musical pieces without having to have a deep knowledge of music theory
+- Priority: 9/10
+- Number of hours: 2
+
+12. As a guitarist, I want to see the chord diagram for each chord so that I can immediately play it on my instrument
+- Priority: 7 /10
+- Number of hours: 4
