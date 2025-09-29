@@ -303,3 +303,6 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 12. As a guitarist, I want to see the chord diagram for each chord so that I can immediately play it on my instrument
 - Priority: 7 /10
 - Number of hours: 4
+
+## 8. Issue Tracker
+[issue tracker link](https://github.com/EthanSNAU/CS386_project/issues)
