@@ -7,10 +7,10 @@ Group 02 – “Musical Chord Progression Generator”
 The problem of difficult learning/composing of complex music affects musicians of all levels; the impact of which is their music lacking identity, or worse, the musician not understanding music at all.
 
 ### 1.2 Product Position Statement
-For musicians interested in the chord progression music theory, [app name] is a web-app music-making tool that suggests a wide range of chord progressions to the user, giving them the opportunity to listen and test suggestions on the go; unlike other music-making tools such as Hooktheory and Scaler Music, our product isolates and partially automates the process of creating chord progressions to make learning/implementing them as easy as possible.
+For musicians interested in the chord progression music theory, Musegen is a web-app music-making tool that suggests a wide range of chord progressions to the user, giving them the opportunity to listen and test suggestions on the go; unlike other music-making tools such as Hooktheory and Scaler Music, our product isolates and partially automates the process of creating chord progressions to make learning/implementing them as easy as possible.
 
 ### 1.3 Value Proposition
-Value proposition: [app name] is a web-app music-making tool that assists musicians interested in the chord progression music theory, allowing them to generate, listen to, and export chord progressions for whatever they need.
+Value proposition: Musegen is a web-app music-making tool that assists musicians interested in the chord progression music theory, allowing them to generate, listen to, and export chord progressions for whatever they need.
 Consumer segment: Musicians interested in the music theory of chord progressions
 
 ## 2. Stakeholders
@@ -24,7 +24,7 @@ Future testers/users will be responsible for evaluating the application for usab
 If trends in the music community shift, so do the most popular progressions, affecting the algorithm that suggests chord progressions to the user as well as each one’s description.
 
 <u>Competitors</u> (eg. Hooktheory and Scaler Music)<br/>
-Other similar apps set the bar for what [app name] should provide to the user.  If they set a high standard, the app needs to match—and in some aspects, surpass—that standard.
+Other similar apps set the bar for what Musegen should provide to the user.  If they set a high standard, the app needs to match—and in some aspects, surpass—that standard.
 
 ## 3. Functional requirements (features)
 <ol>
@@ -58,7 +58,7 @@ Other similar apps set the bar for what [app name] should provide to the user.  
 </ol>
 
 ## 5. MVP
-The minimum viable product (MVP) for [app name] will prioritize the user's ability to create, modify, and listen to their chord progressions.  This means that key/scale/complexity selection, individual note modification and listening will come first, with the piano being the default instrument. From there, we’ll perform interviews revolving around the product and play it by ear, asking if they are satisfied with their experience and what else they’d want to see in the app, if anything.  In the absence of user feedback, functional requirements will be implemented going down the list (with the topmost ones holding more priority).  If feedback is present, functional requirements will be modified to suit the needs of a wider user base.  Afterwards, the process will be repeated, gathering more user feedback via interviews or online means (eg. Google Forms).
+The minimum viable product (MVP) for Musegen will prioritize the user's ability to create, modify, and listen to their chord progressions.  This means that key/scale/complexity selection, individual note modification and listening will come first, with the piano being the default instrument. From there, we’ll perform interviews revolving around the product and play it by ear, asking if they are satisfied with their experience and what else they’d want to see in the app, if anything.  In the absence of user feedback, functional requirements will be implemented going down the list (with the topmost ones holding more priority).  If feedback is present, functional requirements will be modified to suit the needs of a wider user base.  Afterwards, the process will be repeated, gathering more user feedback via interviews or online means (eg. Google Forms).
 
 ## 6. Use Cases
 ### 6.1 use case diagram
@@ -83,7 +83,7 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 
 2a. The musician closes the generate window
 
-     -The system brings the musician back to the main page
+- The system brings the musician back to the main page
      
 3a.	Invalid parameters provided
 
@@ -94,6 +94,8 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 **UI mockup:**
 
 ![use01](img/use01.png)
+
+<br/>
 
 **Use Case:** Interacting with Live Player <br>
 **Actors:** Musician <br>
@@ -124,8 +126,7 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 
 **UI mockup:**
 
-
-
+<br />
 
 **Use Case:** Export to relevant Audio format <br>
 **Actors:** Musician <br>
@@ -172,6 +173,8 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 ![use02](img/use02.png)
 ![use03](img/use03.png)
 
+<br />
+
 **Use Case:** Access previous saved chord progressions <br>
 **Actors:** Musician <br>
 **Description:** The musician retrieves and reviews chord progressions saved in their account. <br>
@@ -203,6 +206,8 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 **UI mockup:**
 
 ![use06](img/use06.png)
+
+<br/>
 
 **Use Case:** Adjust Parameters <br>
 **Actors:** Musician <br>
@@ -237,6 +242,8 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 **UI mockup:**
 
 ![use04](img/use04.png)
+
+<br/>
 
 **Use Case:** Log in <br>
 **Actors:** Musician <br>
@@ -282,53 +289,53 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 
 ## 7. User Stories
 
-1. As a Musician, I want to decide the key of the chord progression so that I can narrow in on the emotional tonality I desire
+1. As a musician, I want to decide the key of the chord progression so that I can narrow in on the emotional tonality I desire
 - Priority: 8/10
 - Number of hours: 1
 
-2. As a Musician, I want to export my generated chord progression to midi so that I can use it in my DAW
+2. As a musician, I want to export my generated chord progression to midi so that I can use it in my DAW
 - Priority: 5/10
 - Number of hours: 20
 
-3. As a Musician, I want to be able to hear the chord progression in real time so that I can decide if I like it
+3. As a musician, I want to be able to hear the chord progression in real time so that I can decide if I like it
 - Priority: 2/10
 - Number of hours: 256
 
-4. As a Musician, I want to save my chord progression so that I can use it later to create a piece using that progression
+4. As a musician, I want to save my chord progression so that I can use it later to create a piece using that progression
 - Priority: 3/10
 - Number of hours: 20
 
-5. As a Musician, I want to use inversions so that I can get more complex emotions from my chords
+5. As a musician, I want to use inversions so that I can get more complex emotions from my chords
 - Priority: 7/10
 - Number of hours: 5
 
-6. As a Piano student, I want a tool to help me practice chord naming so that I can work on my chord naming proficiency
+6. As a musician, I want a tool to help me practice chord naming so that I can work on my chord naming proficiency
 - Priority: 7/10
 - Number of hours: 3
 
-7. As a Worship Group Leader, I want to change the key of songs that have chords so that the whole church can sing certain songs.
+7. As a musician, I want to change the key of songs that have chords so that the whole church can sing certain songs.
 - Priority: 4 /10
 - Number of hours: 4
 
-8. As a Song Writer, I want chord progressions that I don't normally use so that the music I write does not use the same chords repeatedly.
+8. As a musician, I want chord progressions that I don't normally use so that the music I write does not use the same chords repeatedly.
 - Priority: 5/10
 - Number of hours: 3
 
-9. As a Jazz musician, I want to practice using less common chord progressions so that I can change keys smoothly and play well in the new key
+9. As a musician, I want to practice using less common chord progressions so that I can change keys smoothly and play well in the new key
 - Priority: 7 /10
 - Number of hours: 7
 
-10. As a music educator, I want create multiple chords progressions so that i can test students on their chord progression, and key understanding
+10. As a musician, I want create multiple chords progressions so that i can test students on their chord progression, and key understanding
 - Priority: 3 /10
 - Number of hours: 2
 
-11. As a beginner musician, I want to generate random chords so that I can quickly find inspiration for musical pieces without having to have a deep knowledge of music theory
+11. As a musician, I want to generate random chords so that I can quickly find inspiration for musical pieces without having to have a deep knowledge of music theory
 - Priority: 9/10
 - Number of hours: 2
 
-12. As a guitarist, I want to see the chord diagram for each chord so that I can immediately play it on my instrument
+12. As a musician, I want to see the chord diagram for each chord so that I can immediately play it on my instrument
 - Priority: 7 /10
 - Number of hours: 4
 
 ## 8. Issue Tracker
-[issue tracker link](https://github.com/EthanSNAU/CS386_project/issues)
+[Link to issues](https://github.com/EthanSNAU/CS386_project/issues)
