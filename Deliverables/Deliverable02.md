@@ -91,6 +91,10 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 - The system displays an error message identifying invalid parameters
 - The system allows the musician to place new parameters and try again
 
+**UI mockup:**
+
+![use01](img/use01.png)
+
 **Use Case:** Interacting with Live Player <br>
 **Actors:** Musician <br>
 **Description:** The musician interacts with a live audio player to play, pause, stop, or adjust the chord progression in real time. <br>
@@ -117,6 +121,10 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 3a. Live player fails to load
 - The system displays an error message
 - The musician is asked to try again
+
+**UI mockup:**
+
+
 
 
 **Use Case:** Export to relevant Audio format <br>
@@ -159,6 +167,11 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 
 - The system displays an error message and ask the musician to try again
 
+**UI mockup:**
+
+![use02](img/use02.png)
+![use03](img/use03.png)
+
 **Use Case:** Access previous saved chord progressions <br>
 **Actors:** Musician <br>
 **Description:** The musician retrieves and reviews chord progressions saved in their account. <br>
@@ -186,6 +199,10 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 
 - The system displays a message
 - The musician is given the option to create a new chord progression
+
+**UI mockup:**
+
+
 
 **Use Case:** Adjust Parameters <br>
 **Actors:** Musician <br>
@@ -216,6 +233,10 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 
 - The system displays an error message
 - The system allows the musician to correct the values and try again
+
+**UI mockup:**
+
+![use04](img/use04.png)
 
 **Use Case:** Log in <br>
 **Actors:** Musician <br>
@@ -254,6 +275,10 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 - The musician provides their credentials
 - The system validates these credentials
 - The system brings the musician to the log in screen to log in
+
+**UI mockup:**
+
+![use05](img/use05.png)
 
 ## 7. User Stories
 
