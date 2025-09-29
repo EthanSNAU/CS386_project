@@ -126,6 +126,8 @@ The minimum viable product (MVP) for Musegen will prioritize the user's ability 
 
 **UI mockup:**
 
+![use07](img/use07.png)
+
 <br />
 
 **Use Case:** Export to relevant Audio format <br>
@@ -339,3 +341,5 @@ The minimum viable product (MVP) for Musegen will prioritize the user's ability 
 
 ## 8. Issue Tracker
 [Link to issues](https://github.com/EthanSNAU/CS386_project/issues)
+![screenshot01](img/screenshot01.jpg)
+![screenshot02](img/screenshot02.jpg)
