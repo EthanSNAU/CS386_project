@@ -62,6 +62,7 @@ The minimum viable product (MVP) for [app name] will prioritize the user's abili
 
 ## 6. Use Cases
 ### 6.1 use case diagram
+![usecase_diagram](img/usecase_diagram_FORD2.png)
 ### 6.2 Use case descriptions and interface sketch
 **Use Case:** Generate Chord Progression <br>
 **Actors:** Musician <br>
