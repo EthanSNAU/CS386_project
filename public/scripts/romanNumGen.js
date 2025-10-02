@@ -1,4 +1,4 @@
-//this script generates a random roman numeral
+// this script handles random generation 
 
 // name: genRomanNumeral
 // desc: generates a random Roman numeral between I and VII
@@ -21,7 +21,7 @@ function genRomanNumeral() {
         const romanNumeral = romanNumerals[index];
 
         // add it to the result string
-        result += romanNumeral + " ";
+        result += romanNumeral + " " ;
     }
 
 
@@ -36,4 +36,19 @@ function genRomanNumeral() {
     return complete_string;
 }
 
+
+// name: getKey
+// desc: allows user to select what key they want to be in
+// Inputs: keyName
+// Outputs: keyDisplay
+// Contributors: Ethan
+
+function getKey(keyName)
+{
+    // creates a display element for updating the webpage
+    const display = document.getElementById('keyDisplay');
+
+    //updates the display with the selected key name
+    display.textContent = `key: ${keyName}`;
+}
 
