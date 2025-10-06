@@ -7,14 +7,38 @@ const PATHS = {
     pages: "/pages/"
 }
 
+// asynchronously loads a script and returns a promise
 function loadScript(scriptName) {
-    const script = document.createElement('script');
-    script.src = PATHS.scripts + scriptName;
-    script.async = false; // make sure scripts are loaded in order
-    document.head.appendChild(script);
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = PATHS.scripts + scriptName;
+        script.async = false; // make sure scripts are loaded in order
+        
+        script.onload = () => resolve(scriptName);
+        script.onerror = () => reject(new Error("Failed to load script: " + scriptName));
+
+        document.head.appendChild(script);
+    });
 }
 
-function loadBootstrapCSS() {
+// loads scripts immediately in order
+async function loadScriptsInOrder(scriptNames) {
+    for (const name of scriptNames) {
+        await loadScript(name);
+    }
+}
+
+// use for running code after the DOM is fully loaded
+function onDomLoad(callback) {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', callback);
+    } else {
+        callback();
+    }
+}
+
+// loads bootstrap CSS
+function loadBootstrap() {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = PATHS.bootstrap;

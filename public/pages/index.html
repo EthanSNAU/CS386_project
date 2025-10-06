@@ -9,8 +9,10 @@
     
     <!-- load scripts and CSS via config.js -->
     <script>
-        loadScript("romanNumGen.js");
-        loadBootstrapCSS();
+        onDomLoad(() => {
+            loadScript("romanNumGen.js");
+            loadBootstrap();
+        });
     </script>
 
     <!-- Misc. -->
