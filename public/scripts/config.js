@@ -1,8 +1,8 @@
 // every path is relative to the 'public' directory
 const PATHS = {
     bootstrap: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
-    scripts: "/js/",
-    css: "/css/",
+    scripts: "/scripts/",
+    css: "/styles/",
     images: "/images/",
     pages: "/pages/"
 }
