@@ -13,3 +13,13 @@ function loadScript(scriptName) {
     script.async = false; // make sure scripts are loaded in order
     document.head.appendChild(script);
 }
+
+function loadBootstrapCSS() {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = PATHS.bootstrap;
+    link.integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH";
+    link.crossOrigin = "anonymous";
+
+    document.head.appendChild(link);
+}
