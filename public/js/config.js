@@ -36,14 +36,3 @@ function onDomLoad(callback) {
         callback();
     }
 }
-
-// loads bootstrap CSS
-function loadBootstrap() {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = PATHS.bootstrap;
-    link.integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH";
-    link.crossOrigin = "anonymous";
-
-    document.head.appendChild(link);
-}
