@@ -1,0 +1,25 @@
+#header {
+    position: sticky;
+    width: 100%;
+    height: var(--musegen-navbar-height);
+    padding-left: 20px;
+    padding-right: 20px;
+    top: 0;
+    background-color: var(--musegen-white);
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    gap: 10px;
+    border-bottom: 2px solid var(--musegen-black);
+}
+
+#header > .logo {
+    margin-right: auto;
+    text-decoration: none;
+    color: var(--musegen-black);
+}
+
+#header-sign-in-button {
+    background-color: var(--musegen-grey);
+    color: var(--musegen-white);
+}

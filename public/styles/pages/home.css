@@ -1,0 +1,18 @@
+#romanNumProgression {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 150px;
+    background-color: var(--musegen-black);
+    color: var(--musegen-white);
+    margin: 20px auto;
+}
+
+.romanNum {
+    margin: 0;
+    padding: 0;
+    font-size: 3em;
+    width: 80px;
+    text-align: center;
+}

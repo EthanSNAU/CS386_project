@@ -1,0 +1,34 @@
+<!-- CSS container for all elements-->
+<div class="container-fluid m-0 p-0">
+
+<!-- header-->
+<h1>Random Chord progression</h1>
+
+<!-- displays key that user selects -->
+<h2 id="keyDisplay">Key: C</h2>
+
+<!-- id="romanNum" comes from genRomanNumeral function in romanNumGen.js-->
+<!-- onclick runs function genRomanNumeral() from romanNumGen.js-->
+<div id="romanNumProgression">
+    <p id="romanNum1" class="romanNum">I</p>
+    <p id="romanNum2" class="romanNum">V</p>
+    <p id="romanNum3" class="romanNum">VI</p>
+    <p id="romanNum4" class="romanNum">IV</p>
+</div>
+<button onclick="genRomanNumeral()">Generate Roman Numeral</button>
+
+<!-- set of buttons that let the user select what key they want to be in-->
+<br/>
+<br/>
+<button onclick="getKey('C')" data-key="C">C</button>
+<button onclick="getKey('C#')" data-key="C#">C#/Db</button>
+<button onclick="getKey('D')" data-key="D">D</button>
+<button onclick="getKey('D#')" data-key="D#">D#/Eb</button>
+<button onclick="getKey('E')" data-key="E">E</button>
+<button onclick="getKey('F')" data-key="F">F</button>
+<button onclick="getKey('F#')" data-key="F#">F#/Gb</button>
+<button onclick="getKey('G')" data-key="G">G</button>
+<button onclick="getKey('G#')" data-key="G#/Ab">G#/Ab</button>
+<button onclick="getKey('A')" data-key="A">A</button>
+<button onclick="getKey('A#')" data-key="A#">A#/Bb</button>
+<button onclick="getKey('B')" data-key="B">B</button>

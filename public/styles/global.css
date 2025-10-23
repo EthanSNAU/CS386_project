@@ -1,0 +1,17 @@
+:root {
+    --musegen-orange: #EF6E50;
+    --musegen-grey: #444444;
+    --musegen-black: #000000;
+    --musegen-white: #FFFFFF;
+
+    --musegen-navbar-height: 80px;
+    --musegen-footer-height: 80px;
+}
+
+main {
+    min-height: calc(100vh - var(--musegen-navbar-height) - var(--musegen-footer-height));
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
