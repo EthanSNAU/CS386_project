@@ -1,6 +1,5 @@
 // this script handles random generation 
 const NUM_CHORDS = 4;
-
 /**
  * Generates a random integer between inclusiveMin and inclusiveMax (both inclusive)
  * @param {integer} inclusiveMin The minimum integer value (inclusive)
