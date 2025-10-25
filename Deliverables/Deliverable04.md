@@ -28,6 +28,56 @@ The minimum viable product (MVP) for Musegen focuses on the user’s ability to 
 
 [https://github.com/EthanSNAU/CS386\_project](https://github.com/EthanSNAU/CS386_project)
 
+# 2\. Implemented Requirements
+
+## 2.1 Adolfo Lopez Villanueva
+## 2.2 Benjamin Jones
+## 2.3 Christofer Vega
+## 2.4 Ethan Sudol
+## 2.5 Marcus Luca
+## 2.6 Nolan Carlisle
+
+**Pull requests**: [https://github.com/EthanSNAU/CS386\_project/issues?q=is%3Apr%20author%3ANCarlisle24](https://github.com/EthanSNAU/CS386_project/issues?q=is%3Apr%20author%3ANCarlisle24)  
+(need screenshot)
+
+### 2.6.1 Random chord generation (major and minor)
+
+**Requirement**: As a musician , I want generate random chords so that i can quickly find inspiration for musical pieces without having to have a deep knowledge of music theory  
+**Issue**: [https://github.com/EthanSNAU/CS386\_project/issues/19](https://github.com/EthanSNAU/CS386_project/issues/19)  
+**Pull request**: [https://github.com/EthanSNAU/CS386\_project/pull/26](https://github.com/EthanSNAU/CS386_project/pull/26)  
+**Implemented by**: Nolan Carlisle  
+**Approved by**: Ethan Sudol  
+**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGent.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)  
+**Visual evidence**:  
+![nolan requirement 1](img/deliverable04/nolan-requirement-1.png)
+
+### 2.6.2 Random inversion generation
+
+**Requirement**: As a musician, I want to use inversions so that I can get more complex emotions from my chords  
+**Issue**: [https://github.com/EthanSNAU/CS386\_project/issues/13](https://github.com/EthanSNAU/CS386_project/issues/13)  
+**Pull request**: [https://github.com/EthanSNAU/CS386\_project/pull/26](https://github.com/EthanSNAU/CS386_project/pull/26)  
+**Implemented by**: Nolan Carlisle  
+**Approved by**: Ethan Sudol  
+**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)  
+**Visual evidence**:  
+![nolan requirement 2](img/deliverable04/nolan-requirement-2.png)
+
+# 3\. Automated Testing
+
+## 3.1 Testing Framework
+
+**Name**: Jest  
+**Reason**: Jest grants the ability to simulate DOM elements, allowing unit/integration tests to check if display elements are being updated properly.  Additionally, in case the project scope ever expands, it offers support for many heavier frameworks (i.e. React).  
+**Location**: [https://github.com/EthanSNAU/CS386\_project/tree/tests](https://github.com/EthanSNAU/CS386_project/tree/tests)
+
+## 3.2 Example
+
+**Test performed**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)  
+**Code tested**: [https://github.com/EthanSNAU/CS386\_project/blob/main/src/public/scripts/romanNumGen.js](https://github.com/EthanSNAU/CS386_project/blob/main/src/public/scripts/romanNumGen.js)  
+**Explanation**: genRomanNumeral() is supposed to do two things: Randomly generate a string of Roman numerals (from I to VII) and update the chord progression display.  In the test below, Jest made sure that genRomanNumeral() generated the right number of chords (four in this case), returned a string of valid Roman numerals, and updated the correct display elements.  
+**Results**:  
+![automated test example](img/deliverable04/automated-test-example.png)
+
 # 4\. Technology Stack
 
 ## 4.1 HTML and CSS
@@ -119,7 +169,17 @@ The team acquired many technical skills throughout the development of Musegen.  
 
 **Music theory course**: [https://www.musictheory.net/lessons](https://www.musictheory.net/lessons)
 
+# 6\. Deployment
 # 7\. Licensing
 
 **License used**: MIT License  
 **Justification**: Team members agreed that they don’t care too much about what other people do with Musegen’s code.  As such, a simple and permissive license was used.
+
+# 8\. Repository Documentation
+
+**README.md**: [https://github.com/EthanSNAU/CS386\_project/blob/main/README.md](https://github.com/EthanSNAU/CS386_project/blob/main/README.md)  
+**LICENSE**: [https://github.com/EthanSNAU/CS386\_project/blob/main/LICENSE](https://github.com/EthanSNAU/CS386_project/blob/main/LICENSE)
+
+# 9\. User Interface Design
+# 10\. Retrospective Analysis
+# 11\. System Demonstration
