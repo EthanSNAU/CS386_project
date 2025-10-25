@@ -49,8 +49,8 @@ function genRomanNumeral() {
  * @contributors Nolan
  */
 function genInversions() {
-    // inversion options (root, first, and second inversions respectively)
-    const inversions = ["53", "42", "64"];
+    // inversion options (root, first, and second inversions for now)
+    const inversions = ["53", "63", "64"];
     let result = "";
 
     for (let i = 0; i < NUM_CHORDS; i++) {
@@ -62,8 +62,13 @@ function genInversions() {
         const upperFigureDisplayElement = document.getElementById(`upperFigure${i + 1}`);
         const lowerFigureDisplayElement = document.getElementById(`lowerFigure${i + 1}`);
 
-        upperFigureDisplayElement.textContent = randInversion.charAt(0);
-        lowerFigureDisplayElement.textContent = randInversion.charAt(1);
+        if (randInversion === "53") {
+            upperFigureDisplayElement.textContent = "";
+            lowerFigureDisplayElement.textContent = "";
+        } else {
+            upperFigureDisplayElement.textContent = randInversion.charAt(0);
+            lowerFigureDisplayElement.textContent = randInversion.charAt(1);
+        }
     }
 
     return result.trim();
