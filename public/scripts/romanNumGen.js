@@ -75,6 +75,11 @@ function genInversions() {
  */
 function clearInversions() {
     for (let i = 0; i < NUM_CHORDS; i++) {
+        const upperFigureDisplayElement = document.getElementById(`upperFigure${i + 1}`);
+        const lowerFigureDisplayElement = document.getElementById(`lowerFigure${i + 1}`);
+
+        upperFigureDisplayElement.textContent = "";
+        lowerFigureDisplayElement.textContent = "";
 
     }
 }
