@@ -6,7 +6,6 @@ const NUM_CHORDS = 4;
  * @param {integer} inclusiveMin The minimum integer value (inclusive)
  * @param {integer} inclusiveMax The maximum integer value (inclusive)
  * @returns {integer} A random integer between inclusiveMin and inclusiveMax (both inclusive)
- * 
  * @contributors Nolan
  */
 function getRandomInt(inclusiveMin, inclusiveMax) {
@@ -16,7 +15,6 @@ function getRandomInt(inclusiveMin, inclusiveMax) {
 /**
  * Generates a random chord progression in roman numerals and displays it on the webpage
  * @returns {string} A string containing the chord progression
- * 
  * @contributors Chris, Nolan
  */
 function genRomanNumeral() {
@@ -37,7 +35,7 @@ function genRomanNumeral() {
         result += romanNumeral + " " ;
 
         // display it on the webpage
-        const displayElement = document.getElementById(`romanNum${i + 1}`);
+        const displayElement = document.getElementById(`rootNote${i + 1}`);
         displayElement.textContent = romanNumeral;
     }
 
@@ -48,18 +46,24 @@ function genRomanNumeral() {
 /**
  * Generates a random sequence of chord inversions and displays it on the webpage
  * @returns {string} A string containing the inversions
- * 
  * @contributors Nolan
  */
 function genInversions() {
     // inversion options (root, first, and second inversions respectively)
-    const inversions = ["35", "42", "64"];
+    const inversions = ["53", "42", "64"];
     let result = "";
 
     for (let i = 0; i < NUM_CHORDS; i++) {
-        let randIndex = getRandomInt(0, inversions.length - 1);
+        const randIndex = getRandomInt(0, inversions.length - 1);
+        const randInversion = inversions[randIndex];
 
-        result += inversions[randIndex] + " ";
+        result += randInversion + " ";
+
+        const upperFigureDisplayElement = document.getElementById(`upperFigure${i + 1}`);
+        const lowerFigureDisplayElement = document.getElementById(`lowerFigure${i + 1}`);
+
+        upperFigureDisplayElement.textContent = randInversion.charAt(0);
+        lowerFigureDisplayElement.textContent = randInversion.charAt(1);
     }
 
     return result.trim();
@@ -67,7 +71,6 @@ function genInversions() {
 
 /**
  * Clears the displayed inversions on the webpage
- * 
  * @contributors Nolan
  */
 function clearInversions() {
