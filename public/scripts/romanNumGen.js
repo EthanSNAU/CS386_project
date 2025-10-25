@@ -1,11 +1,24 @@
 // this script handles random generation 
+const NUM_CHORDS = 4;
 
-// name: genRomanNumeral
-// desc: generates a random Roman numeral between I and VII
-// Inputs: none
-// Outputs: romanNumeral
-// Contributors: Chris, Nolan
+/**
+ * Generates a random integer between inclusiveMin and inclusiveMax (both inclusive)
+ * @param {integer} inclusiveMin The minimum integer value (inclusive)
+ * @param {integer} inclusiveMax The maximum integer value (inclusive)
+ * @returns {integer} A random integer between inclusiveMin and inclusiveMax (both inclusive)
+ * 
+ * @contributors Nolan
+ */
+function getRandomInt(inclusiveMin, inclusiveMax) {
+    return Math.floor(Math.random() * (inclusiveMax - inclusiveMin + 1)) + inclusiveMin;
+}
 
+/**
+ * Generates a random chord progression in roman numerals and displays it on the webpage
+ * @returns {string} A string containing the chord progression
+ * 
+ * @contributors Chris, Nolan
+ */
 function genRomanNumeral() {
     // roman numerals from I to VII
     const romanNumerals = ["I", "II", "III", "IV", "V", "VI", "VII"];
@@ -13,9 +26,9 @@ function genRomanNumeral() {
     let result = "";
 
     // loop 4 times to build the string
-    for(let i = 0; i < 4; i++){
+    for(let i = 0; i < NUM_CHORDS; i++) {
         // generate a random index between 0 and 6
-        const index = Math.floor(Math.random() * romanNumerals.length);
+        const index = getRandomInt(0, romanNumerals.length - 1);
 
         // get the Roman numeral
         const romanNumeral = romanNumerals[index];
@@ -32,13 +45,42 @@ function genRomanNumeral() {
     return result.trim();
 }
 
+/**
+ * Generates a random sequence of chord inversions and displays it on the webpage
+ * @returns {string} A string containing the inversions
+ * 
+ * @contributors Nolan
+ */
+function genInversions() {
+    // inversion options (root, first, and second inversions respectively)
+    const inversions = ["35", "42", "64"];
+    let result = "";
 
-// name: getKey
-// desc: allows user to select what key they want to be in
-// Inputs: keyName
-// Outputs: keyDisplay
-// Contributors: Ethan
+    for (let i = 0; i < NUM_CHORDS; i++) {
+        let randIndex = getRandomInt(0, inversions.length - 1);
 
+        result += inversions[randIndex] + " ";
+    }
+
+    return result.trim();
+}
+
+/**
+ * Clears the displayed inversions on the webpage
+ * 
+ * @contributors Nolan
+ */
+function clearInversions() {
+    for (let i = 0; i < NUM_CHORDS; i++) {
+
+    }
+}
+
+/**
+ * Updates the root key on the webpage
+ * @param {string} keyName The name of the selected key
+ * @contributors Ethan
+ */
 function getKey(keyName)
 {
     // creates a display element for updating the webpage
