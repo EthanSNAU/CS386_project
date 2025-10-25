@@ -26,10 +26,10 @@ function genRomanNumeral() {
     // loop 4 times to build the string
     for(let i = 0; i < NUM_CHORDS; i++) {
         // generate a random index between 0 and 6
-        const index = getRandomInt(0, romanNumerals.length - 1);
+        const randIndex = getRandomInt(0, romanNumerals.length - 1);
 
-        // get the Roman numeral
-        const romanNumeral = romanNumerals[index];
+        // get the Roman numeral and randomize case
+        const romanNumeral = Math.random() > 0.5 ? romanNumerals[randIndex] : romanNumerals[randIndex].toLowerCase();
 
         // add it to the result string
         result += romanNumeral + " " ;
