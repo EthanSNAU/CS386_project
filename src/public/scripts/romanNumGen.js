@@ -101,3 +101,5 @@ function getKey(keyName)
     //updates the display with the selected key name
     display.textContent = `key: ${keyName}`;
 }
+
+module.exports = { getRandomInt, genRomanNumeral, genInversions, clearInversions, getKey, NUM_CHORDS };
