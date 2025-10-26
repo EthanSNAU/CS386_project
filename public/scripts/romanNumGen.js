@@ -1,6 +1,10 @@
 // this script handles random generation 
 const NUM_CHORDS = 4;
 
+// variables for genAlphabet
+let key;
+const Alphabet = ["A", "B", "C", "D", "E", "F", "G"];
+let RomanOrAlphabet = 0;
 /**
  * Generates a random integer between inclusiveMin and inclusiveMax (both inclusive)
  * @param {integer} inclusiveMin The minimum integer value (inclusive)
@@ -39,8 +43,36 @@ function genRomanNumeral() {
         displayElement.textContent = romanNumeral;
     }
 
+    RomanOrAlphabet = 0;
+
     // get rid of any whitespace and return
     return result.trim();
+}
+
+function genAlphabet() {
+
+    let result = "";
+
+    // loop 4 times to build the string
+    for(let i = 0; i < NUM_CHORDS; i++) {
+        // generate a random index between 0 and 6
+        const randIndex = getRandomInt(0, Alphabet.length - 1);
+
+        // get the alphabet and randomize case
+        const AlphabetLtr = Math.random() > 0.5 ? Alphabet[randIndex] : Alphabet[randIndex].toLowerCase();
+
+        // add it to the result string
+        result += AlphabetLtr + " " ;
+
+        // display it on the webpage
+        const displayElement = document.getElementById(`rootNote${i + 1}`);
+        displayElement.textContent = AlphabetLtr;
+    }
+
+    RomanOrAlphabet = 1;
+    // get rid of any whitespace and return
+    return result.trim();
+ 
 }
 
 /**
@@ -101,4 +133,17 @@ function getKey(keyName)
 
     //updates the display with the selected key name
     display.textContent = `key: ${keyName}`;
-} 
+
+    // storing key value
+    key = Alphabet.indexOf(keyName.charAt(0).toUpperCase);
+
+    // updating either roman or alphabet based on last user input
+    if(RomanOrAlphabet == 0)
+    {
+        genRomanNumeral();
+    }
+    else if(RomanOrAlphabet == 1)
+    {
+        genAlphabet();
+    }
+}
