@@ -1,6 +1,5 @@
 // this script handles random generation 
 const NUM_CHORDS = 4;
-
 /**
  * Generates a random integer between inclusiveMin and inclusiveMax (both inclusive)
  * @param {integer} inclusiveMin The minimum integer value (inclusive)
@@ -102,3 +101,5 @@ function getKey(keyName)
     //updates the display with the selected key name
     display.textContent = `key: ${keyName}`;
 }
+
+module.exports = { getRandomInt, genRomanNumeral, genInversions, clearInversions, getKey, NUM_CHORDS };
