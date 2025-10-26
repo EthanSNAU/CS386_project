@@ -38,7 +38,7 @@ The minimum viable product (MVP) for Musegen focuses on the user’s ability to 
 ## 2.6 Nolan Carlisle
 
 **Pull requests**: [https://github.com/EthanSNAU/CS386\_project/issues?q=is%3Apr%20author%3ANCarlisle24](https://github.com/EthanSNAU/CS386_project/issues?q=is%3Apr%20author%3ANCarlisle24)  
-(need screenshot)
+\[screenshot of pull requests here\]
 
 ### 2.6.1 Random chord generation (major and minor)
 
@@ -124,7 +124,7 @@ The team acquired many technical skills throughout the development of Musegen.  
 
 ### 5.1.1 Learning how to play music
 
-**Description**: Playing music via JavaScript is surprisingly difficult, so much so that playing chord progressions was delayed multiple times.
+**Problem**: Playing music via JavaScript is surprisingly difficult, so much so that playing chord progressions was delayed multiple times.
 
 * Primary options included MIDI and a multitude of other frameworks/formats  
 * Translating chords to playable file formats brings its own host of difficulties
@@ -133,13 +133,13 @@ The team acquired many technical skills throughout the development of Musegen.  
 
 ### 5.1.2 Learning music theory
 
-**Description**: Due to the nature of Musegen, it became clear that understanding basic music theory is, to some extent, a prerequisite to understanding why certain features are designed the way they are.  To encourage design collaboration, team members needed to learn about chord progressions.
+**Problem**: Due to the nature of Musegen, it became clear that understanding basic music theory is, to some extent, a prerequisite to understanding why certain features are designed the way they are.  To encourage design collaboration, team members needed to learn about chord progressions.
 
 **Solution**: Team members that had no experience with music theory grouped together to learn and share insights, including learning resources.
 
 ### 5.1.3 Deciding between OOP and functional programming
 
-**Description**: Music consists of multiple layers of elements, including notes, chords, measures, sections, and so on.  Every element has its own properties and methods, so deciding between OOP and functional programming was difficult.
+**Problem**: Music consists of multiple layers of elements, including notes, chords, measures, sections, and so on.  Every element has its own properties and methods, so deciding between OOP and functional programming was difficult.
 
 * OOP would make it easy to replicate functionality at the cost of spaghetti code  
 * Functional programming would keep it simple while potentially violating DRY principles
@@ -170,6 +170,11 @@ The team acquired many technical skills throughout the development of Musegen.  
 **Music theory course**: [https://www.musictheory.net/lessons](https://www.musictheory.net/lessons)
 
 # 6\. Deployment
+
+**Live System Link**: [https://musegen.vercel.app](https://musegen.vercel.app)  
+**Deployment Method**: Vercel is set up so that it tracks the main branch of a Git repository.  Musegen uses ExpressJS as the middleware, so “deploying” Musegen really means running server.js on one of Vercel’s servers. Whenever a commit is made to the main branch, Vercel redeploys the app automatically.  For deliverables (where a certain version of the app is to be submitted), a clone of the original repository is made and linked to Vercel.  
+**Platform Justification**: Vercel is simple and free.  As Musegen uses ExpressJS to deliver pages, Vercel presents itself as an attractive option due to supporting ExpressJS and automatically tracking changes on GitHub (reducing time spent redeploying).
+
 # 7\. Licensing
 
 **License used**: MIT License  
@@ -182,4 +187,44 @@ The team acquired many technical skills throughout the development of Musegen.  
 
 # 9\. User Interface Design
 # 10\. Retrospective Analysis
+
+## 10.1 Key Learnings
+
+The team made some major discoveries during the development of Musegen:
+
+* Time estimates tend to vary in error a lot.  Overestimating the required time is a better practice  
+* Function documentation is a lifesaver and takes less time to implement than previously thought  
+* Unit tests should be used for development on any heavier features due to the time saved  
+* Declaring constant variables is always better than magic values
+
+## 10.2 Challenges Overcome
+
+### 10.2.1 Communication overhead
+
+**Problem**: Team members were often busy throughout the development process, especially as classes began warming up.  This meant that development notifications would often go unseen for upwards of several days, which was especially bad when trying to get code reviewed.
+
+**Solution**: Start development early to allocate an adequate amount of time for other team members.  If messages are sent asking to do something more involved (such as get in a call or review code), a response should be made saying that the team member is currently busy and will get to it when they get the chance.
+
+### 10.2.2 File mismatching
+
+**Problem**: When collaborating on deliverables, team members would often use different methods of adding their changes, such as directly via GitHub, converting Google Docs to Markdown, and using external programs.  This became a big issue when it came to attaching images and links.
+
+**Solution**: All images are uploaded to an image folder in GitHub that the uploaded Markdown file uses to display images (unless otherwise agreed upon).  Any text editor is fine as long as all links are in the format “\[text\](link)”.
+
+### 10.2.3 Design disagreements
+
+**Problem**: Designing the app’s structure and look were often points of contention throughout the development process.  This includes how the file system was laid out, whether OOP or FP should be used, and how to best serve files to the end user.
+
+**Solution**: Team meetings are held to discuss and debate different sides of the problem.  Optimally, team members eventually arrive at a unanimous decision, but if there is no movement from any side, the team holds a vote and moves forward accordingly.
+
+## 10.3 Future Improvements
+
+Future improvements to Musegen include the following:
+
+* Add the ability to play music  
+* Add the ability to export music  
+* Make the chord progression editor more dynamic  
+  * Dynamically insert/remove chords  
+* Add projects
+
 # 11\. System Demonstration
