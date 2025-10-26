@@ -102,4 +102,18 @@ function getKey(keyName)
     display.textContent = `key: ${keyName}`;
 }
 
-module.exports = { getRandomInt, genRomanNumeral, genInversions, clearInversions, getKey, NUM_CHORDS };
+/**
+ * Updates the scale on the webpage
+ * @param {string} scaleName The name of the selected scale
+ * @contributors Ethan
+ */
+function getScale(scaleName)
+{
+    // creates a display element for updating the webpage
+    const display = document.getElementById('scaleDisplay');
+
+    //updates the display with the selected scale name
+    display.textContent = `scale: ${scaleName}`;
+}
+
+module.exports = { getRandomInt, genRomanNumeral, genInversions, clearInversions, getKey, NUM_CHORDS, getScale };
