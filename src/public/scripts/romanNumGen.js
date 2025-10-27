@@ -303,5 +303,53 @@ function displayAlphabetProgressionAndWords() {
     document.getElementById("wordDisplay").textContent = words;
 }
 
+/**
+ * Generate random bass notes for each chord and displays them
+ * @returns {string} A string of bass notes
+ * @contributors Adolfo
+ */
+function genBassNotes() 
+{
+    // Common bass notes
+    const bassNotes = ["C", "D", "E", "F", "G", "A", "B"];
+    let result = "";
+
+    for (let i = 0; i < NUM_CHORDS; i++) 
+        {
+        const randIndex = getRandomInt(0, bassNotes.length - 1);
+        const randBassNote = bassNotes[randIndex];
+
+        result += randBassNote + " ";
+
+        const displayElement = document.getElementById(`bassNote${i + 1}`);
+        if (displayElement) {
+            displayElement.textContent = randBassNote;
+        }
+    }
+
+    return result.trim();
+}
+
+//Letting the user to add note to the chords (bass notes)
+window.addEventListener("DOMContentLoaded", () => {
+    // Select all elements with the class "bassNoteDisplay"
+    const bassNoteElements = document.querySelectorAll(".bassNoteDisplay");
+
+    // Add click event listener to each bass note
+    bassNoteElements.forEach((bassNote) => {
+        bassNote.addEventListener("click", () => {
+            // Prompt the user for a new note
+            const currentNote = bassNote.textContent || "";
+            const newNote = prompt("Enter a new bass note (e.g., C, D#, F):", currentNote);
+
+            // Update the bass note if valid input is given
+            if (newNote !== null && newNote.trim() !== "") {
+                bassNote.textContent = newNote.trim();
+            }
+        });
+    });
+});
+
+
 module.exports = { getRandomInt, numCycle, genRomanNumeral, genAlphabet, genInversions, clearInversions, getKey, 
-    NUM_CHORDS, getScale, romanToWords, chordToWords, displayAlphabetProgressionAndWords, displayRomanProgressionAndWords };
+    NUM_CHORDS, getScale, romanToWords, chordToWords, displayAlphabetProgressionAndWords, displayRomanProgressionAndWords, genBassNotes };

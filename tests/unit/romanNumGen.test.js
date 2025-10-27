@@ -252,3 +252,37 @@ describe(`displayAlphabetProgressionAndWords`, () => {
         global.genAlphabet.mockRestore();
     });
 });
+/* ============================================= genBassNotes tests ============================================= */
+
+describe(`genBassNotes`, () => {
+  beforeEach(() => {
+    document.body.innerHTML = "";
+    for (let i = 0; i < NUM_CHORDS; i++) {
+      document.body.innerHTML += `<p id="bassNote${i + 1}"></p>`;
+    }
+  });
+
+  test(`Generates correct number of bass notes`, () => {
+    const bassNoteString = genBassNotes();
+    expect(bassNoteString.split(" ").length).toBe(NUM_CHORDS);
+  });
+
+  test(`Generates valid bass notes`, () => {
+    const validNotes = ["C", "D", "E", "F", "G", "A", "B"];
+    for (let i = 0; i < iterationCount; i++) {
+      const bassNoteString = genBassNotes();
+      bassNoteString.split(" ").forEach(note => {
+        expect(validNotes).toContain(note);
+      });
+    }
+  });
+
+  test(`Display elements update correctly`, () => {
+    const bassNoteString = genBassNotes();
+    const bassNotes = bassNoteString.split(" ");
+    for (let j = 0; j < NUM_CHORDS; j++) {
+      const displayElement = document.getElementById(`bassNote${j + 1}`);
+      expect(displayElement.textContent).toBe(bassNotes[j]);
+    }
+  });
+});
