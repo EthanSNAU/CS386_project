@@ -31,26 +31,155 @@ The minimum viable product (MVP) for Musegen focuses on the user’s ability to 
 # 2\. Implemented Requirements
 
 ## 2.1 Adolfo Lopez Villanueva
+
+**Pull requests**: [https://github.com/EthanSNAU/CS386\_project/pulls?q=is%3Apr+author%3ALatestStream+](https://github.com/EthanSNAU/CS386_project/pulls?q=is%3Apr+author%3ALatestStream+)  
+![img/deliverable04/adolfo-pull-requests.png](img/deliverable04/adolfo-pull-requests.png)
+
+### 2.1.1 Added bass note created function
+
+**Requirement**:As a musician, I want to add notes to individual chords so that I can learn about different bass tones  
+**Issue**: [https://github.com/EthanSNAU/CS386\_project/issues/30](https://github.com/EthanSNAU/CS386_project/issues/30)  
+**Pull request**: [https://github.com/EthanSNAU/CS386\_project/pull/44](https://github.com/EthanSNAU/CS386_project/pull/44)  
+**Implemented by**: Adolfo Lopez Villanueva  
+**Approved by**: Ethan Sudol  
+**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)  
+**Visual evidence**:
+![img/deliverable04/adolfo-requirement-1.png](img/deliverable04/adolfo-requirement-1.png)
+
+### 2.1.2 Added removal note option
+
+**Requirement**: As a musician, I want to remove individual notes from chords so that I can learn about minimalist chords  
+**Issue**: [https://github.com/EthanSNAU/CS386\_project/issues/31](https://github.com/EthanSNAU/CS386_project/issues/31)  
+**Pull request**: [https://github.com/EthanSNAU/CS386\_project/pull/45](https://github.com/EthanSNAU/CS386_project/pull/45)  
+**Implemented by**: Adolfo Lopez Villanueva  
+**Approved by**: Ethan Sudol  
+**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)  
+**Visual evidence**:
+![img/deliverable04/adolfo-requirement-2.png](img/deliverable04/adolfo-requirement-2.png)
+
 ## 2.2 Benjamin Jones
+
+**Pull requests**: [https://github.com/EthanSNAU/CS386\_project/pulls?q=+is%3Apr+author%3Abjones55+](https://github.com/EthanSNAU/CS386_project/pulls?q=+is%3Apr+author%3Abjones55+)   
+![img/deliverable04/ben-pull-requests.png](img/deliverable04/ben-pull-requests.png)
+
+### 2.2.1 Added swap between alphabet and roman numerals
+
+**Requirement**: As a musician, I want to be able to toggle the chord progression symbols between roman numerals and notes so that reading it is easier  
+**Issue**: [https://github.com/EthanSNAU/CS386\_project/issues/28](https://github.com/EthanSNAU/CS386_project/issues/28)   
+**Pull request:** [https://github.com/EthanSNAU/CS386\_project/pull/40](https://github.com/EthanSNAU/CS386_project/pull/40)   
+**Implemented by**: Benjamin Jones  
+**Approved by**: Ethan Sudol   
+**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)  
+**Visual evidence**:   
+![img/deliverable04/ben-requirement-1.png](img/deliverable04/ben-requirement-1.png)
+
+### 2.2.2 Added cycle between chosen number of chord progressions
+
+**Requirement**: As a musician, I want to be able to toggle the chord progression symbols between roman numerals and notes so that reading it is easier  
+**Issue**: [https://github.com/EthanSNAU/CS386\_project/issues/28](https://github.com/EthanSNAU/CS386_project/issues/28)   
+**Pull request**: [https://github.com/EthanSNAU/CS386\_project/pull/40/commits](https://github.com/EthanSNAU/CS386_project/pull/40/commits)   
+**Implemented by**: Benjamin Jones  
+**Approved by**: Ethan Sudol   
+**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)  
+**Visual evidence**:  
+![img/deliverable04/ben-requirement-2.png](img/deliverable04/ben-requirement-2.png)
+
 ## 2.3 Christofer Vega
+
+**Pull requests**: [https://github.com/EthanSNAU/CS386\_project/pull/40](https://github.com/EthanSNAU/CS386_project/pull/40)   
+![img/deliverable04/chris-pull-requests.png](img/deliverable04/chris-pull-requests.png)
+
+### 2.3.1 Added Conversion of Roman Numerals into Words
+
+**Requirement**: As a musician, I want a tool to convert roman numerals to chord names so that I can work on my chord naming proficiency  
+**Issue**: [https://github.com/EthanSNAU/CS386\_project/issues/14](https://github.com/EthanSNAU/CS386_project/issues/14)   
+**Pull request**: [https://github.com/EthanSNAU/CS386\_project/pull/40](https://github.com/EthanSNAU/CS386_project/pull/40)   
+**Implemented by**: Christofer Vega and Marcus Luca  
+**Approved by**: Ethan Sudol  
+**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)   
+**Visual evidence**:   
+![img/deliverable04/chris-requirement-1.png](img/deliverable04/chris-requirement-1.png)
+
+### 2.3.2 Added Conversion of Letter Chords into Words
+
+**Requirement**: As a musician, I want a tool to convert alphabetical chord symbols to chord names so that I can work on my chord naming proficiency  
+**Issue**: [https://github.com/EthanSNAU/CS386\_project/issues/39](https://github.com/EthanSNAU/CS386_project/issues/39)   
+**Pull request**:[https://github.com/EthanSNAU/CS386\_project/pull/40](https://github.com/EthanSNAU/CS386_project/pull/40)   
+**Implemented by**: Christofer Vega and Marcus Luca   
+**Approved by**: Ethan Sudol  
+**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)   
+**Visual evidence**:  
+![img/deliverable04/chris-requirement-2.png](img/deliverable04/chris-requirement-2.png)
+
 ## 2.4 Ethan Sudol
+
+**Pull requests**: https://github.com/EthanSNAU/CS386\_project/pulls/EthanSNAU  
+![img/deliverable04/ethan-pull-requests.png](img/deliverable04/ethan-pull-requests.png)
+
+### 2.4.1 Musical Scale selection
+
+**Requirement**: As a musician, I want to decide the key of the chord progression, so that I can narrow in on the emotional tonality I desire  
+**Issue**: [https://github.com/EthanSNAU/CS386\_project/issues/9](https://github.com/EthanSNAU/CS386_project/issues/9)  
+**Pull request**: [https://github.com/EthanSNAU/CS386\_project/pull/37](https://github.com/EthanSNAU/CS386_project/pull/37)  
+**Implemented by**: Ethan Sudol  
+**Approved by**: Ethan Sudol  
+**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)  
+**Visual evidence**:  
+![img/deliverable04/ethan-requirement-1.png](img/deliverable04/ethan-requirement-1.png)
+
+### 2.4.2 Chord Extensions
+
+**Requirement**: As a musician, I want to be able to quickly change chords to be 7ths, 9ths, and 11ths so I can have more dimension in my chords  
+**Issue**: [https://github.com/EthanSNAU/CS386\_project/issues/36](https://github.com/EthanSNAU/CS386_project/issues/36)  
+**Pull request**: [https://github.com/EthanSNAU/CS386\_project/pull/37](https://github.com/EthanSNAU/CS386_project/pull/37)  
+**Implemented by**: Ethan Sudol  
+**Approved by**: Ethan Sudol  
+**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)  
+**Visual evidence**:  
+![img/deliverable04/ethan-requirement-2.png](img/deliverable04/ethan-requirement-2.png)
+
 ## 2.5 Marcus Luca
+
+**Pull requests**: [https://github.com/EthanSNAU/CS386\_project/pull/40](https://github.com/EthanSNAU/CS386_project/pull/40)    
+![img/deliverable04/marcus-pull-requests.png](img/deliverable04/marcus-pull-requests.png)
+
+### 2.5.1 Added Conversion of Roman Numerals into Words
+
+**Requirement**: As a musician, I want a tool to convert roman numerals to chord names so that I can work on my chord naming proficiency  
+**Issue**: [https://github.com/EthanSNAU/CS386\_project/issues/14](https://github.com/EthanSNAU/CS386_project/issues/14)   
+**Pull request**: [https://github.com/EthanSNAU/CS386\_project/pull/40](https://github.com/EthanSNAU/CS386_project/pull/40)   
+**Implemented by**: Christofer Vega and Marcus Luca  
+**Approved by**: Ethan Sudol  
+**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)   
+**Visual evidence**:  
+![img/deliverable04/marcus-requirement-1.png](img/deliverable04/marcus-requirement-1.png)
+
+### 2.5.2 Added Conversion of Letter Chords into Words
+
+**Requirement**: As a musician, I want a tool to convert alphabetical chord symbols to chord names so that I can work on my chord naming proficiency  
+**Issue**: [https://github.com/EthanSNAU/CS386\_project/issues/39](https://github.com/EthanSNAU/CS386_project/issues/39)   
+**Pull request**:[https://github.com/EthanSNAU/CS386\_project/pull/40](https://github.com/EthanSNAU/CS386_project/pull/40)   
+**Implemented by**: Christofer Vega and Marcus Luca   
+**Approved by**: Ethan Sudol  
+**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)   
+**Visual evidence**:  
+![img/deliverable04/marcus-requirement-2.png](img/deliverable04/marcus-requirement-2.png)
+
 ## 2.6 Nolan Carlisle
 
 **Pull requests**: [https://github.com/EthanSNAU/CS386\_project/issues?q=is%3Apr%20author%3ANCarlisle24](https://github.com/EthanSNAU/CS386_project/issues?q=is%3Apr%20author%3ANCarlisle24)  
 
-![img/deliverable04/nolan-pull-requests.png](img/deliverable04/nolan-pull-requests.png)
-
 ### 2.6.1 Random chord generation (major and minor)
+![img/deliverable04/nolan-pull-requests.png](img/deliverable04/nolan-pull-requests.png)
 
 **Requirement**: As a musician , I want generate random chords so that i can quickly find inspiration for musical pieces without having to have a deep knowledge of music theory  
 **Issue**: [https://github.com/EthanSNAU/CS386\_project/issues/19](https://github.com/EthanSNAU/CS386_project/issues/19)  
 **Pull request**: [https://github.com/EthanSNAU/CS386\_project/pull/26](https://github.com/EthanSNAU/CS386_project/pull/26)  
 **Implemented by**: Nolan Carlisle  
 **Approved by**: Ethan Sudol  
-**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGent.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)  
+**Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)  
 **Visual evidence**:  
-![nolan requirement 1](img/deliverable04/nolan-requirement-1.png)
+![img/deliverable04/nolan-requirement-1.png](img/deliverable04/nolan-requirement-1.png)
 
 ### 2.6.2 Random inversion generation
 
@@ -61,7 +190,7 @@ The minimum viable product (MVP) for Musegen focuses on the user’s ability to 
 **Approved by**: Ethan Sudol  
 **Automated Tests**: [https://github.com/EthanSNAU/CS386\_project/blob/main/tests/unit/romanNumGen.test.js](https://github.com/EthanSNAU/CS386_project/blob/main/tests/unit/romanNumGen.test.js)  
 **Visual evidence**:  
-![nolan requirement 2](img/deliverable04/nolan-requirement-2.png)
+![img/deliverable04/nolan-requirement-2.png](img/deliverable04/nolan-requirement-2.png)
 
 # 3\. Automated Testing
 
@@ -77,7 +206,7 @@ The minimum viable product (MVP) for Musegen focuses on the user’s ability to 
 **Code tested**: [https://github.com/EthanSNAU/CS386\_project/blob/main/src/public/scripts/romanNumGen.js](https://github.com/EthanSNAU/CS386_project/blob/main/src/public/scripts/romanNumGen.js)  
 **Explanation**: genRomanNumeral() is supposed to do two things: Randomly generate a string of Roman numerals (from I to VII) and update the chord progression display.  In the test below, Jest made sure that genRomanNumeral() generated the right number of chords (four in this case), returned a string of valid Roman numerals, and updated the correct display elements.  
 **Results**:  
-![automated test example](img/deliverable04/automated-test-example.png)
+![img/deliverable04/automated-test-example.png](img/deliverable04/automated-test-example.png)
 
 # 4\. Technology Stack
 
@@ -179,14 +308,21 @@ The team acquired many technical skills throughout the development of Musegen.  
 # 7\. Licensing
 
 **License used**: MIT License  
-**Justification**: Team members agreed that they don’t care too much about what other people do with Musegen’s code.  As such, a simple and permissive license was used.
+**Justification**: Team members agreed that they don’t care too much about what other people do with Musegen’s code. As such, a simple and permissive license was used.
 
 # 8\. Repository Documentation
 
 **README.md**: [https://github.com/EthanSNAU/CS386\_project/blob/main/README.md](https://github.com/EthanSNAU/CS386_project/blob/main/README.md)  
-**LICENSE**: [https://github.com/EthanSNAU/CS386\_project/blob/main/LICENSE](https://github.com/EthanSNAU/CS386_project/blob/main/LICENSE)
+**LICENSE**: [https://github.com/EthanSNAU/CS386\_project/blob/main/LICENSE.txt](https://github.com/EthanSNAU/CS386_project/blob/main/LICENSE.txt)
 
 # 9\. User Interface Design
+
+Our visual design was constructed around the idea of being a clear, concise, yet stylish application. In terms of hierarchy, although we went for stylish minimalism, the style is primarily designed for functionality. Form serving function if you will.
+
+![img/deliverable04/ui-ux.png](img/deliverable04/ui-ux.png)
+
+As you can see, the chord progression display looks sleek but we have giant buttons for the user to clearly and quickly modify the parameters of the program. Additionally as you can see, everything is large and high contrast for maximum visibility. It also uses a timeless monochromatic color scheme so that the user knows they are using a serious tool.
+
 # 10\. Retrospective Analysis
 
 ## 10.1 Key Learnings
@@ -229,3 +365,4 @@ Future improvements to Musegen include the following:
 * Add projects
 
 # 11\. System Demonstration
+[https://nau.zoom.us/rec/share/GEGezT28O51cL-kvobgcBzQE6RlyxLoJG2n9z-pX6hV_2jtfheZgj_HKlLtgbY8O.90byJqQqYpWDz2fm](https://nau.zoom.us/rec/share/GEGezT28O51cL-kvobgcBzQE6RlyxLoJG2n9z-pX6hV_2jtfheZgj_HKlLtgbY8O.90byJqQqYpWDz2fm)
