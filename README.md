@@ -1,5 +1,5 @@
 
-# Musical Chord Progression Generator
+# Musgen
 
 A simple web app that lets users create custom chord progressions.  
 Choose your key signature, pick major or minor modes, and many other features to explore different harmonic options.
