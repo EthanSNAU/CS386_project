@@ -1,5 +1,12 @@
 // this script handles random generation 
-const NUM_CHORDS = 4;
+let NUM_CHORDS = 4;
+
+// variables for genAlphabet
+let key;
+const Alphabet = ["A", "B", "C", "D", "E", "F", "G"];
+const displayNum = ["1", "2", "3", "4", "5", "6", "7"];
+let RomanOrAlphabet = 0;
+
 /**
  * Generates a random integer between inclusiveMin and inclusiveMax (both inclusive)
  * @param {integer} inclusiveMin The minimum integer value (inclusive)
@@ -23,7 +30,7 @@ function genRomanNumeral() {
     let result = "";
 
     // loop 4 times to build the string
-    for(let i = 0; i < NUM_CHORDS; i++) {
+    for(let i = 0; i < 7; i++) {
         // generate a random index between 0 and 6
         const randIndex = getRandomInt(0, romanNumerals.length - 1);
 
@@ -38,8 +45,52 @@ function genRomanNumeral() {
         displayElement.textContent = romanNumeral;
     }
 
+    RomanOrAlphabet = 0;
+
     // get rid of any whitespace and return
     return result.trim();
+}
+
+function numCycle(){
+    if (NUM_CHORDS < 7)
+    {
+        NUM_CHORDS++;
+        document.getElementById(`chord${NUM_CHORDS}`).style="visibility:visible";
+    }
+    else
+    {
+        for(let i = 2; i <= NUM_CHORDS; i++) 
+        {
+            document.getElementById(`chord${i}`).style="visibility:hidden";
+        }
+    NUM_CHORDS = 1;
+    }
+}
+
+function genAlphabet() {
+
+    let result = "";
+
+    // loop 4 times to build the string
+    for(let i = 0; i < 7; i++) {
+        // generate a random index between 0 and 6
+        const randIndex = getRandomInt(0, Alphabet.length - 1);
+
+        // get the alphabet and randomize case
+        const AlphabetLtr = Math.random() > 0.5 ? Alphabet[randIndex] : Alphabet[randIndex].toLowerCase();
+
+        // add it to the result string
+        result += AlphabetLtr + " " ;
+
+        // display it on the webpage
+        const displayElement = document.getElementById(`rootNote${i + 1}`);
+        displayElement.textContent = AlphabetLtr;
+    }
+
+    RomanOrAlphabet = 1;
+    // get rid of any whitespace and return
+    return result.trim();
+ 
 }
 
 /**
@@ -100,6 +151,19 @@ function getKey(keyName)
 
     //updates the display with the selected key name
     display.textContent = `key: ${keyName}`;
+    
+    // storing key value
+    key = Alphabet.indexOf(keyName.charAt(0).toUpperCase);
+
+    // updating either roman or alphabet based on last user input
+    if(RomanOrAlphabet == 0)
+    {
+        genRomanNumeral();
+    }
+    else if(RomanOrAlphabet == 1)
+    {
+        genAlphabet();
+    }
 }
 
 /**
@@ -165,6 +229,81 @@ window.onload = function() {
 };
 
 /**
+ * Converts Roman numeral chords into readable text.
+ * Uppercase = major, lowercase = minor
+ * @param {string} numeral The Roman numeral chord ("V" o "vi")
+ * @returns {string} Descriptive chord name ("Five major" or "Six minor")
+ */
+function romanToWords(numeralString){
+    const romanMap = {
+        "I": "One",
+        "II": "Two",
+        "III": "Three",
+        "IV": "Four",
+        "V": "Five",
+        "VI": "Six",
+        "VII": "Seven"
+    };
+
+    const numerals = numeralString.split(" ");
+    const words = numerals.map(numeral => {
+        const isMinor = numeral === numeral.toLowerCase();
+        const upperNumeral = numeral.toUpperCase();
+        const numberWord = romanMap[upperNumeral] || numeral;
+        return numberWord + " " + (isMinor ? "minor" : "major");
+    });
+
+    return words.join(" ");    
+}
+
+/**
+ * Converts chord symbols (like "Cmaj7") into words.
+ * Example: Cmaj7 -> "C major seven"
+ * @param {string} chordSymbol
+ * @returns {string}
+ * 
+ */
+function chordToWords(chordSymbol){
+    const chordDictionary = {
+        "A": "A major",
+        "a": "A minor",
+        "B": "B major",
+        "b": "B minor",
+        "C": "C major",
+        "c": "C minor",
+        "D": "D major",
+        "d": "D minor",
+        "E": "E major",
+        "e": "E minor",
+        "F": "F major",
+        "f": "F minor",
+        "G": "G major",
+        "g": "G minor",
+        "Cmaj7": "C major seven",
+        "G7": "G dominant seven"
+    };
+    
+    return chordDictionary[chordSymbol] || "Unknown chord";
+}
+
+function displayRomanProgressionAndWords() {
+    const romanProgression = genRomanNumeral();
+
+    const words = romanToWords(romanProgression);
+
+    document.getElementById("wordDisplay").textContent = words;
+}
+
+
+function displayAlphabetProgressionAndWords() {
+    const alphabetProgression = genAlphabet();
+    const chords = alphabetProgression.split(" ");
+    const words = chords.map(chordToWords).join(" ");
+
+    document.getElementById("wordDisplay").textContent = words;
+}
+
+/**
  * Generate random bass notes for each chord and displays them
  * @returns {string} A string of bass notes
  * @contributors Adolfo
@@ -212,4 +351,5 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 
-module.exports = { getRandomInt, genRomanNumeral, genInversions, clearInversions, getKey, NUM_CHORDS, getScale, genBassNotes };
+module.exports = { getRandomInt, numCycle, genRomanNumeral, genAlphabet, genInversions, clearInversions, getKey, 
+    NUM_CHORDS, getScale, romanToWords, chordToWords, displayAlphabetProgressionAndWords, displayRomanProgressionAndWords, genBassNotes };
