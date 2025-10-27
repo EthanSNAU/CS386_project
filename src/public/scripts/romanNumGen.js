@@ -116,4 +116,52 @@ function getScale(scaleName)
     display.textContent = `scale: ${scaleName}`;
 }
 
+
+/**
+ * allows user to change chords to be 7ths, 9ths, and 11ths, just by clicking the chord progression display
+ * @contributors Ethan
+ */
+window.onload = function() {
+    // selects all Roman numeral elements
+    const rootNotes = document.querySelectorAll('.rootDisplay');
+
+    // goes through each iteration
+    rootNotes.forEach(rootNote => {
+        // adds the click event listener
+        rootNote.addEventListener('click', function() {
+            
+            // grabs upper figure element for changing
+            const upperFigure = this.nextElementSibling; 
+
+            // check
+            if (upperFigure && upperFigure.classList.contains('upperFigureDisplay')) {
+                
+                const currentText = upperFigure.textContent;
+                let nextText = '';
+
+                // cycles through clicks to change upper figure display
+                if (currentText === '') 
+                {
+                    nextText = '7';
+                } 
+                else if (currentText === '7') 
+                {
+                    nextText = '9';
+                } 
+                else if (currentText === '9') 
+                {
+                    nextText = '11';
+                } 
+                else if (currentText === '11') 
+                {
+                    nextText = '';
+                }
+
+                // updatres upper figure
+                upperFigure.textContent = nextText;
+            }
+        });
+    });
+};
+
 module.exports = { getRandomInt, genRomanNumeral, genInversions, clearInversions, getKey, NUM_CHORDS, getScale };
