@@ -10,36 +10,50 @@
 <!-- id="romanNum" comes from genRomanNumeral function in romanNumGen.js-->
 <!-- onclick runs function genRomanNumeral() from romanNumGen.js-->
 <div id="chordProgressionDisplay">
-    <div id="chord1" class="chordDisplay">
+    <div id="chord1" class="chordDisplay" style="visibility:visible">
         <p id="rootNote1" class="rootDisplay">I</p>
         <p id="upperFigure1" class="upperFigureDisplay"></p>
         <p id="lowerFigure1" class="lowerFigureDisplay"></p>
     </div>
 
-    <div id="chord2" class="chordDisplay">
+    <div id="chord2" class="chordDisplay" style="visibility:visible">
         <p id="rootNote2" class="rootDisplay">V</p>
         <p id="upperFigure2" class="upperFigureDisplay"></p>
         <p id="lowerFigure2" class="lowerFigureDisplay"></p>
     </div>
 
-    <div id="chord3" class="chordDisplay">
+    <div id="chord3" class="chordDisplay" style="visibility:visible">
         <p id="rootNote3" class="rootDisplay">VI</p>
         <p id="upperFigure3" class="upperFigureDisplay"></p>
         <p id="lowerFigure3" class="lowerFigureDisplay"></p>
     </div>
 
-    <div id="chord4" class="chordDisplay">
+    <div id="chord4" class="chordDisplay" style="visibility:visible">
         <p id="rootNote4" class="rootDisplay">IV</p>
         <p id="upperFigure4" class="upperFigureDisplay"></p>
         <p id="lowerFigure4" class="lowerFigureDisplay"></p>
     </div>
+        <div id="chord5" class="chordDisplay" style="visibility:hidden">
+        <p id="rootNote5" class="rootDisplay">V</p>
+        <p id="upperFigure5" class="upperFigureDisplay"></p>
+        <p id="lowerFigure5" class="lowerFigureDisplay"></p>
+    </div>
+        <div id="chord6" class="chordDisplay" style="visibility:hidden">
+        <p id="rootNote6" class="rootDisplay">VI</p>
+        <p id="upperFigure6" class="upperFigureDisplay"></p>
+        <p id="lowerFigure6" class="lowerFigureDisplay"></p>
+    </div>
+        <div id="chord7" class="chordDisplay" style="visibility:hidden">
+        <p id="rootNote7" class="rootDisplay">VII</p>
+        <p id="upperFigure7" class="upperFigureDisplay"></p>
+        <p id="lowerFigure7" class="lowerFigureDisplay"></p>    
+    </div>
 </div>
 <button onclick="genRomanNumeral()">Randomize root notes</button>
 <button onclick="genAlphabet()">Randomize root notes (Alphabet)</button>
+<button onclick="numCycle()">Click to change number of progressions (1-7)</button>
 <button onclick="genInversions()">Randomize inversions</button>
 <button onclick="clearInversions()">Clear inversions</button>
-
-
 
 <!-- set of buttons that let the user select what key they want to be in-->
 <br/>

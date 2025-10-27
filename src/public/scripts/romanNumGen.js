@@ -1,9 +1,10 @@
 // this script handles random generation 
-const NUM_CHORDS = 4;
+let NUM_CHORDS = 4;
 
 // variables for genAlphabet
 let key;
 const Alphabet = ["A", "B", "C", "D", "E", "F", "G"];
+const displayNum = ["1", "2", "3", "4", "5", "6", "7"];
 let RomanOrAlphabet = 0;
 
 /**
@@ -29,7 +30,7 @@ function genRomanNumeral() {
     let result = "";
 
     // loop 4 times to build the string
-    for(let i = 0; i < NUM_CHORDS; i++) {
+    for(let i = 0; i < 7; i++) {
         // generate a random index between 0 and 6
         const randIndex = getRandomInt(0, romanNumerals.length - 1);
 
@@ -44,8 +45,26 @@ function genRomanNumeral() {
         displayElement.textContent = romanNumeral;
     }
 
+    RomanOrAlphabet = 0;
+
     // get rid of any whitespace and return
     return result.trim();
+}
+
+function numCycle(){
+    if (NUM_CHORDS < 7)
+    {
+        NUM_CHORDS++;
+        document.getElementById(`chord${NUM_CHORDS}`).style="visibility:visible";
+    }
+    else
+    {
+        for(let i = 2; i <= NUM_CHORDS; i++) 
+        {
+            document.getElementById(`chord${i}`).style="visibility:hidden";
+        }
+    NUM_CHORDS = 1;
+    }
 }
 
 function genAlphabet() {
@@ -53,7 +72,7 @@ function genAlphabet() {
     let result = "";
 
     // loop 4 times to build the string
-    for(let i = 0; i < NUM_CHORDS; i++) {
+    for(let i = 0; i < 7; i++) {
         // generate a random index between 0 and 6
         const randIndex = getRandomInt(0, Alphabet.length - 1);
 
@@ -285,5 +304,5 @@ function displayAlphabetProgressionAndWords() {
 }
 
 
-module.exports = { getRandomInt, genRomanNumeral, genAlphabet, genInversions, clearInversions, getKey, 
+module.exports = { getRandomInt, numCycle, genRomanNumeral, genAlphabet, genInversions, clearInversions, getKey, 
     NUM_CHORDS, getScale, romanToWords, chordToWords, displayAlphabetProgressionAndWords, displayRomanProgressionAndWords };
