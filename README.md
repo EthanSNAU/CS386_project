@@ -5,6 +5,10 @@ A simple web app that lets users create custom chord progressions.
 Choose your key signature, pick major or minor modes, and many other features to explore different harmonic options.
 
 
+
+
+
+
 ## Features
 - Select key signatures 
 - Choose between major or minor modes
@@ -14,7 +18,15 @@ Choose your key signature, pick major or minor modes, and many other features to
 
 
 
+
+
+
+
 Version 1.0.0 
+
+
+
+
 
 
 ## How to start creating chord progressions today
@@ -35,10 +47,20 @@ Open the index.html in your web browser!!
 
 
 
+
+
+
+
+
 ## Contribution Guidelines
 
 Thank you for considering contributing!  
 This project is open to ideas, improvements, and fixes from the community.
+
+
+
+
+
 
 ### How to contribute
 
@@ -61,6 +83,9 @@ This project is open to ideas, improvements, and fixes from the community.
      
 6. **Push to your fork**
    - git push origin feature/your-feature-name
+
+
+
 
 ### Guidelines
 - Please keep code clean and well-commented.
