@@ -1,5 +1,11 @@
 // this script handles random generation 
 const NUM_CHORDS = 4;
+
+// variables for genAlphabet
+let key;
+const Alphabet = ["A", "B", "C", "D", "E", "F", "G"];
+let RomanOrAlphabet = 0;
+
 /**
  * Generates a random integer between inclusiveMin and inclusiveMax (both inclusive)
  * @param {integer} inclusiveMin The minimum integer value (inclusive)
@@ -40,6 +46,32 @@ function genRomanNumeral() {
 
     // get rid of any whitespace and return
     return result.trim();
+}
+
+function genAlphabet() {
+
+    let result = "";
+
+    // loop 4 times to build the string
+    for(let i = 0; i < NUM_CHORDS; i++) {
+        // generate a random index between 0 and 6
+        const randIndex = getRandomInt(0, Alphabet.length - 1);
+
+        // get the alphabet and randomize case
+        const AlphabetLtr = Math.random() > 0.5 ? Alphabet[randIndex] : Alphabet[randIndex].toLowerCase();
+
+        // add it to the result string
+        result += AlphabetLtr + " " ;
+
+        // display it on the webpage
+        const displayElement = document.getElementById(`rootNote${i + 1}`);
+        displayElement.textContent = AlphabetLtr;
+    }
+
+    RomanOrAlphabet = 1;
+    // get rid of any whitespace and return
+    return result.trim();
+ 
 }
 
 /**
@@ -100,6 +132,19 @@ function getKey(keyName)
 
     //updates the display with the selected key name
     display.textContent = `key: ${keyName}`;
+    
+    // storing key value
+    key = Alphabet.indexOf(keyName.charAt(0).toUpperCase);
+
+    // updating either roman or alphabet based on last user input
+    if(RomanOrAlphabet == 0)
+    {
+        genRomanNumeral();
+    }
+    else if(RomanOrAlphabet == 1)
+    {
+        genAlphabet();
+    }
 }
 
 /**
@@ -164,4 +209,81 @@ window.onload = function() {
     });
 };
 
-module.exports = { getRandomInt, genRomanNumeral, genInversions, clearInversions, getKey, NUM_CHORDS, getScale };
+/**
+ * Converts Roman numeral chords into readable text.
+ * Uppercase = major, lowercase = minor
+ * @param {string} numeral The Roman numeral chord ("V" o "vi")
+ * @returns {string} Descriptive chord name ("Five major" or "Six minor")
+ */
+function romanToWords(numeralString){
+    const romanMap = {
+        "I": "One",
+        "II": "Two",
+        "III": "Three",
+        "IV": "Four",
+        "V": "Five",
+        "VI": "Six",
+        "VII": "Seven"
+    };
+
+    const numerals = numeralString.split(" ");
+    const words = numerals.map(numeral => {
+        const isMinor = numeral === numeral.toLowerCase();
+        const upperNumeral = numeral.toUpperCase();
+        const numberWord = romanMap[upperNumeral] || numeral;
+        return numberWord + " " + (isMinor ? "minor" : "major");
+    });
+
+    return words.join(" ");    
+}
+
+/**
+ * Converts chord symbols (like "Cmaj7") into words.
+ * Example: Cmaj7 -> "C major seven"
+ * @param {string} chordSymbol
+ * @returns {string}
+ * 
+ */
+function chordToWords(chordSymbol){
+    const chordDictionary = {
+        "A": "A major",
+        "a": "A minor",
+        "B": "B major",
+        "b": "B minor",
+        "C": "C major",
+        "c": "C minor",
+        "D": "D major",
+        "d": "D minor",
+        "E": "E major",
+        "e": "E minor",
+        "F": "F major",
+        "f": "F minor",
+        "G": "G major",
+        "g": "G minor",
+        "Cmaj7": "C major seven",
+        "G7": "G dominant seven"
+    };
+    
+    return chordDictionary[chordSymbol] || "Unknown chord";
+}
+
+function displayRomanProgressionAndWords() {
+    const romanProgression = genRomanNumeral();
+
+    const words = romanToWords(romanProgression);
+
+    document.getElementById("wordDisplay").textContent = words;
+}
+
+
+function displayAlphabetProgressionAndWords() {
+    const alphabetProgression = genAlphabet();
+    const chords = alphabetProgression.split(" ");
+    const words = chords.map(chordToWords).join(" ");
+
+    document.getElementById("wordDisplay").textContent = words;
+}
+
+
+module.exports = { getRandomInt, genRomanNumeral, genAlphabet, genInversions, clearInversions, getKey, 
+    NUM_CHORDS, getScale, romanToWords, chordToWords, displayAlphabetProgressionAndWords, displayRomanProgressionAndWords };

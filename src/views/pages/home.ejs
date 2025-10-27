@@ -35,8 +35,11 @@
     </div>
 </div>
 <button onclick="genRomanNumeral()">Randomize root notes</button>
+<button onclick="genAlphabet()">Randomize root notes (Alphabet)</button>
 <button onclick="genInversions()">Randomize inversions</button>
 <button onclick="clearInversions()">Clear inversions</button>
+
+
 
 <!-- set of buttons that let the user select what key they want to be in-->
 <br/>
@@ -53,6 +56,13 @@
 <button onclick="getKey('A')" data-key="A">A</button>
 <button onclick="getKey('A#')" data-key="A#">A#/Bb</button>
 <button onclick="getKey('B')" data-key="B">B</button>
+
+<!-- added two buttons to toggle the features of romanToWords and chordsToWords-->
+<button onclick="displayRomanProgressionAndWords()">Generate Roman Numeral Progression</button>
+<button onclick="displayAlphabetProgressionAndWords()">Generate Alphabet Chord Progression</button>
+
+<br/>
+<p id="wordDisplay"></p>
 
 <!-- set of buttons that let the user select what scale they want to be in (In order of degrees)-->
 <br/>

@@ -1,5 +1,5 @@
 const FILE_PATH = "../../src/public/scripts/romanNumGen.js";
-const { getRandomInt, genRomanNumeral, genInversions, clearInversions, NUM_CHORDS } = require(FILE_PATH);
+const { getRandomInt, genRomanNumeral, genInversions, clearInversions, romanToWords, chordToWords, displayAlphabetProgressionAndWords, NUM_CHORDS } = require(FILE_PATH);
 const iterationCount = 100;
 
 /* ============================================= getRandomInt tests ============================================= */
@@ -147,5 +147,108 @@ describe(`clearInversions`, () => {
             expect(upperFigureDisplayElement.textContent).toBe("");
             expect(lowerFigureDisplayElement.textContent).toBe("");
         }
+    });
+});
+
+/* ============================================= romanToWords tests ============================================= */
+
+describe(`romanToWords`, () => {
+    const { romanToWords } = require(FILE_PATH);
+
+    test(`Converts uppercase Roman numerals to major chords`, () => {
+        expect(romanToWords("I II III IV V VI VII")).toBe
+        ("Onemajor Twomajor Threemajor Fourmajor Fivemajor Sixmajor Sevenmajor");
+    });
+
+    test(`Converts lowercase Roman numerals to minor chords`, () => {
+        expect(romanToWords("i ii iii iv v vi vii")).toBe
+        ("Oneminor Twominor Threeminor Fourminor Fiveminor Sixminor Sevenminor");
+    });
+
+    test(`Handles mixed case Roman numerals`, () => {
+        expect(romanToWords("I ii V vi")).toBe("Onemajor Twominor Fivemajor Sixminor");
+    });
+
+    test(`Returns unknown text for invalid input`, () => {
+        expect(romanToWords("X")).toBe("Xmajor");
+    });
+});
+
+
+/* ============================================= chordToWords tests ============================================= */
+
+describe(`chordToWords`, () => {
+    const { chordToWords } = require(FILE_PATH);
+
+    test(`Converts uppercase chords to major`, () => {
+        expect(chordToWords("C")).toBe("C major");
+        expect(chordToWords("G")).toBe("G major");
+    });
+
+    test(`Converts lowercase chords to minor`, () => {
+        expect(chordToWords("c")).toBe("C minor");
+        expect(chordToWords("a")).toBe("A minor");
+    });
+
+    test(`Recognizes extended chords`, () => {
+        expect(chordToWords("Cmaj7")).toBe("C major seven");
+        expect(chordToWords("G7")).toBe("G dominant seven");
+    });
+
+    test(`Returns 'Unknown chord' for invalid symbols`, () => {
+        expect(chordToWords("Z")).toBe("Unknown chord");
+        expect(chordToWords("")).toBe("Unknown chord");
+    });
+});
+
+
+/* ============================================= displayAlphabetProgressionAndWords tests ============================================= */
+
+describe(`displayAlphabetProgressionAndWords`, () => {
+    const { displayAlphabetProgressionAndWords, genAlphabet } = require(FILE_PATH);
+
+    beforeEach(() => {
+        document.body.innerHTML = `
+            <p id="romanDisplay"></p>
+            <p id="wordDisplay"></p>
+        `;
+    });
+
+    test(`Generates and displays 4 random alphabet chords`, () => {
+        // Mock genAlphabet to return predictable output
+        const mockProgression = "A B C D";
+        jest.spyOn(global, "genAlphabet").mockReturnValue(mockProgression);
+
+        displayAlphabetProgressionAndWords();
+
+        const romanDisplay = document.getElementById("romanDisplay");
+        const wordDisplay = document.getElementById("wordDisplay");
+
+        expect(romanDisplay.textContent).toBe(mockProgression);
+        expect(wordDisplay.textContent).toContain("A major");
+        expect(wordDisplay.textContent).toContain("B major");
+        expect(wordDisplay.textContent).toContain("C major");
+        expect(wordDisplay.textContent).toContain("D major");
+
+        // Restore original
+        global.genAlphabet.mockRestore();
+    });
+
+    test(`Handles lowercase chords correctly`, () => {
+        const mockProgression = "a b c d";
+        jest.spyOn(global, "genAlphabet").mockReturnValue(mockProgression);
+
+        displayAlphabetProgressionAndWords();
+
+        const romanDisplay = document.getElementById("romanDisplay");
+        const wordDisplay = document.getElementById("wordDisplay");
+
+        expect(romanDisplay.textContent).toBe(mockProgression);
+        expect(wordDisplay.textContent).toContain("A minor");
+        expect(wordDisplay.textContent).toContain("B minor");
+        expect(wordDisplay.textContent).toContain("C minor");
+        expect(wordDisplay.textContent).toContain("D minor");
+
+        global.genAlphabet.mockRestore();
     });
 });
