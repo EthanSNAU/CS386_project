@@ -303,6 +303,5 @@ function displayAlphabetProgressionAndWords() {
     document.getElementById("wordDisplay").textContent = words;
 }
 
-
 module.exports = { getRandomInt, numCycle, genRomanNumeral, genAlphabet, genInversions, clearInversions, getKey, 
     NUM_CHORDS, getScale, romanToWords, chordToWords, displayAlphabetProgressionAndWords, displayRomanProgressionAndWords };
