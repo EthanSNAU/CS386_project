@@ -38,7 +38,8 @@ The minimum viable product (MVP) for Musegen focuses on the user’s ability to 
 ## 2.6 Nolan Carlisle
 
 **Pull requests**: [https://github.com/EthanSNAU/CS386\_project/issues?q=is%3Apr%20author%3ANCarlisle24](https://github.com/EthanSNAU/CS386_project/issues?q=is%3Apr%20author%3ANCarlisle24)  
-\[screenshot of pull requests here\]
+
+![img/deliverable04/nolan-pull-requests.png](img/deliverable04/nolan-pull-requests.png)
 
 ### 2.6.1 Random chord generation (major and minor)
 
