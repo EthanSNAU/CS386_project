@@ -350,6 +350,23 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+/**
+ * Allow user to remove a note
+ * @contributors Adolfo
+ */
+window.addEventListener("DOMContentLoaded", () => {
+    const removableElements = document.querySelectorAll(".upperFigureDisplay, .lowerFigureDisplay, .bassNoteDisplay");
+
+    removableElements.forEach((el) => {
+        el.addEventListener("click", () => {
+            // Ask the user if they want to remove the note
+            const shouldRemove = confirm(`Do you want to remove the note "${el.textContent}"?`);
+            if (shouldRemove) {
+                el.textContent = ""; // remove the note
+            }
+        });
+    });
+});
 
 module.exports = { getRandomInt, numCycle, genRomanNumeral, genAlphabet, genInversions, clearInversions, getKey, 
     NUM_CHORDS, getScale, romanToWords, chordToWords, displayAlphabetProgressionAndWords, displayRomanProgressionAndWords, genBassNotes };
