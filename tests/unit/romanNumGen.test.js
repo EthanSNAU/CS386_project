@@ -1,10 +1,10 @@
 const FILE_PATH = "../../src/public/scripts/romanNumGen.js";
-const { getRandomInt, genRomanNumeral, genInversions, clearInversions, romanToWords, chordToWords, displayAlphabetProgressionAndWords, NUM_CHORDS } = require(FILE_PATH);
 const iterationCount = 100;
 
 /* ============================================= getRandomInt tests ============================================= */
 
 describe(`getRandomInt`, () => {
+    const { getRandomInt } = require(FILE_PATH);
     let lowerBound = 1;
     let upperBound = 20;
 
@@ -40,6 +40,7 @@ describe(`getRandomInt`, () => {
 /* ============================================= genRomanNumeral tests ============================================= */
 
 describe(`genRomanNumeral`, () => {
+    const { genRomanNumeral } = require(FILE_PATH);
     beforeEach(() => {
         document.body.innerHTML = "";
 
@@ -82,6 +83,7 @@ describe(`genRomanNumeral`, () => {
 /* ============================================= genInversions tests ============================================= */
 
 describe(`genInversions`, () => {
+    const { genInversions } = require(FILE_PATH);
     beforeEach(() => {
         document.body.innerHTML = "";
 
@@ -127,6 +129,7 @@ describe(`genInversions`, () => {
 /* ============================================= clearInversions tests ============================================= */
 
 describe(`clearInversions`, () => {
+    const { clearInversions } = require(FILE_PATH);
     beforeEach(() => {
         document.body.innerHTML = "";
 
