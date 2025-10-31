@@ -154,8 +154,8 @@ function addChordToDisplay() {
     });
 
     let newBassNoteDisplay = document.createElement("p");
-    newBassNoteDisplay.id = `baseNote${numChordsDisplayed}`;
-    newBassNoteDisplay.className = "baseNoteDisplay";
+    newBassNoteDisplay.id = `bassNote${numChordsDisplayed}`;
+    newBassNoteDisplay.className = "bassNoteDisplay";
     newBassNoteDisplay.addEventListener("click", (event) => {
         // Prompt the user for a new note
         const currentNote = event.target.textContent || "";
@@ -314,7 +314,7 @@ function clearInversions() {
 /**
  * Generate random bass notes for each chord and displays them
  * @returns {string} A string of bass notes
- * @contributors Adolfo
+ * @contributors Adolfo, Nolan
  */
 function genBassNotes() {
     // Common bass notes
@@ -322,15 +322,20 @@ function genBassNotes() {
 
     for (let i = 0; i < numChordsDisplayed; i++) 
         {
-        const randIndex = getRandomInt(0, bassNotes.length - 1);
-        const randBassNote = alphabetNotes[randIndex];
+        let randIndex;
+        let randBassNote;
+        
+        if (isDisplayingAlphabet) {
+            randIndex = getRandomInt(0, alphabetNotes.length - 1);
+            randBassNote = alphabetNotes[randIndex];
+        } else {
+            randIndex = getRandomInt(0, romanNotes.length - 1);
+            randBassNote = romanNotes[randIndex];
+        }
 
         result += randBassNote + " ";
 
-        const displayElement = document.getElementById(`bassNote${i + 1}`);
-        if (displayElement) {
-            displayElement.textContent = randBassNote;
-        }
+        document.getElementById(`bassNote${i + 1}`).textContent = randBassNote;
     }
 
     return result.trim();
