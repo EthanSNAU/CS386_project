@@ -387,4 +387,16 @@ function init() {
 module.exports = { 
     MAX_CHORDS,
     getChordName,
+    convertProgressionToChordNames,
+    updateChordNameDisplay,
+    addChordToDisplay,
+    incrementNumChords,
+    genRomanNumeral,
+    genAlphabet,
+    genInversions,
+    clearInversions,
+    genBassNotes,
+    setKey,
+    setScale,
+    init
 };
