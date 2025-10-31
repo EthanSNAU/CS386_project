@@ -30,7 +30,8 @@ app.get('/', (req, res) => {
     res.render(LAYOUT_NAME, {
         body: "pages/home",
         styles: ["pages/home.css"],
-        scripts: ["romanNumGen.js"]
+        scripts: ["romanNumGen.js"],
+        startupFunction: "init();"
     });
 })
 
