@@ -40,9 +40,9 @@ const chordNameDictionary = {
     "vii": "Seven minor"
 };
 
-let numChordsDisplayed = DEFAULT_NUM_CHORDS;
+let numChordsDisplayed = 0;
 let isDisplayingAlphabet = false; // currently unused
-let currentProgression = "I V VI IV";
+let currentProgression = "";
 
 /**
  * Generates a random integer between inclusiveMin and inclusiveMax (both inclusive)
@@ -73,9 +73,9 @@ function getChordName(chordSymbol){
  * @returns {string} Descriptive chord name ("Five major", "A minor", etc.)
  * @contributors Marcus, Nolan
  */
-function convertProgressionToChordNames(numeralString){
-    const names = numeralString.split(" ").map(numeral => {
-        return getChordName(numeral);
+function convertProgressionToChordNames(progressionString){
+    const names = progressionString.split(" ").map(symbol => {
+        return getChordName(symbol);
     });
 
     return names.join(" ");
@@ -86,33 +86,86 @@ function convertProgressionToChordNames(numeralString){
  * Updates the displayed names of chord progressions
  * @contributors Marcus, Nolan
  */
-function displayChordNames(progression) {
-    const words = convertProgressionToChordNames(progression);
+function updateChordNameDisplay() {
+    const words = convertProgressionToChordNames(currentProgression);
     document.getElementById("wordDisplay").textContent = words;
 }
 
 
 /**
  * Adds a chord to the chord display
- * @contributors Nolan
+ * @contributors Nolan, Ethan
  */
-function addChordToDisplay(number) {
+function addChordToDisplay() {
+    numChordsDisplayed++;
+
     let newRootNoteDisplay = document.createElement("p");
-    newRootNoteDisplay.id = `rootNote${number}`;
+    newRootNoteDisplay.id = `rootNote${numChordsDisplayed}`;
     newRootNoteDisplay.className = "rootNoteDisplay";
-    newRootNoteDisplay.textContent = "I"
+    if (isDisplayingAlphabet) {
+        newRootNoteDisplay.textContent = "C";
+        currentProgression += " C"
+    } else {
+        newRootNoteDisplay.textContent = "I";
+        currentProgression += " I"
+    }
+    newRootNoteDisplay.addEventListener('click', function(event) {
+        const upperFigure = event.target.nextElementSibling; 
+        if (upperFigure && upperFigure.classList.contains('upperFigureDisplay')) {
+            const currentText = upperFigure.textContent;
+            let nextText = '';
+
+            // cycles through clicks to change upper figure display
+            if (currentText === '') {
+                nextText = '7';
+            } else if (currentText === '7') {
+                nextText = '9';
+            } else if (currentText === '9') {
+                nextText = '11';
+            } else if (currentText === '11') {
+                nextText = '';
+            }
+
+            // updates upper figure
+            upperFigure.textContent = nextText;
+        }
+    });
 
     let newUpperFigureDisplay = document.createElement("p");
-    newUpperFigureDisplay.id = `upperFigure${number}`;
+    newUpperFigureDisplay.id = `upperFigure${numChordsDisplayed}`;
     newUpperFigureDisplay.className = "upperFigureDisplay";
+    newUpperFigureDisplay.addEventListener("click", (event) => {
+        // Ask the user if they want to remove the note
+        const shouldRemove = confirm(`Do you want to remove the note "${event.target.textContent}"?`);
+        if (shouldRemove) {
+            event.target.textContent = ""; // remove the note
+        }
+    });
 
     let newLowerFigureDisplay = document.createElement("p");
-    newLowerFigureDisplay.id = `lowerFigure${number}`;
+    newLowerFigureDisplay.id = `lowerFigure${numChordsDisplayed}`;
     newLowerFigureDisplay.className = "lowerFigureDisplay";
+    newLowerFigureDisplay.addEventListener("click", (event) => {
+        // Ask the user if they want to remove the note
+        const shouldRemove = confirm(`Do you want to remove the note "${event.target.textContent}"?`);
+        if (shouldRemove) {
+            event.target.textContent = ""; // remove the note
+        }
+    });
 
     let newBassNoteDisplay = document.createElement("p");
-    newBassNoteDisplay.id = `baseNote${number}`;
+    newBassNoteDisplay.id = `baseNote${numChordsDisplayed}`;
     newBassNoteDisplay.className = "baseNoteDisplay";
+    newBassNoteDisplay.addEventListener("click", (event) => {
+        // Prompt the user for a new note
+        const currentNote = event.target.textContent || "";
+        const newNote = prompt("Enter a new bass note (e.g., C, D#, F):", currentNote);
+
+        // Update the bass note if valid input is given
+        if (newNote !== null && newNote.trim() !== "") {
+            event.target.textContent = newNote.trim();
+        }
+    });
 
     let newChord = document.createElement("div");
     newChord.id = `chord${numChordsDisplayed}`;
@@ -132,16 +185,18 @@ function addChordToDisplay(number) {
  * @contributors Ben, Nolan
  */
 function incrementNumChords() {
-    numChordsDisplayed++;
-    if (numChordsDisplayed <= MAX_CHORDS) {
-        addChordToDisplay(numChordsDisplayed);
+    if (numChordsDisplayed < MAX_CHORDS) {
+        addChordToDisplay();
     } else {
         for (let i = 2; i <= MAX_CHORDS; i++) {
             document.getElementById(`chord${i}`).remove();
         }
 
+        currentProgression = currentProgression.split(" ")[0];
         numChordsDisplayed = 1;
     }
+
+    updateChordNameDisplay();
 }
 
 
@@ -172,7 +227,7 @@ function genRomanNumeral() {
     isDisplayingAlphabet = false;
     currentProgression = result.trim();
 
-    displayChordNames(currentProgression);
+    updateChordNameDisplay();
 
     return currentProgression;
 }
@@ -205,7 +260,7 @@ function genAlphabet() {
     isDisplayingAlphabet = true;
     currentProgression = result.trim();
 
-    displayChordNames(currentProgression);
+    updateChordNameDisplay();
 
     return currentProgression;
 }
@@ -315,68 +370,11 @@ function setScale(scaleName) {
  * @contributors Ethan, Adolfo, Nolan
  */
 function init() {
-    // selects all Roman numeral elements
-    const rootNotes = document.querySelectorAll('.rootNoteDisplay');
-
-    // goes through each iteration
-    rootNotes.forEach(rootNote => {
-        // adds the click event listener
-        rootNote.addEventListener('click', function() {
-            
-            // grabs upper figure element for changing
-            const upperFigure = this.nextElementSibling; 
-
-            // check
-            if (upperFigure && upperFigure.classList.contains('upperFigureDisplay')) {
-                
-                const currentText = upperFigure.textContent;
-                let nextText = '';
-
-                // cycles through clicks to change upper figure display
-                if (currentText === '') {
-                    nextText = '7';
-                } else if (currentText === '7') {
-                    nextText = '9';
-                } else if (currentText === '9') {
-                    nextText = '11';
-                } else if (currentText === '11') {
-                    nextText = '';
-                }
-
-                // updates upper figure
-                upperFigure.textContent = nextText;
-            }
-        });
-    });
-
-    // Select all elements with the class "bassNoteDisplay"
-    const bassNoteElements = document.querySelectorAll(".bassNoteDisplay");
-
-    // Add click event listener to each bass note
-    bassNoteElements.forEach((bassNote) => {
-        bassNote.addEventListener("click", () => {
-            // Prompt the user for a new note
-            const currentNote = bassNote.textContent || "";
-            const newNote = prompt("Enter a new bass note (e.g., C, D#, F):", currentNote);
-
-            // Update the bass note if valid input is given
-            if (newNote !== null && newNote.trim() !== "") {
-                bassNote.textContent = newNote.trim();
-            }
-        });
-    });
-
-    const removableElements = document.querySelectorAll(".upperFigureDisplay, .lowerFigureDisplay, .bassNoteDisplay");
-
-    removableElements.forEach((el) => {
-        el.addEventListener("click", () => {
-            // Ask the user if they want to remove the note
-            const shouldRemove = confirm(`Do you want to remove the note "${el.textContent}"?`);
-            if (shouldRemove) {
-                el.textContent = ""; // remove the note
-            }
-        });
-    });
+    for (let i = 0; i < DEFAULT_NUM_CHORDS; i++) {
+        addChordToDisplay();
+    }
+    currentProgression = currentProgression.trim();
+    updateChordNameDisplay();
 };
 
 
