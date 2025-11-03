@@ -10,16 +10,23 @@
             <% }); %>
         <% } %>
 
-        <% if (scripts && scripts.length) { %>
-            <script>
+        <% if ((scripts && scripts.length) || startupFunction) { %>
+        <script>
+            <% if (scripts && scripts.length) { %>
                 const scriptsToLoad = <%- JSON.stringify(scripts) %>;
+            <% } %>
 
-                onDomLoad(() => {
-                    scriptsToLoad.forEach(script => {
-                        loadScript(script);
-                    });
-                });
-            </script>
+            onDomLoad(async () => {
+                <% if (scripts && scripts.length) { %>
+                    await Promise.all(scriptsToLoad.map(loadScript));
+                <% } %>
+
+
+                <% if (startupFunction) { %>
+                    <%- startupFunction %>
+                <% } %>
+            });
+        </script>
         <% } %>
     </head>
     <body>

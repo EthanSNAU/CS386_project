@@ -1,11 +1,48 @@
-// this script handles random generation 
-let NUM_CHORDS = 4;
+// romanNumGen.js
+const DEFAULT_NUM_CHORDS = 4;
+const MAX_CHORDS = 7;
+const romanNotes = ["I", "II", "III", "IV", "V", "VI", "VII"];
+const alphabetNotes = ["A", "B", "C", "D", "E", "F", "G"];
+const inversions = ["53", "63", "64"]; // root, first, and second inversions respectively
+const chordNameDictionary = {
+    // alphabetical characters
+    "A": "A major",
+    "Am": "A minor",
+    "B": "B major",
+    "Bm": "B minor",
+    "C": "C major",
+    "Cm": "C minor",
+    "D": "D major",
+    "Dm": "D minor",
+    "E": "E major",
+    "Em": "E minor",
+    "F": "F major",
+    "Fm": "F minor",
+    "G": "G major",
+    "Gm": "G minor",
+    "Cmaj7": "C major seven",
+    "G7": "G dominant seven",
 
-// variables for genAlphabet
-let key;
-const Alphabet = ["A", "B", "C", "D", "E", "F", "G"];
-const displayNum = ["1", "2", "3", "4", "5", "6", "7"];
-let RomanOrAlphabet = 0;
+    // roman numerals
+    "I": "One",
+    "i": "One minor",
+    "II": "Two",
+    "ii": "Two minor",
+    "III": "Three",
+    "iii": "Three minor",
+    "IV": "Four",
+    "iv": "Four minor",
+    "V": "Five",
+    "v": "Five minor",
+    "VI": "Six",
+    "vi": "Six minor",
+    "VII": "Seven",
+    "vii": "Seven minor"
+};
+
+let numChordsDisplayed = 0;
+let isDisplayingAlphabet = false; // currently unused
+let currentProgression = "";
 
 /**
  * Generates a random integer between inclusiveMin and inclusiveMax (both inclusive)
@@ -19,79 +56,215 @@ function getRandomInt(inclusiveMin, inclusiveMax) {
 }
 
 /**
+ * Converts chord symbols (like "Cmaj7") into words.
+ * Example: Cmaj7 -> "C major seven"
+ * @param {string} chordSymbol
+ * @returns {string}
+ * @contributors Marcus, Nolan
+ */
+function getChordName(chordSymbol){
+    return chordNameDictionary[chordSymbol] || "Unknown chord";
+}
+
+
+/**
+ * Converts a sequence of chord symbols into readable text.
+ * @param {string} numeral The chord symbol ("V", "Am", etc.)
+ * @returns {string} Descriptive chord name ("Five major", "A minor", etc.)
+ * @contributors Marcus, Nolan
+ */
+function convertProgressionToChordNames(progressionString){
+    const names = progressionString.split(" ").map(symbol => {
+        return getChordName(symbol);
+    });
+
+    return names.join(" ");
+}
+
+
+/**
+ * Updates the displayed names of chord progressions
+ * @contributors Marcus, Nolan
+ */
+function updateChordNameDisplay() {
+    const words = convertProgressionToChordNames(currentProgression);
+    document.getElementById("wordDisplay").textContent = words;
+}
+
+
+/**
+ * Adds a chord to the chord display
+ * @contributors Nolan, Ethan
+ */
+function addChordToDisplay() {
+    numChordsDisplayed++;
+
+    let newRootNoteDisplay = document.createElement("p");
+    newRootNoteDisplay.id = `rootNote${numChordsDisplayed}`;
+    newRootNoteDisplay.className = "rootNoteDisplay";
+    if (isDisplayingAlphabet) {
+        newRootNoteDisplay.textContent = "C";
+        currentProgression += " C"
+    } else {
+        newRootNoteDisplay.textContent = "I";
+        currentProgression += " I"
+    }
+    newRootNoteDisplay.addEventListener('click', function(event) {
+        const upperFigure = event.target.nextElementSibling; 
+        if (upperFigure && upperFigure.classList.contains('upperFigureDisplay')) {
+            const currentText = upperFigure.textContent;
+            let nextText = '';
+
+            // cycles through clicks to change upper figure display
+            if (currentText === '') {
+                nextText = '7';
+            } else if (currentText === '7') {
+                nextText = '9';
+            } else if (currentText === '9') {
+                nextText = '11';
+            } else if (currentText === '11') {
+                nextText = '';
+            }
+
+            // updates upper figure
+            upperFigure.textContent = nextText;
+        }
+    });
+
+    let newUpperFigureDisplay = document.createElement("p");
+    newUpperFigureDisplay.id = `upperFigure${numChordsDisplayed}`;
+    newUpperFigureDisplay.className = "upperFigureDisplay";
+    newUpperFigureDisplay.addEventListener("click", (event) => {
+        // Ask the user if they want to remove the note
+        const shouldRemove = confirm(`Do you want to remove the note "${event.target.textContent}"?`);
+        if (shouldRemove) {
+            event.target.textContent = ""; // remove the note
+        }
+    });
+
+    let newLowerFigureDisplay = document.createElement("p");
+    newLowerFigureDisplay.id = `lowerFigure${numChordsDisplayed}`;
+    newLowerFigureDisplay.className = "lowerFigureDisplay";
+    newLowerFigureDisplay.addEventListener("click", (event) => {
+        // Ask the user if they want to remove the note
+        const shouldRemove = confirm(`Do you want to remove the note "${event.target.textContent}"?`);
+        if (shouldRemove) {
+            event.target.textContent = ""; // remove the note
+        }
+    });
+
+    let newBassNoteDisplay = document.createElement("p");
+    newBassNoteDisplay.id = `bassNote${numChordsDisplayed}`;
+    newBassNoteDisplay.className = "bassNoteDisplay";
+    newBassNoteDisplay.addEventListener("click", (event) => {
+        // Prompt the user for a new note
+        const currentNote = event.target.textContent || "";
+        const newNote = prompt("Enter a new bass note (e.g., C, D#, F):", currentNote);
+
+        // Update the bass note if valid input is given
+        if (newNote !== null && newNote.trim() !== "") {
+            event.target.textContent = newNote.trim();
+        }
+    });
+
+    let newChord = document.createElement("div");
+    newChord.id = `chord${numChordsDisplayed}`;
+    newChord.className = "chordDisplay";
+
+    newChord.appendChild(newRootNoteDisplay);
+    newChord.appendChild(newUpperFigureDisplay);
+    newChord.appendChild(newLowerFigureDisplay);
+    newChord.appendChild(newBassNoteDisplay);
+
+    document.getElementById("chordProgressionDisplay").appendChild(newChord);
+}
+
+
+/**
+ * Increments the number of chords being displayed in the web page, looping to one if at capacity.
+ * @contributors Ben, Nolan
+ */
+function incrementNumChords() {
+    if (numChordsDisplayed < MAX_CHORDS) {
+        addChordToDisplay();
+    } else {
+        for (let i = 2; i <= MAX_CHORDS; i++) {
+            document.getElementById(`chord${i}`).remove();
+        }
+
+        currentProgression = currentProgression.split(" ")[0];
+        numChordsDisplayed = 1;
+    }
+
+    updateChordNameDisplay();
+}
+
+
+/**
  * Generates a random chord progression in roman numerals and displays it on the webpage
  * @returns {string} A string containing the chord progression
  * @contributors Chris, Nolan
  */
 function genRomanNumeral() {
-    // roman numerals from I to VII
-    const romanNumerals = ["I", "II", "III", "IV", "V", "VI", "VII"];
-
     let result = "";
 
     // loop 4 times to build the string
-    for(let i = 0; i < 7; i++) {
+    for(let i = 0; i < numChordsDisplayed; i++) {
         // generate a random index between 0 and 6
-        const randIndex = getRandomInt(0, romanNumerals.length - 1);
+        const randIndex = getRandomInt(0, romanNotes.length - 1);
 
         // get the Roman numeral and randomize case
-        const romanNumeral = Math.random() > 0.5 ? romanNumerals[randIndex] : romanNumerals[randIndex].toLowerCase();
+        const romanNumeral = Math.random() > 0.5 ? romanNotes[randIndex] : romanNotes[randIndex].toLowerCase();
 
         // add it to the result string
-        result += romanNumeral + " " ;
+        result += romanNumeral + " ";
 
         // display it on the webpage
         const displayElement = document.getElementById(`rootNote${i + 1}`);
         displayElement.textContent = romanNumeral;
     }
 
-    RomanOrAlphabet = 0;
+    isDisplayingAlphabet = false;
+    currentProgression = result.trim();
 
-    // get rid of any whitespace and return
-    return result.trim();
+    updateChordNameDisplay();
+
+    return currentProgression;
 }
 
-function numCycle(){
-    if (NUM_CHORDS < 7)
-    {
-        NUM_CHORDS++;
-        document.getElementById(`chord${NUM_CHORDS}`).style="visibility:visible";
-    }
-    else
-    {
-        for(let i = 2; i <= NUM_CHORDS; i++) 
-        {
-            document.getElementById(`chord${i}`).style="visibility:hidden";
-        }
-    NUM_CHORDS = 1;
-    }
-}
 
+/**
+ * Generates a random chord progression in alphabetical characters and displays it on the webpage
+ * @returns {string} 
+ * @contributors Ben, Nolan
+ */
 function genAlphabet() {
-
     let result = "";
 
-    // loop 4 times to build the string
-    for(let i = 0; i < 7; i++) {
+    for(let i = 0; i < numChordsDisplayed; i++) {
         // generate a random index between 0 and 6
-        const randIndex = getRandomInt(0, Alphabet.length - 1);
+        const randIndex = getRandomInt(0, alphabetNotes.length - 1);
 
-        // get the alphabet and randomize case
-        const AlphabetLtr = Math.random() > 0.5 ? Alphabet[randIndex] : Alphabet[randIndex].toLowerCase();
+        // get the alphabet and randomize major/minor
+        let symbol = alphabetNotes[randIndex];
+        if (Math.random() > 0.5) symbol += "m";
 
         // add it to the result string
-        result += AlphabetLtr + " " ;
+        result += symbol + " " ;
 
         // display it on the webpage
         const displayElement = document.getElementById(`rootNote${i + 1}`);
-        displayElement.textContent = AlphabetLtr;
+        displayElement.textContent = symbol;
     }
 
-    RomanOrAlphabet = 1;
-    // get rid of any whitespace and return
-    return result.trim();
- 
+    isDisplayingAlphabet = true;
+    currentProgression = result.trim();
+
+    updateChordNameDisplay();
+
+    return currentProgression;
 }
+
 
 /**
  * Generates a random sequence of chord inversions and displays it on the webpage
@@ -99,11 +272,9 @@ function genAlphabet() {
  * @contributors Nolan
  */
 function genInversions() {
-    // inversion options (root, first, and second inversions for now)
-    const inversions = ["53", "63", "64"];
     let result = "";
 
-    for (let i = 0; i < NUM_CHORDS; i++) {
+    for (let i = 0; i < numChordsDisplayed; i++) {
         const randIndex = getRandomInt(0, inversions.length - 1);
         const randInversion = inversions[randIndex];
 
@@ -124,249 +295,108 @@ function genInversions() {
     return result.trim();
 }
 
+
 /**
  * Clears the displayed inversions on the webpage
  * @contributors Nolan
  */
 function clearInversions() {
-    for (let i = 0; i < NUM_CHORDS; i++) {
+    for (let i = 0; i < numChordsDisplayed; i++) {
         const upperFigureDisplayElement = document.getElementById(`upperFigure${i + 1}`);
         const lowerFigureDisplayElement = document.getElementById(`lowerFigure${i + 1}`);
 
         upperFigureDisplayElement.textContent = "";
         lowerFigureDisplayElement.textContent = "";
-
     }
 }
+
+
+/**
+ * Generate random bass notes for each chord and displays them
+ * @returns {string} A string of bass notes
+ * @contributors Adolfo, Nolan
+ */
+function genBassNotes() {
+    // Common bass notes
+    let result = "";
+
+    for (let i = 0; i < numChordsDisplayed; i++) 
+        {
+        let randIndex;
+        let randBassNote;
+        
+        if (isDisplayingAlphabet) {
+            randIndex = getRandomInt(0, alphabetNotes.length - 1);
+            randBassNote = alphabetNotes[randIndex];
+        } else {
+            randIndex = getRandomInt(0, romanNotes.length - 1);
+            randBassNote = romanNotes[randIndex];
+        }
+
+        result += randBassNote + " ";
+
+        document.getElementById(`bassNote${i + 1}`).textContent = randBassNote;
+    }
+
+    return result.trim();
+}
+
 
 /**
  * Updates the root key on the webpage
  * @param {string} keyName The name of the selected key
- * @contributors Ethan
+ * @contributors Ethan, Nolan
  */
-function getKey(keyName)
-{
+function setKey(keyName) {
     // creates a display element for updating the webpage
     const display = document.getElementById('keyDisplay');
 
-    //updates the display with the selected key name
-    display.textContent = `key: ${keyName}`;
-    
-    // storing key value
-    key = Alphabet.indexOf(keyName.charAt(0).toUpperCase);
-
-    // updating either roman or alphabet based on last user input
-    if(RomanOrAlphabet == 0)
-    {
-        genRomanNumeral();
-    }
-    else if(RomanOrAlphabet == 1)
-    {
-        genAlphabet();
-    }
+    // updates the display with the selected key name
+    display.textContent = `Key: ${keyName}`;
 }
+
 
 /**
  * Updates the scale on the webpage
  * @param {string} scaleName The name of the selected scale
  * @contributors Ethan
  */
-function getScale(scaleName)
-{
+function setScale(scaleName) {
     // creates a display element for updating the webpage
     const display = document.getElementById('scaleDisplay');
 
     //updates the display with the selected scale name
-    display.textContent = `scale: ${scaleName}`;
+    display.textContent = `Scale: ${scaleName}`;
 }
 
 
 /**
- * allows user to change chords to be 7ths, 9ths, and 11ths, just by clicking the chord progression display
- * @contributors Ethan
+ * Called on DOM load. Attaches event listeners for hydration.
+ * @contributors Ethan, Adolfo, Nolan
  */
-window.onload = function() {
-    // selects all Roman numeral elements
-    const rootNotes = document.querySelectorAll('.rootDisplay');
-
-    // goes through each iteration
-    rootNotes.forEach(rootNote => {
-        // adds the click event listener
-        rootNote.addEventListener('click', function() {
-            
-            // grabs upper figure element for changing
-            const upperFigure = this.nextElementSibling; 
-
-            // check
-            if (upperFigure && upperFigure.classList.contains('upperFigureDisplay')) {
-                
-                const currentText = upperFigure.textContent;
-                let nextText = '';
-
-                // cycles through clicks to change upper figure display
-                if (currentText === '') 
-                {
-                    nextText = '7';
-                } 
-                else if (currentText === '7') 
-                {
-                    nextText = '9';
-                } 
-                else if (currentText === '9') 
-                {
-                    nextText = '11';
-                } 
-                else if (currentText === '11') 
-                {
-                    nextText = '';
-                }
-
-                // updatres upper figure
-                upperFigure.textContent = nextText;
-            }
-        });
-    });
+function init() {
+    for (let i = 0; i < DEFAULT_NUM_CHORDS; i++) {
+        addChordToDisplay();
+    }
+    currentProgression = currentProgression.trim();
+    updateChordNameDisplay();
 };
 
-/**
- * Converts Roman numeral chords into readable text.
- * Uppercase = major, lowercase = minor
- * @param {string} numeral The Roman numeral chord ("V" o "vi")
- * @returns {string} Descriptive chord name ("Five major" or "Six minor")
- */
-function romanToWords(numeralString){
-    const romanMap = {
-        "I": "One",
-        "II": "Two",
-        "III": "Three",
-        "IV": "Four",
-        "V": "Five",
-        "VI": "Six",
-        "VII": "Seven"
-    };
 
-    const numerals = numeralString.split(" ");
-    const words = numerals.map(numeral => {
-        const isMinor = numeral === numeral.toLowerCase();
-        const upperNumeral = numeral.toUpperCase();
-        const numberWord = romanMap[upperNumeral] || numeral;
-        return numberWord + " " + (isMinor ? "minor" : "major");
-    });
-
-    return words.join(" ");    
-}
-
-/**
- * Converts chord symbols (like "Cmaj7") into words.
- * Example: Cmaj7 -> "C major seven"
- * @param {string} chordSymbol
- * @returns {string}
- * 
- */
-function chordToWords(chordSymbol){
-    const chordDictionary = {
-        "A": "A major",
-        "a": "A minor",
-        "B": "B major",
-        "b": "B minor",
-        "C": "C major",
-        "c": "C minor",
-        "D": "D major",
-        "d": "D minor",
-        "E": "E major",
-        "e": "E minor",
-        "F": "F major",
-        "f": "F minor",
-        "G": "G major",
-        "g": "G minor",
-        "Cmaj7": "C major seven",
-        "G7": "G dominant seven"
-    };
-    
-    return chordDictionary[chordSymbol] || "Unknown chord";
-}
-
-function displayRomanProgressionAndWords() {
-    const romanProgression = genRomanNumeral();
-
-    const words = romanToWords(romanProgression);
-
-    document.getElementById("wordDisplay").textContent = words;
-}
-
-
-function displayAlphabetProgressionAndWords() {
-    const alphabetProgression = genAlphabet();
-    const chords = alphabetProgression.split(" ");
-    const words = chords.map(chordToWords).join(" ");
-
-    document.getElementById("wordDisplay").textContent = words;
-}
-
-/**
- * Generate random bass notes for each chord and displays them
- * @returns {string} A string of bass notes
- * @contributors Adolfo
- */
-function genBassNotes() 
-{
-    // Common bass notes
-    const bassNotes = ["C", "D", "E", "F", "G", "A", "B"];
-    let result = "";
-
-    for (let i = 0; i < NUM_CHORDS; i++) 
-        {
-        const randIndex = getRandomInt(0, bassNotes.length - 1);
-        const randBassNote = bassNotes[randIndex];
-
-        result += randBassNote + " ";
-
-        const displayElement = document.getElementById(`bassNote${i + 1}`);
-        if (displayElement) {
-            displayElement.textContent = randBassNote;
-        }
-    }
-
-    return result.trim();
-}
-
-//Letting the user to add note to the chords (bass notes)
-window.addEventListener("DOMContentLoaded", () => {
-    // Select all elements with the class "bassNoteDisplay"
-    const bassNoteElements = document.querySelectorAll(".bassNoteDisplay");
-
-    // Add click event listener to each bass note
-    bassNoteElements.forEach((bassNote) => {
-        bassNote.addEventListener("click", () => {
-            // Prompt the user for a new note
-            const currentNote = bassNote.textContent || "";
-            const newNote = prompt("Enter a new bass note (e.g., C, D#, F):", currentNote);
-
-            // Update the bass note if valid input is given
-            if (newNote !== null && newNote.trim() !== "") {
-                bassNote.textContent = newNote.trim();
-            }
-        });
-    });
-});
-
-/**
- * Allow user to remove a note
- * @contributors Adolfo
- */
-window.addEventListener("DOMContentLoaded", () => {
-    const removableElements = document.querySelectorAll(".upperFigureDisplay, .lowerFigureDisplay, .bassNoteDisplay");
-
-    removableElements.forEach((el) => {
-        el.addEventListener("click", () => {
-            // Ask the user if they want to remove the note
-            const shouldRemove = confirm(`Do you want to remove the note "${el.textContent}"?`);
-            if (shouldRemove) {
-                el.textContent = ""; // remove the note
-            }
-        });
-    });
-});
-
-module.exports = { getRandomInt, numCycle, genRomanNumeral, genAlphabet, genInversions, clearInversions, getKey, 
-    NUM_CHORDS, getScale, romanToWords, chordToWords, displayAlphabetProgressionAndWords, displayRomanProgressionAndWords, genBassNotes };
+// TODO: update this
+module.exports = { 
+    MAX_CHORDS,
+    getChordName,
+    convertProgressionToChordNames,
+    updateChordNameDisplay,
+    addChordToDisplay,
+    incrementNumChords,
+    genRomanNumeral,
+    genAlphabet,
+    genInversions,
+    clearInversions,
+    genBassNotes,
+    setKey,
+    setScale,
+    init
+};
