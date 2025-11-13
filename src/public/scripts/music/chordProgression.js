@@ -62,6 +62,14 @@ class ChordProgression {
     getNumChords() {
         return this.#chords.length;
     }
+
+    transposeChordBy(chordIndex, numHalfSteps) {
+        this.#chords[chordIndex].transposeBy(numHalfSteps);
+    }
+
+    transposeChordTo(chordIndex, pitchClass, octave) {
+        this.#chords[chordIndex].transposeTo(pitchClass, octave);
+    }
 }
 
 module.exports = {

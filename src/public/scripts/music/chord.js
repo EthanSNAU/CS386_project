@@ -1,3 +1,5 @@
+const { OCTAVE_HALF_STEP_LENGTH } = require("./pitchClass.js");
+
 const CHORD_PLAYBACK_STYLE = Object.freeze({
     BLOCK:         0,
     ARPEGGIO_UP:   1,
@@ -34,7 +36,7 @@ const ChordQualityMap = Object.freeze({
     [CHORD_QUALITY.HALF_DIMINISHED]: { steps: [3, 3, 4], symbol: "m7b5", name: "half diminished" },
 })
 
-const OCTAVE_HALF_STEP_LENGTH = 12;
+const DEFAULT_OCTAVE = 4;
 
 class Chord {
     #rootNoteIndex
@@ -42,8 +44,7 @@ class Chord {
     #quality
     #playbackStyle
 
-    // TODO: add octaves
-    constructor(rootNotePitchClass, quality, inversion = CHORD_INVERSION.ROOT,
+    constructor(rootNotePitchClass, rootNoteOctave = DEFAULT_OCTAVE, quality, inversion = CHORD_INVERSION.ROOT,
                 playbackStyle = CHORD_PLAYBACK_STYLE.BLOCK) {
 
         this.#playbackStyle = playbackStyle;
@@ -51,15 +52,22 @@ class Chord {
 
         // TODO: take into account the inversion
         this.#rootNoteIndex = 0;
-        this.#notes = [new Note(rootNotePitchClass)]
+        this.#notes = [new Note(rootNotePitchClass, rootNoteOctave)]
 
         // add notes based on the quality
         const chordQualitySteps = ChordQualityMap[quality].steps;
         let currentPitchClass = rootNotePitchClass;
+        let currentOctave = rootNoteOctave;
 
         for (const step of chordQualitySteps) {
             currentPitchClass = (currentPitchClass + step) % OCTAVE_HALF_STEP_LENGTH;
-            this.#notes.push(new Note(currentPitchClass));
+            currentPitchClass += step;
+            if (currentPitchClass >= OCTAVE_HALF_STEP_LENGTH) {
+                currentOctave += Math.trunc(currentPitchClass / OCTAVE_HALF_STEP_LENGTH);
+                currentPitch %= OCTAVE_HALF_STEP_LENGTH;
+            }
+
+            this.#notes.push(new Note(currentPitchClass, currentOctave));
         }
     }
 
@@ -74,6 +82,19 @@ class Chord {
             symbol:  qualityInfo.symbol,
             name:    qualityInfo.name,
         };
+    }
+
+    transposeBy(numHalfSteps) {
+        for (const note of this.#notes) {
+            note.transposeBy(numHalfSteps);
+        }
+    }
+
+    transposeTo(pitchClass, octave) {
+        // get the number of half steps, then call transposeBy
+        const rootNote = this.getRootNote();
+        const numHalfSteps = (octave - rootNote.getOctave()) * OCTAVE_HALF_STEP_LENGTH + (pitchClass - rootNote.pitchClass);
+        this.transposeBy(numHalfSteps);
     }
 }
 

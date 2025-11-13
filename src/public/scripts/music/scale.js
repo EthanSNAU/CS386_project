@@ -2,16 +2,18 @@ const { SUPPORTED_PITCH_CLASSES, NUM_PITCH_CLASSES, getPitchClassRepresentation,
 
 const REFERENTIAL_SCALE = Object.freeze({
     IONIAN_MAJOR: 0,
+    IONIAN_NATURAL_MINOR: 1
     // TODO: add more
-    // note: some values can share because they are equivalent (i.e. ionian minor is the same as aelioan major I think)
 });
 
 // "steps" refers to half steps
-const ReferentialScaleMap = {
-    [REFERENTIAL_SCALE.IONIAN_MAJOR]: { steps: [2, 2, 1, 2, 2, 2] }
-}
+// the steps must be in order, so unless the constructor is changed, ionian natural minor and aeolian major are NOT the same
+const ReferentialScaleMap = Object.freeze({
+    [REFERENTIAL_SCALE.IONIAN_MAJOR]:         { steps: [2, 2, 1, 2, 2, 2] },
+    [REFERENTIAL_SCALE.IONIAN_NATURAL_MINOR]: { steps: [2, 1, 2, 2, 1, 2] }
+});
 
-const RomanNumMap = {
+const RomanNumMap = Object.freeze({
     1: "I",
     2: "II",
     3: "III",
@@ -19,9 +21,9 @@ const RomanNumMap = {
     5: "V",
     6: "VI",
     7: "VII",
-}
+});
 
-const WordNumMap = {
+const WordNumMap = Object.freeze({
     1: "one",
     2: "two",
     3: "three",
@@ -29,7 +31,7 @@ const WordNumMap = {
     5: "five",
     6: "six",
     7: "seven",
-}
+});
 
 function convertToRoman(num) {
     return RomanNumMap[num];
@@ -41,6 +43,7 @@ function convertToWord(num) {
 
 
 // TODO: add ability for users to toggle between different symbols (eg. G# vs. Ab)
+// TODO: add ability to transpose a chord
 class Scale {
     #octave // tracks the user's preferred symbols (eg. G# vs. Ab)
     #referentialScale // tracks the notes that are used for chord labeling

@@ -129,6 +129,7 @@ const NUM_PITCH_CLASSES = SUPPORTED_PITCH_CLASSES.length;
 const PITCH_CLASS_BASE_OCTAVE = 4
 const MIN_INTERVAL = 0;
 const MAX_INTERVAL = 11;
+const OCTAVE_HALF_STEP_LENGTH = 12;
 
 function getPitchClassRepresentations(pitchClass) {
     return PitchClassMap[pitchClass].representations;
@@ -149,6 +150,7 @@ module.exports = {
     NUM_PITCH_CLASSES,
     MIN_INTERVAL,
     MAX_INTERVAL,
+    OCTAVE_HALF_STEP_LENGTH,
     getPitchClassRepresentations,
     getPitchClassRepresentation,
     getPitchClassPitch
