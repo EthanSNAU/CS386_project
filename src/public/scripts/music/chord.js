@@ -91,7 +91,6 @@ class Chord {
     }
 
     transposeTo(pitchClass, octave) {
-        // get the number of half steps, then call transposeBy
         const rootNote = this.getRootNote();
         const numHalfSteps = (octave - rootNote.getOctave()) * OCTAVE_HALF_STEP_LENGTH + (pitchClass - rootNote.pitchClass);
         this.transposeBy(numHalfSteps);

@@ -12,18 +12,13 @@ class ChordProgression {
     #chords
     #scale
     
-    constructor(numChords, scaleRootPitchClass, diatonicScaleType) {
-        this.#scale = new Scale(scaleRootPitchClass, diatonicScaleType);
-
-        this.#chords = [];
-        for (let i = 0; i < numChords; i++) {
-            this.#chords.push(new Chord(scaleRootPitchClass));
-        }
+    constructor(scaleRootPitchClass, referentialScale) {
+        this.#scale = new Scale(scaleRootPitchClass, referentialScale);
     }
 
     /**
      * Gets a chord's representation information
-     * @param {Number} chordIndex Index of the chord to get representation information on
+     * @param {Number} chordIndex Index of the chord to get information on
      * @returns {{
      *  alphabeticalName:   string,
      *  alphabeticalSymbol: string,
@@ -69,6 +64,26 @@ class ChordProgression {
 
     transposeChordTo(chordIndex, pitchClass, octave) {
         this.#chords[chordIndex].transposeTo(pitchClass, octave);
+    }
+
+    addChord(pitchClass, octave, chordQuality) {
+        this.#chords.push(new Chord(pitchClass, octave, chordQuality))
+    }
+
+    addChord(chord) {
+        this.#chords.push(chord);
+    }
+
+    removeChord(chordIndex) {
+        this.#chords.splice(chordIndex, 1);
+    }
+
+    clearChords() {
+        this.#chords = [];
+    }
+
+    popChord() {
+        return this.#chords.pop();
     }
 }
 

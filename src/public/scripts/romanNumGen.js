@@ -1,86 +1,14 @@
 // romanNumGen.js
+const { ChordProgression } = require("./music/chordProgression.js");
+const { REFERENTIAL_SCALE } = require("./music/scale.js");
+const { PITCH_CLASS } = require("./music/pitchClass.js");
+const { getRandomArrayElement } = require ("./math.js");
+
 const DEFAULT_NUM_CHORDS = 4;
 const MAX_CHORDS = 7;
-const romanNotes = ["I", "II", "III", "IV", "V", "VI", "VII"];
-const alphabetNotes = ["A", "B", "C", "D", "E", "F", "G"];
-const inversions = ["53", "63", "64"]; // root, first, and second inversions respectively
-const chordNameDictionary = {
-    // alphabetical characters
-    "A": "A major",
-    "Am": "A minor",
-    "B": "B major",
-    "Bm": "B minor",
-    "C": "C major",
-    "Cm": "C minor",
-    "D": "D major",
-    "Dm": "D minor",
-    "E": "E major",
-    "Em": "E minor",
-    "F": "F major",
-    "Fm": "F minor",
-    "G": "G major",
-    "Gm": "G minor",
-    "Cmaj7": "C major seven",
-    "G7": "G dominant seven",
-
-    // roman numerals
-    "I": "One",
-    "i": "One minor",
-    "II": "Two",
-    "ii": "Two minor",
-    "III": "Three",
-    "iii": "Three minor",
-    "IV": "Four",
-    "iv": "Four minor",
-    "V": "Five",
-    "v": "Five minor",
-    "VI": "Six",
-    "vi": "Six minor",
-    "VII": "Seven",
-    "vii": "Seven minor"
-};
-
 let numChordsDisplayed = 0;
-let isDisplayingAlphabet = false; // currently unused
-let currentProgression = "";
-
-/**
- * Generates a random integer between inclusiveMin and inclusiveMax (both inclusive)
- * @param {integer} inclusiveMin The minimum integer value (inclusive)
- * @param {integer} inclusiveMax The maximum integer value (inclusive)
- * @returns {integer} A random integer between inclusiveMin and inclusiveMax (both inclusive)
- * @contributors Nolan
- */
-function getRandomInt(inclusiveMin, inclusiveMax) {
-    return Math.floor(Math.random() * (inclusiveMax - inclusiveMin + 1)) + inclusiveMin;
-}
-
-/**
- * Converts chord symbols (like "Cmaj7") into words.
- * Example: Cmaj7 -> "C major seven"
- * @param {string} chordSymbol
- * @returns {string}
- * @contributors Marcus, Nolan
- */
-function getChordName(chordSymbol){
-    return chordNameDictionary[chordSymbol] || "Unknown chord";
-}
-
-
-/**
- * Converts a sequence of chord symbols into readable text.
- * @param {string} numeral The chord symbol ("V", "Am", etc.)
- * @returns {string} Descriptive chord name ("Five major", "A minor", etc.)
- * @contributors Marcus, Nolan
- */
-function convertProgressionToChordNames(progressionString){
-    const names = progressionString.split(" ").map(symbol => {
-        return getChordName(symbol);
-    });
-
-    return names.join(" ");
-}
-
+let isDisplayingAlphabet = false;
+const chordProgression = new ChordProgression(PITCH_CLASS.C, REFERENTIAL_SCALE.IONIAN_MAJOR);
 
 /**
  * Updates the displayed names of chord progressions
@@ -91,12 +19,11 @@ function updateChordNameDisplay() {
     document.getElementById("wordDisplay").textContent = words;
 }
 
-
 /**
  * Adds a chord to the chord display
- * @contributors Nolan, Ethan
+ * @contributors Nolan, Ethan, Ben
  */
-function addChordToDisplay() {
+function addChord() {
     numChordsDisplayed++;
 
     let newRootNoteDisplay = document.createElement("p");
@@ -179,33 +106,12 @@ function addChordToDisplay() {
     document.getElementById("chordProgressionDisplay").appendChild(newChord);
 }
 
-
 /**
- * Increments the number of chords being displayed in the web page, looping to one if at capacity.
- * @contributors Ben, Nolan
- */
-function incrementNumChords() {
-    if (numChordsDisplayed < MAX_CHORDS) {
-        addChordToDisplay();
-    } else {
-        for (let i = 2; i <= MAX_CHORDS; i++) {
-            document.getElementById(`chord${i}`).remove();
-        }
-
-        currentProgression = currentProgression.split(" ")[0];
-        numChordsDisplayed = 1;
-    }
-
-    updateChordNameDisplay();
-}
-
-
-/**
- * Generates a random chord progression in roman numerals and displays it on the webpage
+ * Generates a random chord progression displays it on the webpage
  * @returns {string} A string containing the chord progression
- * @contributors Chris, Nolan
+ * @contributors Chris, Nolan, Ben
  */
-function genRomanNumeral() {
+function getRandomProgression() {
     let result = "";
 
     // loop 4 times to build the string
@@ -234,112 +140,78 @@ function genRomanNumeral() {
 
 
 /**
- * Generates a random chord progression in alphabetical characters and displays it on the webpage
- * @returns {string} 
- * @contributors Ben, Nolan
- */
-function genAlphabet() {
-    let result = "";
-
-    for(let i = 0; i < numChordsDisplayed; i++) {
-        // generate a random index between 0 and 6
-        const randIndex = getRandomInt(0, alphabetNotes.length - 1);
-
-        // get the alphabet and randomize major/minor
-        let symbol = alphabetNotes[randIndex];
-        if (Math.random() > 0.5) symbol += "m";
-
-        // add it to the result string
-        result += symbol + " " ;
-
-        // display it on the webpage
-        const displayElement = document.getElementById(`rootNote${i + 1}`);
-        displayElement.textContent = symbol;
-    }
-
-    isDisplayingAlphabet = true;
-    currentProgression = result.trim();
-
-    updateChordNameDisplay();
-
-    return currentProgression;
-}
-
-
-/**
  * Generates a random sequence of chord inversions and displays it on the webpage
  * @returns {string} A string containing the inversions
  * @contributors Nolan
  */
-function genInversions() {
-    let result = "";
-
-    for (let i = 0; i < numChordsDisplayed; i++) {
-        const randIndex = getRandomInt(0, inversions.length - 1);
-        const randInversion = inversions[randIndex];
-
-        result += randInversion + " ";
-
-        const upperFigureDisplayElement = document.getElementById(`upperFigure${i + 1}`);
-        const lowerFigureDisplayElement = document.getElementById(`lowerFigure${i + 1}`);
-
-        if (randInversion === "53") {
-            upperFigureDisplayElement.textContent = "";
-            lowerFigureDisplayElement.textContent = "";
-        } else {
-            upperFigureDisplayElement.textContent = randInversion.charAt(0);
-            lowerFigureDisplayElement.textContent = randInversion.charAt(1);
-        }
-    }
-
-    return result.trim();
-}
+// function genInversions() {
+//     let result = "";
+// 
+//     for (let i = 0; i < numChordsDisplayed; i++) {
+//         const randIndex = getRandomInt(0, inversions.length - 1);
+//         const randInversion = inversions[randIndex];
+// 
+//         result += randInversion + " ";
+// 
+//         const upperFigureDisplayElement = document.getElementById(`upperFigure${i + 1}`);
+//         const lowerFigureDisplayElement = document.getElementById(`lowerFigure${i + 1}`);
+// 
+//         if (randInversion === "53") {
+//             upperFigureDisplayElement.textContent = "";
+//             lowerFigureDisplayElement.textContent = "";
+//         } else {
+//             upperFigureDisplayElement.textContent = randInversion.charAt(0);
+//             lowerFigureDisplayElement.textContent = randInversion.charAt(1);
+//         }
+//     }
+// 
+//     return result.trim();
+// }
 
 
 /**
  * Clears the displayed inversions on the webpage
  * @contributors Nolan
  */
-function clearInversions() {
-    for (let i = 0; i < numChordsDisplayed; i++) {
-        const upperFigureDisplayElement = document.getElementById(`upperFigure${i + 1}`);
-        const lowerFigureDisplayElement = document.getElementById(`lowerFigure${i + 1}`);
-
-        upperFigureDisplayElement.textContent = "";
-        lowerFigureDisplayElement.textContent = "";
-    }
-}
-
+// function clearInversions() {
+//     for (let i = 0; i < numChordsDisplayed; i++) {
+//         const upperFigureDisplayElement = document.getElementById(`upperFigure${i + 1}`);
+//         const lowerFigureDisplayElement = document.getElementById(`lowerFigure${i + 1}`);
+// 
+//         upperFigureDisplayElement.textContent = "";
+//         lowerFigureDisplayElement.textContent = "";
+//     }
+// }
 
 /**
  * Generate random bass notes for each chord and displays them
  * @returns {string} A string of bass notes
  * @contributors Adolfo, Nolan
  */
-function genBassNotes() {
-    // Common bass notes
-    let result = "";
-
-    for (let i = 0; i < numChordsDisplayed; i++) 
-        {
-        let randIndex;
-        let randBassNote;
-        
-        if (isDisplayingAlphabet) {
-            randIndex = getRandomInt(0, alphabetNotes.length - 1);
-            randBassNote = alphabetNotes[randIndex];
-        } else {
-            randIndex = getRandomInt(0, romanNotes.length - 1);
-            randBassNote = romanNotes[randIndex];
-        }
-
-        result += randBassNote + " ";
-
-        document.getElementById(`bassNote${i + 1}`).textContent = randBassNote;
-    }
-
-    return result.trim();
-}
+// function genBassNotes() {
+//     // Common bass notes
+//     let result = "";
+// 
+//     for (let i = 0; i < numChordsDisplayed; i++) 
+//         {
+//         let randIndex;
+//         let randBassNote;
+//         
+//         if (isDisplayingAlphabet) {
+//             randIndex = getRandomInt(0, alphabetNotes.length - 1);
+//             randBassNote = alphabetNotes[randIndex];
+//         } else {
+//             randIndex = getRandomInt(0, romanNotes.length - 1);
+//             randBassNote = romanNotes[randIndex];
+//         }
+// 
+//         result += randBassNote + " ";
+// 
+//         document.getElementById(`bassNote${i + 1}`).textContent = randBassNote;
+//     }
+// 
+//     return result.trim();
+// }
 
 
 /**
@@ -376,7 +248,7 @@ function setScale(scaleName) {
  */
 function init() {
     for (let i = 0; i < DEFAULT_NUM_CHORDS; i++) {
-        addChordToDisplay();
+        addChord();
     }
     currentProgression = currentProgression.trim();
     updateChordNameDisplay();
@@ -386,16 +258,8 @@ function init() {
 // TODO: update this
 module.exports = { 
     MAX_CHORDS,
-    getChordName,
-    convertProgressionToChordNames,
+    addChord,
     updateChordNameDisplay,
-    addChordToDisplay,
-    incrementNumChords,
-    genRomanNumeral,
-    genAlphabet,
-    genInversions,
-    clearInversions,
-    genBassNotes,
     setKey,
     setScale,
     init
