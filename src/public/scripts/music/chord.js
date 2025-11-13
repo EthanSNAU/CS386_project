@@ -1,0 +1,85 @@
+const CHORD_PLAYBACK_STYLE = Object.freeze({
+    BLOCK:         0,
+    ARPEGGIO_UP:   1,
+    ARPEGGIO_DOWN: 2,
+    BROKEN:        3
+});
+
+const CHORD_INVERSION = Object.freeze({
+    ROOT:   0,
+    FIRST:  1,
+    SECOND: 2
+});
+
+const CHORD_QUALITY = Object.freeze({
+    MAJOR:           0,
+    MINOR:           1,
+    DIMINISHED:      2,
+    AUGMENTED:       3,
+    SUSPENDED_TWO:   4,
+    SUSPENDED_FOUR:  5,
+    DOMINANT_SEVEN:  6,
+    HALF_DIMINISHED: 7
+});
+
+// "steps" are in half steps
+const ChordQualityMap = Object.freeze({
+    [CHORD_QUALITY.MAJOR]:           { steps: [4, 3],    symbol: "",     name: "major"           },
+    [CHORD_QUALITY.MINOR]:           { steps: [3, 4],    symbol: "m",    name: "minor"           },
+    [CHORD_QUALITY.DIMINISHED]:      { steps: [3, 3],    symbol: "dim",  name: "diminished"      },
+    [CHORD_QUALITY.AUGMENTED]:       { steps: [4, 4],    symbol: "aug",  name: "augmented"       },
+    [CHORD_QUALITY.SUSPENDED_TWO]:   { steps: [2, 5],    symbol: "sus2", name: "suspended two"   },
+    [CHORD_QUALITY.SUSPENDED_FOUR]:  { steps: [5, 2],    symbol: "sus4", name: "suspended four"  },
+    [CHORD_QUALITY.DOMINANT_SEVEN]:  { steps: [4, 3, 3], symbol: "7",    name: "dominant seven"  },
+    [CHORD_QUALITY.HALF_DIMINISHED]: { steps: [3, 3, 4], symbol: "m7b5", name: "half diminished" },
+})
+
+const OCTAVE_HALF_STEP_LENGTH = 12;
+
+class Chord {
+    #rootNoteIndex
+    #notes
+    #quality
+    #playbackStyle
+
+    // TODO: add octaves
+    constructor(rootNotePitchClass, quality, inversion = CHORD_INVERSION.ROOT,
+                playbackStyle = CHORD_PLAYBACK_STYLE.BLOCK) {
+
+        this.#playbackStyle = playbackStyle;
+        this.#quality = quality;
+
+        // TODO: take into account the inversion
+        this.#rootNoteIndex = 0;
+        this.#notes = [new Note(rootNotePitchClass)]
+
+        // add notes based on the quality
+        const chordQualitySteps = ChordQualityMap[quality].steps;
+        let currentPitchClass = rootNotePitchClass;
+
+        for (const step of chordQualitySteps) {
+            currentPitchClass = (currentPitchClass + step) % OCTAVE_HALF_STEP_LENGTH;
+            this.#notes.push(new Note(currentPitchClass));
+        }
+    }
+
+    getRootNote() {
+        return this.#notes[this.#rootNoteIndex];
+    }
+
+    getQualityInformation() {
+        const qualityInfo = ChordQualityMap[this.#quality];
+        return {
+            quality: this.#quality,
+            symbol:  qualityInfo.symbol,
+            name:    qualityInfo.name,
+        };
+    }
+}
+
+this.modules = {
+    Chord,
+    CHORD_PLAYBACK_STYLE,
+    CHORD_INVERSION,
+    CHORD_QUALITY,
+};

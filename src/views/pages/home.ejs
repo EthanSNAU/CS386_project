@@ -5,12 +5,12 @@
 <h1>Random Chord progression</h1>
 
 <!-- displays key that user selects -->
-<h2 id="keyDisplay">Key: C</h2>
+<h2 id="rootKeyDisplay">Key: C</h2>
 <h2 id="scaleDisplay">Scale: Ionian</h2>
 
 <!-- id="romanNum" comes from genRomanNumeral function in romanNumGen.js-->
 <!-- onclick runs function genRomanNumeral() from romanNumGen.js-->
-<div id="chordProgressionDisplay"> </div>
+<div id="chordProgressionDisplay"></div>
 <button onclick="genRomanNumeral()">Randomize root notes</button>
 <button onclick="genAlphabet()">Randomize root notes (Alphabet)</button>
 <button onclick="incrementNumChords()">Click to change number of progressions (1-7)</button>
@@ -18,21 +18,23 @@
 <button onclick="clearInversions()">Clear inversions</button>
 <button onclick="genBassNotes()">Randomize bass notes</button>
 
-<!-- set of buttons that let the user select what key they want to be in-->
 <br/>
 <br/>
-<button onclick="setKey('C')" data-key="C">C</button>
-<button onclick="setKey('C#')" data-key="C#">C#/Db</button>
-<button onclick="setKey('D')" data-key="D">D</button>
-<button onclick="setKey('D#')" data-key="D#">D#/Eb</button>
-<button onclick="setKey('E')" data-key="E">E</button>
-<button onclick="setKey('F')" data-key="F">F</button>
-<button onclick="setKey('F#')" data-key="F#">F#/Gb</button>
-<button onclick="setKey('G')" data-key="G">G</button>
-<button onclick="setKey('G#')" data-key="G#/Ab">G#/Ab</button>
-<button onclick="setKey('A')" data-key="A">A</button>
-<button onclick="setKey('A#')" data-key="A#">A#/Bb</button>
-<button onclick="setKey('B')" data-key="B">B</button>
+<form>
+    <select onchange="setRootKey(this.value)">
+        <option value="C">C</option>
+        <option value="C#/Db">C#/Db</option>
+        <option value="D">D</option>
+        <option value="D#/Eb">D#/Eb</option>
+        <option value="E">E</option>
+        <option value="F">F</option>
+        <option value="F#/Gb">F#/Gb</option>
+        <option value="G">G</option>
+        <option value="G#/Ab">G#/Ab</option>
+        <option value="A">A</option>
+        <option value="A#/Bb">A#/Bb</option>
+    </select>
+</form>
 
 <br/>
 <p id="wordDisplay"></p>
