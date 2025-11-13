@@ -1,19 +1,20 @@
-const { OCTAVE_HALF_STEP_LENGTH } = require("./pitchClass.js");
+import { OCTAVE_HALF_STEP_LENGTH } from "./pitchClass.js";
+import { Note } from "./note.js"
 
-const CHORD_PLAYBACK_STYLE = Object.freeze({
+export const CHORD_PLAYBACK_STYLE = Object.freeze({
     BLOCK:         0,
     ARPEGGIO_UP:   1,
     ARPEGGIO_DOWN: 2,
     BROKEN:        3
 });
 
-const CHORD_INVERSION = Object.freeze({
+export const CHORD_INVERSION = Object.freeze({
     ROOT:   0,
     FIRST:  1,
     SECOND: 2
 });
 
-const CHORD_QUALITY = Object.freeze({
+export const CHORD_QUALITY = Object.freeze({
     MAJOR:           0,
     MINOR:           1,
     DIMINISHED:      2,
@@ -23,6 +24,8 @@ const CHORD_QUALITY = Object.freeze({
     DOMINANT_SEVEN:  6,
     HALF_DIMINISHED: 7
 });
+
+export const SUPPORTED_CHORD_QUALITIES = Object.freeze(Object.values(CHORD_QUALITY));
 
 // "steps" are in half steps
 const ChordQualityMap = Object.freeze({
@@ -38,7 +41,7 @@ const ChordQualityMap = Object.freeze({
 
 const DEFAULT_OCTAVE = 4;
 
-class Chord {
+export class Chord {
     #rootNoteIndex
     #notes
     #quality
@@ -64,7 +67,7 @@ class Chord {
             currentPitchClass += step;
             if (currentPitchClass >= OCTAVE_HALF_STEP_LENGTH) {
                 currentOctave += Math.trunc(currentPitchClass / OCTAVE_HALF_STEP_LENGTH);
-                currentPitch %= OCTAVE_HALF_STEP_LENGTH;
+                currentPitchClass %= OCTAVE_HALF_STEP_LENGTH;
             }
 
             this.#notes.push(new Note(currentPitchClass, currentOctave));
@@ -93,14 +96,20 @@ class Chord {
 
     transposeTo(pitchClass, octave) {
         const rootNote = this.getRootNote();
-        const numHalfSteps = (octave - rootNote.getOctave()) * OCTAVE_HALF_STEP_LENGTH + (pitchClass - rootNote.pitchClass);
+        const numHalfSteps = (octave - rootNote.getOctave()) * OCTAVE_HALF_STEP_LENGTH + (pitchClass - rootNote.getPitchClass());
         this.transposeBy(numHalfSteps);
+    }
+
+    setQuality(quality) {
+        this.#quality = quality;
+        
+        const QUALITY_STEPS = ChordQualityMap;
     }
 }
 
-this.modules = {
-    Chord,
-    CHORD_PLAYBACK_STYLE,
-    CHORD_INVERSION,
-    CHORD_QUALITY,
-};
+// this.modules = {
+//     Chord,
+//     CHORD_PLAYBACK_STYLE,
+//     CHORD_INVERSION,
+//     CHORD_QUALITY,
+// };

@@ -1,6 +1,6 @@
 // note: numbers are of ascending pitch class
 // a difference of one means one half step
-const PITCH_CLASS = Object.freeze({
+export const PITCH_CLASS = Object.freeze({
     C:       0,
     C_SHARP: 1,
     D_FLAT:  1,
@@ -22,13 +22,13 @@ const PITCH_CLASS = Object.freeze({
     B:       11,
 });
 
-const PITCH_CLASS_REPRESENTATION_TYPE = Object.freeze({
+export const PITCH_CLASS_REPRESENTATION_TYPE = Object.freeze({
     NATURAL: 0,
     SHARP:   1,
     FLAT:    2
 })
 
-const PitchClassMap = Object.freeze({
+export const PitchClassMap = Object.freeze({
     [PITCH_CLASS.C]: {
         basePitch: 261.63,
         representations: [
@@ -123,34 +123,34 @@ const PitchClassMap = Object.freeze({
     },
 });
 
-const SUPPORTED_PITCH_CLASSES = Array.freeze(Object.keys(PitchClassMap))
-const NUM_PITCH_CLASSES = SUPPORTED_PITCH_CLASSES.length;
+export const SUPPORTED_PITCH_CLASSES = Object.freeze(Object.keys(PitchClassMap))
+export const NUM_PITCH_CLASSES = SUPPORTED_PITCH_CLASSES.length;
 const PITCH_CLASS_BASE_OCTAVE = 4
-const MIN_INTERVAL = 0;
-const MAX_INTERVAL = 11;
-const OCTAVE_HALF_STEP_LENGTH = 12;
+export const MIN_INTERVAL = 0;
+export const MAX_INTERVAL = 11;
+export const OCTAVE_HALF_STEP_LENGTH = 12;
 
-function getPitchClassRepresentations(pitchClass) {
+export function getPitchClassRepresentations(pitchClass) {
     return PitchClassMap[pitchClass].representations;
 }
 
-function getPitchClassRepresentation(pitchClass, index) {
+export function getPitchClassRepresentation(pitchClass, index) {
     return getPitchClassRepresentations(pitchClass)[index];
 }
 
-function getPitchClassPitch(pitchClass, octave) {
+export function getPitchClassPitch(pitchClass, octave) {
     return Math.pow(2, octave - PITCH_CLASS_BASE_OCTAVE) * PitchClassMap[pitchClass].basePitch;
 }
 
-module.exports = {
-    PITCH_CLASS,
-    PITCH_CLASS_REPRESENTATION_TYPE,
-    SUPPORTED_PITCH_CLASSES,
-    NUM_PITCH_CLASSES,
-    MIN_INTERVAL,
-    MAX_INTERVAL,
-    OCTAVE_HALF_STEP_LENGTH,
-    getPitchClassRepresentations,
-    getPitchClassRepresentation,
-    getPitchClassPitch
-};
+// module.exports = {
+//     PITCH_CLASS,
+//     PITCH_CLASS_REPRESENTATION_TYPE,
+//     SUPPORTED_PITCH_CLASSES,
+//     NUM_PITCH_CLASSES,
+//     MIN_INTERVAL,
+//     MAX_INTERVAL,
+//     OCTAVE_HALF_STEP_LENGTH,
+//     getPitchClassRepresentations,
+//     getPitchClassRepresentation,
+//     getPitchClassPitch
+// };

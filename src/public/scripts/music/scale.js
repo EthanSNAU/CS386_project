@@ -1,6 +1,6 @@
-const { SUPPORTED_PITCH_CLASSES, NUM_PITCH_CLASSES, getPitchClassRepresentation, PITCH_CLASS_REPRESENTATION_TYPE } = require("./pitchClass.js");
+import { PITCH_CLASS_REPRESENTATION_TYPE, SUPPORTED_PITCH_CLASSES, NUM_PITCH_CLASSES, getPitchClassRepresentation, } from "./pitchClass.js";
 
-const REFERENTIAL_SCALE = Object.freeze({
+export const REFERENTIAL_SCALE = Object.freeze({
     IONIAN_MAJOR: 0,
     IONIAN_NATURAL_MINOR: 1
     // TODO: add more
@@ -44,7 +44,7 @@ function convertToWord(num) {
 
 // TODO: add ability for users to toggle between different symbols (eg. G# vs. Ab)
 // TODO: add ability to transpose a chord
-class Scale {
+export class Scale {
     #rootPitchClass
     #octave // tracks the user's preferred symbols (eg. G# vs. Ab)
     #referentialScale // tracks the notes that are used for chord labeling
@@ -68,9 +68,10 @@ class Scale {
         // fill in the octave
         while (currentPitchClassIndex < NUM_PITCH_CLASSES) {
             addNewOctaveNote();
+            currentPitchClassIndex++;
         }
 
-        for (pitchClassIndex = 0; SUPPORTED_PITCH_CLASSES[pitchClassIndex] != rootPitchClass; pitchClassIndex++) {
+        for (currentPitchClassIndex = 0; SUPPORTED_PITCH_CLASSES[currentPitchClassIndex] != rootPitchClass; currentPitchClassIndex++) {
             addNewOctaveNote();
         }
 
@@ -85,14 +86,15 @@ class Scale {
         }
 
         const referentialScaleLength = this.#referentialScale.length;
-        
+        const minReferentialScaleIndex = this.#referentialScale.indexOf(Math.min(...this.#referentialScale));
+
         // fill in the roman numerals
         for (const [octavePitchClass, octaveRepresentation] of Object.entries(this.#octave)) {
             // find where the pitch class resides on the referential scale
             // find the minimum, then loop through the array until a pitch higher than the inputted pitch class is found
             // (implement binary search for optimization later)
             let numIterations = 0;
-            let currentReferentialIndex = this.#referentialScale.indexOf(Math.min(this.#referentialScale));
+            let currentReferentialIndex = minReferentialScaleIndex;
 
             while (this.#referentialScale[currentReferentialIndex] < octavePitchClass
                    && currentReferentialIndex < referentialScaleLength) {
@@ -193,7 +195,7 @@ class Scale {
     }
 }
 
-module.exports = {
-    Scale,
-    REFERENTIAL_SCALE
-}
+// module.exports = {
+//     Scale,
+//     REFERENTIAL_SCALE
+// }

@@ -1,11 +1,12 @@
 // romanNumGen.js
-const { ChordProgression } = require("./music/chordProgression.js");
-const { REFERENTIAL_SCALE } = require("./music/scale.js");
-const { PITCH_CLASS, SUPPORTED_PITCH_CLASSES } = require("./music/pitchClass.js");
-const { getRandomArrayElement } = require ("./math.js");
+import { ChordProgression } from "./music/chordProgression.js";
+import { REFERENTIAL_SCALE } from "./music/scale.js";
+import { PITCH_CLASS, SUPPORTED_PITCH_CLASSES } from "./music/pitchClass.js";
+import { SUPPORTED_CHORD_QUALITIES } from "./music/chord.js";
+import { getRandomArrayElement } from "./math.js";
 
-const DEFAULT_NUM_CHORDS = 4;
-const MAX_CHORDS = 7;
+export const DEFAULT_NUM_CHORDS = 4;
+export const MAX_CHORDS = 7;
 let isDisplayingAlphabet = false;
 const chordProgression = new ChordProgression(PITCH_CLASS.C, REFERENTIAL_SCALE.IONIAN_MAJOR);
 
@@ -13,7 +14,7 @@ const chordProgression = new ChordProgression(PITCH_CLASS.C, REFERENTIAL_SCALE.I
  * Updates the displayed names of chord progressions
  * @contributors Marcus, Nolan
  */
-function updateChordNameDisplay() {
+export function updateChordNameDisplay() {
     const numChords = chordProgression.getNumChords();
     let names = [];
 
@@ -30,24 +31,43 @@ function updateChordNameDisplay() {
     document.getElementById("wordDisplay").textContent = names;
 }
 
+
+export function updateChordSymbolDisplay() {
+    if (isDisplayingAlphabet) {
+        for (let i = 0; i < chordProgression.getNumChords(); i++) {
+            const displayElement = document.getElementById(`rootNote${i}`);
+            displayElement.textContent = chordProgression.getChordRepresentation(i).alphabeticalSymbol;
+        }
+    } else {
+        for (let i = 0; i < chordProgression.getNumChords(); i++) {
+            const displayElement = document.getElementById(`rootNote${i}`);
+            displayElement.textContent = chordProgression.getChordRepresentation(i).romanSymbol;
+        }
+    }
+}
+
+
 /**
  * Adds a chord to the chord display
  * @contributors Nolan, Ethan, Ben
  */
-function addChord() {
+export function addChord() {
+    const numChords = chordProgression.getNumChords();
+    if (numChords >= MAX_CHORDS) return;
+
     // add the chord to the progression manager
     chordProgression.addChord();
-    const chordRepresentation = chordProgression.getChordRepresentation(chordProgression.getNumChords() - 1);
+    const chordRepresentation = chordProgression.getChordRepresentation(numChords);
 
     // create the root note
     let newRootNoteDisplay = document.createElement("p");
-    newRootNoteDisplay.id = `rootNote${numChordsDisplayed}`;
+    newRootNoteDisplay.id = `rootNote${numChords}`;
     newRootNoteDisplay.className = "rootNoteDisplay";
 
     if (isDisplayingAlphabet) {
         newRootNoteDisplay.textContent = chordRepresentation.alphabeticalSymbol;
     } else {
-        newRootNoteDisplay.textContent = chordProgression.romanSymbol;
+        newRootNoteDisplay.textContent = chordRepresentation.romanSymbol;
     }
 
     // newRootNoteDisplay.addEventListener('click', function(event) {
@@ -73,7 +93,7 @@ function addChord() {
     // });
 
     let newUpperFigureDisplay = document.createElement("p");
-    newUpperFigureDisplay.id = `upperFigure${numChordsDisplayed}`;
+    newUpperFigureDisplay.id = `upperFigure${numChords}`;
     newUpperFigureDisplay.className = "upperFigureDisplay";
     // newUpperFigureDisplay.addEventListener("click", (event) => {
     //     // Ask the user if they want to remove the note
@@ -84,7 +104,7 @@ function addChord() {
     // });
 
     let newLowerFigureDisplay = document.createElement("p");
-    newLowerFigureDisplay.id = `lowerFigure${numChordsDisplayed}`;
+    newLowerFigureDisplay.id = `lowerFigure${numChords}`;
     newLowerFigureDisplay.className = "lowerFigureDisplay";
     // newLowerFigureDisplay.addEventListener("click", (event) => {
     //     // Ask the user if they want to remove the note
@@ -95,7 +115,7 @@ function addChord() {
     // });
 
     let newBassNoteDisplay = document.createElement("p");
-    newBassNoteDisplay.id = `bassNote${numChordsDisplayed}`;
+    newBassNoteDisplay.id = `bassNote${numChords}`;
     newBassNoteDisplay.className = "bassNoteDisplay";
     // newBassNoteDisplay.addEventListener("click", (event) => {
     //     // Prompt the user for a new note
@@ -109,7 +129,7 @@ function addChord() {
     // });
 
     let newChord = document.createElement("div");
-    newChord.id = `chord${numChordsDisplayed}`;
+    newChord.id = `chord${numChords}`;
     newChord.className = "chordDisplay";
 
     newChord.appendChild(newRootNoteDisplay);
@@ -125,22 +145,17 @@ function addChord() {
  * @returns {string} A string containing the chord progression
  * @contributors Chris, Nolan, Ben
  */
-function genRandomRootNotes() {
+export function genRandomRootNotes() {
     const numChords = chordProgression.getNumChords();
     for(let i = 0; i < numChords; i++) {
         const randomPitchClass = getRandomArrayElement(SUPPORTED_PITCH_CLASSES);
-        chordProgression.setChord(i, randomPitchClass);
-
-        const displayElement = document.getElementById(`rootNote${i + 1}`);
-        if (isDisplayingAlphabet) {
-            displayElement.textContent = chordProgression.getChordRepresentation(i).alphabeticalSymbol;
-        } else {
-            displayElement.textContent = chordProgression.getChordRepresentation(i).romanSymbol;
-        }
+        chordProgression.setChord(i, randomPitchClass, );
     }
 
+    updateChordSymbolDisplay();
     updateChordNameDisplay();
 }
+
 
 
 /**
@@ -148,7 +163,7 @@ function genRandomRootNotes() {
  * @returns {string} A string containing the inversions
  * @contributors Nolan
  */
-// function genInversions() {
+// export function genInversions() {
 //     let result = "";
 // 
 //     for (let i = 0; i < numChordsDisplayed; i++) {
@@ -177,7 +192,7 @@ function genRandomRootNotes() {
  * Clears the displayed inversions on the webpage
  * @contributors Nolan
  */
-// function clearInversions() {
+// export function clearInversions() {
 //     for (let i = 0; i < numChordsDisplayed; i++) {
 //         const upperFigureDisplayElement = document.getElementById(`upperFigure${i + 1}`);
 //         const lowerFigureDisplayElement = document.getElementById(`lowerFigure${i + 1}`);
@@ -192,7 +207,7 @@ function genRandomRootNotes() {
  * @returns {string} A string of bass notes
  * @contributors Adolfo, Nolan
  */
-// function genBassNotes() {
+// export function genBassNotes() {
 //     // Common bass notes
 //     let result = "";
 // 
@@ -223,7 +238,7 @@ function genRandomRootNotes() {
  * @param {string} keyName The name of the selected key
  * @contributors Ethan, Nolan
  */
-function setKey(keyName) {
+export function setKey(keyName) {
     // creates a display element for updating the webpage
     const display = document.getElementById('keyDisplay');
 
@@ -237,7 +252,7 @@ function setKey(keyName) {
  * @param {string} scaleName The name of the selected scale
  * @contributors Ethan
  */
-function setScale(scaleName) {
+export function setScale(scaleName) {
     // creates a display element for updating the webpage
     const display = document.getElementById('scaleDisplay');
 
@@ -250,21 +265,24 @@ function setScale(scaleName) {
  * Called on DOM load. Attaches event listeners for hydration.
  * @contributors Ethan, Adolfo, Nolan
  */
-function init() {
+export function init() {
     for (let i = 0; i < DEFAULT_NUM_CHORDS; i++) {
         addChord();
     }
 
+    updateChordSymbolDisplay();
     updateChordNameDisplay();
+
+    document.getElementById("randomizeRootNotesButton").addEventListener("click", genRandomRootNotes);
+    document.getElementById("addChordButton").addEventListener("click", addChord);
 };
 
 
-// TODO: update this
-module.exports = { 
-    MAX_CHORDS,
-    addChord,
-    updateChordNameDisplay,
-    setKey,
-    setScale,
-    init
-};
+// module.exports = { 
+//     MAX_CHORDS,
+//     addChord,
+//     updateChordNameDisplay,
+//     setKey,
+//     setScale,
+//     init
+// };

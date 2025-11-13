@@ -5,7 +5,7 @@
  * @returns {integer} A random integer between inclusiveMin and inclusiveMax (both inclusive)
  * @contributors Nolan
  */
-function getRandomInt(inclusiveMin, inclusiveMax) {
+export function getRandomInt(inclusiveMin, inclusiveMax) {
     return Math.floor(Math.random() * (inclusiveMax - inclusiveMin + 1)) + inclusiveMin;
 }
 
@@ -15,11 +15,11 @@ function getRandomInt(inclusiveMin, inclusiveMax) {
  * @returns {any} A random element in array
  * @contributors Nolan
  */
-function getRandomArrayElement(array) {
+export function getRandomArrayElement(array) {
     return array[getRandomInt(0, array.length - 1)];
 }
 
-module.exports = {
-    getRandomInt,
-    getRandomArrayElement
-};
+// module.exports = {
+//     getRandomInt,
+//     getRandomArrayElement
+// };

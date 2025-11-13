@@ -1,10 +1,10 @@
-const { OCTAVE_HALF_STEP_LENGTH, getPitchClassPitch } = require("./pitchClass.js");
+import { OCTAVE_HALF_STEP_LENGTH, getPitchClassPitch } from "./pitchClass.js";
 
 const DEFAULT_OCTAVE = 4;
 
 // TODO: make octaves relative to the scale (?) the note lives in
 // might cause overhead
-class Note {
+export class Note {
     #pitchClass
     #pitch
     #octave
@@ -25,7 +25,8 @@ class Note {
     }
 
     transposeBy(numHalfSteps) {
-        const newPitchClass = (this.#pitchClass + numHalfSteps) % OCTAVE_HALF_STEP_LENGTH;
+        let newPitchClass = (this.#pitchClass + numHalfSteps) % OCTAVE_HALF_STEP_LENGTH;
+        while (newPitchClass < 0) newPitchClass += OCTAVE_HALF_STEP_LENGTH;
         const newOctave = this.#octave + Math.trunc(numHalfSteps / OCTAVE_HALF_STEP_LENGTH);
         this.transposeTo(newPitchClass, newOctave);
     }
@@ -37,6 +38,6 @@ class Note {
     }
 }
 
-this.modules = {
-    Note
-};
+// this.modules = {
+//     Note
+// };

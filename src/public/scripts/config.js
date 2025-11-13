@@ -1,5 +1,5 @@
 // every path is relative to the 'public' directory
-const PATHS = {
+export const PATHS = {
     bootstrap: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
     scripts: "/scripts/",
     css: "/styles/",
@@ -8,11 +8,12 @@ const PATHS = {
 }
 
 // asynchronously loads a script and returns a promise
-function loadScript(scriptName) {
+export function loadScript(scriptName) {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
         script.src = PATHS.scripts + scriptName;
         script.async = false; // make sure scripts are loaded in order
+        script.type = "module"; // allow import statements
         
         script.onload = () => resolve(scriptName);
         script.onerror = () => reject(new Error("Failed to load script: " + scriptName));
@@ -22,14 +23,14 @@ function loadScript(scriptName) {
 }
 
 // loads scripts immediately in order
-async function loadScriptsInOrder(scriptNames) {
+export async function loadScriptsInOrder(scriptNames) {
     for (const name of scriptNames) {
         await loadScript(name);
     }
 }
 
 // use for running code after the DOM is fully loaded
-function onDomLoad(callback) {
+export function onDomLoad(callback) {
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', callback);
     } else {

@@ -1,14 +1,15 @@
-const { CHORD_QUALITY, Chord } = require("./chord.js");
-const { Scale } = require ("./scale.js");
+import { CHORD_QUALITY, Chord } from "./chord.js";
+import { Scale } from "./scale.js";
 
 const DEFAULT_OCTAVE = 4;
 
-class ChordProgression {
+export class ChordProgression {
     #chords
     #scale
     
     constructor(scaleRootPitchClass, referentialScale) {
         this.#scale = new Scale(scaleRootPitchClass, referentialScale);
+        this.#chords = [];
     }
 
     /**
@@ -58,17 +59,19 @@ class ChordProgression {
         this.#chords[chordIndex].transposeBy(numHalfSteps);
     }
 
-    setChord(chordIndex, pitchClass, octave) {
-        this.#chords[chordIndex].transposeTo(pitchClass, octave);
+    setChord(chordIndex, pitchClass, octave = DEFAULT_OCTAVE, quality = CHORD_QUALITY.MAJOR) {
+        const chord = this.#chords[chordIndex];
+        chord.transposeTo(pitchClass, octave);
+        chord.setQuality(quality);
     }
 
-    addChord(pitchClass = this.#scale.getRootPitchClass(), octave = DEFAULT_OCTAVE, chordQuality = CHORD_QUALITY.MAJOR) {
-        this.#chords.push(new Chord(pitchClass, octave, chordQuality))
+    addChord(pitchClass = this.#scale.getRootPitchClass(), octave = DEFAULT_OCTAVE, quality = CHORD_QUALITY.MAJOR) {
+        this.#chords.push(new Chord(pitchClass, octave, quality));
     }
 
-    addChord(chord) {
-        this.#chords.push(chord);
-    }
+    // addChord(chord) {
+    //     this.#chords.push(chord);
+    // }
 
     removeChord(chordIndex) {
         this.#chords.splice(chordIndex, 1);
@@ -83,6 +86,6 @@ class ChordProgression {
     }
 }
 
-module.exports = {
-    ChordProgression
-};
+// module.exports = {
+//     ChordProgression
+// };
