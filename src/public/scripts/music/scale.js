@@ -1,4 +1,4 @@
-const { PitchClassMap, NUM_PITCH_CLASSES, PITCH_CLASS_REPRESENTATION_TYPE } = require("pitchClass.js");
+const { SUPPORTED_PITCH_CLASSES, NUM_PITCH_CLASSES, getPitchClassRepresentation, PITCH_CLASS_REPRESENTATION_TYPE } = require("./pitchClass.js");
 
 const REFERENTIAL_SCALE = Object.freeze({
     IONIAN_MAJOR: 0,
@@ -48,8 +48,7 @@ class Scale {
     constructor(rootPitchClass, referentialScale = REFERENTIAL_SCALE.IONIAN_MAJOR) {
         this.#octave = {};
 
-        const supportedPitchClasses = Object.keys(PitchClassMap);
-        let currentPitchClassIndex = supportedPitchClasses.findIndex(pitchClass => pitchClass == rootPitchClass);
+        let currentPitchClassIndex = SUPPORTED_PITCH_CLASSES.findIndex(pitchClass => pitchClass == rootPitchClass);
 
         const addNewOctaveNote = () => {
             const newNote = {
@@ -58,7 +57,7 @@ class Scale {
                 romanRepresentationIndex: 0,
             };
 
-            this.#octave[supportedPitchClasses[currentPitchClassIndex]] = newNote;
+            this.#octave[SUPPORTED_PITCH_CLASSES[currentPitchClassIndex]] = newNote;
         }
 
         // fill in the octave
@@ -66,7 +65,7 @@ class Scale {
             addNewOctaveNote();
         }
 
-        for (pitchClassIndex = 0; supportedPitchClasses[pitchClassIndex] != rootPitchClass; pitchClassIndex++) {
+        for (pitchClassIndex = 0; SUPPORTED_PITCH_CLASSES[pitchClassIndex] != rootPitchClass; pitchClassIndex++) {
             addNewOctaveNote();
         }
 
@@ -85,7 +84,7 @@ class Scale {
         // fill in the roman numerals
         for (const [octavePitchClass, octaveRepresentation] of Object.entries(this.#octave)) {
             // find where the pitch class resides on the referential scale
-            // find the minimum, then loop through the array until a higher one is found
+            // find the minimum, then loop through the array until a pitch higher than the inputted pitch class is found
             // (implement binary search for optimization later)
             let numIterations = 0;
             let currentReferentialIndex = this.#referentialScale.indexOf(Math.min(this.#referentialScale));
@@ -112,7 +111,7 @@ class Scale {
                 return;
             }
 
-            // if there is an exact match, then use that and continue
+            // if there is an exact match, use it and continue
             if (this.#referentialScale[currentReferentialIndex] == octavePitchClass) {
                 octaveRepresentation.romanRepresentations.push({
                     symbol: convertToRoman(currentReferentialIndex + 1),
@@ -172,7 +171,7 @@ class Scale {
 
     getRepresentationFor(pitchClass) {
         const representationInfo = this.#octave[pitchClass];
-        const alphabeticalRepresentation = PitchClassMap[pitchClass].representations[representationInfo.alphabeticalRepresentationIndex];
+        const alphabeticalRepresentation = getPitchClassRepresentation(pitchClass, representationInfo.alphabeticalRepresentationIndex);
         const romanRepresentation = representationInfo.romanRepresentations[representationInfo.romanRepresentationIndex];
         return {
             alphabeticalName:   alphabeticalRepresentation.name,
@@ -183,8 +182,6 @@ class Scale {
             romanType:   romanRepresentation.type,
         };
     }
-
-
 }
 
 module.exports = {

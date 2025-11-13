@@ -1,4 +1,6 @@
-const { CHORD_QUALITY } = require("chord.js");
+const { CHORD_QUALITY } = require("./chord.js");
+const { Scale } = require ("./scale.js");
+const { Chord } = require ("./chord.js");
 
 
 function isLowercaseQuality(quality) {
@@ -61,3 +63,7 @@ class ChordProgression {
         return this.#chords.length;
     }
 }
+
+module.exports = {
+    ChordProgression
+};

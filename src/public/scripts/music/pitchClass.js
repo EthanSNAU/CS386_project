@@ -124,17 +124,32 @@ const PitchClassMap = Object.freeze({
 
 });
 
-const NUM_PITCH_CLASSES = Object.keys(IntervalMap).length;
+const SUPPORTED_PITCH_CLASSES = Array.freeze(Object.keys(PitchClassMap))
+const NUM_PITCH_CLASSES = SUPPORTED_PITCH_CLASSES.length;
 const PITCH_CLASS_BASE_OCTAVE = 4
 const MIN_INTERVAL = 0;
 const MAX_INTERVAL = 11;
 
+function getPitchClassRepresentations(pitchClass) {
+    return PitchClassMap[pitchClass].representations;
+}
+
+function getPitchClassRepresentation(pitchClass, index) {
+    return getPitchClassRepresentations(pitchClass)[index];
+}
+
+function getPitchClassPitch(pitchClass, octave) {
+    return Math.pow(2, octave - PITCH_CLASS_BASE_OCTAVE) * PitchClassMap[pitchClass].basePitch;
+}
+
 module.exports = {
     PITCH_CLASS,
-    PitchClassMap,
     PITCH_CLASS_REPRESENTATION_TYPE,
+    SUPPORTED_PITCH_CLASSES,
     NUM_PITCH_CLASSES,
-    PITCH_CLASS_BASE_OCTAVE,
     MIN_INTERVAL,
-    MAX_INTERVAL
+    MAX_INTERVAL,
+    getPitchClassRepresentations,
+    getPitchClassRepresentation,
+    getPitchClassPitch
 };
