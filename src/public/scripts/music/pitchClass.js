@@ -121,7 +121,6 @@ const PitchClassMap = Object.freeze({
             { symbol: "Cb", name: "C flat",  type: PITCH_CLASS_REPRESENTATION_TYPE.FLAT },
         ]
     },
-
 });
 
 const SUPPORTED_PITCH_CLASSES = Array.freeze(Object.keys(PitchClassMap))

@@ -1,12 +1,7 @@
-const { CHORD_QUALITY } = require("./chord.js");
+const { CHORD_QUALITY, Chord } = require("./chord.js");
 const { Scale } = require ("./scale.js");
-const { Chord } = require ("./chord.js");
 
-
-function isLowercaseQuality(quality) {
-    const LOWERCASE_QUALITIES = [CHORD_QUALITY.MINOR, CHORD_QUALITY.DIMINISHED, CHORD_QUALITY.HALF_DIMINISHED];
-    return LOWERCASE_QUALITIES.includes(quality);
-}
+const DEFAULT_OCTAVE = 4;
 
 class ChordProgression {
     #chords
@@ -30,6 +25,7 @@ class ChordProgression {
      * @contributors Marcus, Nolan
      */
     getChordRepresentation(chordIndex) {
+        // TODO: precompute all chord representations and store them in an array instead of running this every time
         const chord = this.#chords[chordIndex];
         const chordPitchClass = chord.getRootNote().getPitchClass();
         const qualityInformation = chord.getQualityInformation();
@@ -37,7 +33,7 @@ class ChordProgression {
         const chordRepresentation = this.#scale.getRepresentationFor(chordPitchClass);
 
         // account for minor and diminished chords
-        if (isLowercaseQuality(qualityInformation.quality)) {
+        if (qualityInformation.isLowercase) {
             chordRepresentation.alphabeticalSymbol = chordRepresentation.alphabeticalSymbol.toLower();
             chordRepresentation.romanSymbol = chordRepresentation.romanSymbol.toLower();
         }
@@ -58,15 +54,15 @@ class ChordProgression {
         return this.#chords.length;
     }
 
-    transposeChordBy(chordIndex, numHalfSteps) {
+    transposeChord(chordIndex, numHalfSteps) {
         this.#chords[chordIndex].transposeBy(numHalfSteps);
     }
 
-    transposeChordTo(chordIndex, pitchClass, octave) {
+    setChord(chordIndex, pitchClass, octave) {
         this.#chords[chordIndex].transposeTo(pitchClass, octave);
     }
 
-    addChord(pitchClass, octave, chordQuality) {
+    addChord(pitchClass = this.#scale.getRootPitchClass(), octave = DEFAULT_OCTAVE, chordQuality = CHORD_QUALITY.MAJOR) {
         this.#chords.push(new Chord(pitchClass, octave, chordQuality))
     }
 

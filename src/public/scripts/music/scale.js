@@ -45,10 +45,12 @@ function convertToWord(num) {
 // TODO: add ability for users to toggle between different symbols (eg. G# vs. Ab)
 // TODO: add ability to transpose a chord
 class Scale {
+    #rootPitchClass
     #octave // tracks the user's preferred symbols (eg. G# vs. Ab)
     #referentialScale // tracks the notes that are used for chord labeling
 
     constructor(rootPitchClass, referentialScale = REFERENTIAL_SCALE.IONIAN_MAJOR) {
+        this.#rootPitchClass = rootPitchClass;
         this.#octave = {};
 
         let currentPitchClassIndex = SUPPORTED_PITCH_CLASSES.findIndex(pitchClass => pitchClass == rootPitchClass);
@@ -184,6 +186,10 @@ class Scale {
             romanSymbol: romanRepresentation.symbol,
             romanType:   romanRepresentation.type,
         };
+    }
+
+    getRootPitchClass() {
+        return this.#rootPitchClass;
     }
 }
 

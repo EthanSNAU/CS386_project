@@ -1,12 +1,11 @@
 // romanNumGen.js
 const { ChordProgression } = require("./music/chordProgression.js");
 const { REFERENTIAL_SCALE } = require("./music/scale.js");
-const { PITCH_CLASS } = require("./music/pitchClass.js");
+const { PITCH_CLASS, SUPPORTED_PITCH_CLASSES } = require("./music/pitchClass.js");
 const { getRandomArrayElement } = require ("./math.js");
 
 const DEFAULT_NUM_CHORDS = 4;
 const MAX_CHORDS = 7;
-let numChordsDisplayed = 0;
 let isDisplayingAlphabet = false;
 const chordProgression = new ChordProgression(PITCH_CLASS.C, REFERENTIAL_SCALE.IONIAN_MAJOR);
 
@@ -15,8 +14,20 @@ const chordProgression = new ChordProgression(PITCH_CLASS.C, REFERENTIAL_SCALE.I
  * @contributors Marcus, Nolan
  */
 function updateChordNameDisplay() {
-    const words = convertProgressionToChordNames(currentProgression);
-    document.getElementById("wordDisplay").textContent = words;
+    const numChords = chordProgression.getNumChords();
+    let names = [];
+
+    if (isDisplayingAlphabet) {
+        for (let i = 0; i < numChords; i++) {
+            names.push(chordProgression.getChordRepresentation(i).alphabeticalName);
+        }
+    } else {
+        for (let i = 0; i < numChords; i++) {
+            names.push(chordProgression.getChordRepresentation(i).romanName);
+        }
+    }
+
+    document.getElementById("wordDisplay").textContent = names;
 }
 
 /**
@@ -24,75 +35,78 @@ function updateChordNameDisplay() {
  * @contributors Nolan, Ethan, Ben
  */
 function addChord() {
-    numChordsDisplayed++;
+    // add the chord to the progression manager
+    chordProgression.addChord();
+    const chordRepresentation = chordProgression.getChordRepresentation(chordProgression.getNumChords() - 1);
 
+    // create the root note
     let newRootNoteDisplay = document.createElement("p");
     newRootNoteDisplay.id = `rootNote${numChordsDisplayed}`;
     newRootNoteDisplay.className = "rootNoteDisplay";
+
     if (isDisplayingAlphabet) {
-        newRootNoteDisplay.textContent = "C";
-        currentProgression += " C"
+        newRootNoteDisplay.textContent = chordRepresentation.alphabeticalSymbol;
     } else {
-        newRootNoteDisplay.textContent = "I";
-        currentProgression += " I"
+        newRootNoteDisplay.textContent = chordProgression.romanSymbol;
     }
-    newRootNoteDisplay.addEventListener('click', function(event) {
-        const upperFigure = event.target.nextElementSibling; 
-        if (upperFigure && upperFigure.classList.contains('upperFigureDisplay')) {
-            const currentText = upperFigure.textContent;
-            let nextText = '';
 
-            // cycles through clicks to change upper figure display
-            if (currentText === '') {
-                nextText = '7';
-            } else if (currentText === '7') {
-                nextText = '9';
-            } else if (currentText === '9') {
-                nextText = '11';
-            } else if (currentText === '11') {
-                nextText = '';
-            }
+    // newRootNoteDisplay.addEventListener('click', function(event) {
+    //     const upperFigure = event.target.nextElementSibling; 
+    //     if (upperFigure && upperFigure.classList.contains('upperFigureDisplay')) {
+    //         const currentText = upperFigure.textContent;
+    //         let nextText = '';
 
-            // updates upper figure
-            upperFigure.textContent = nextText;
-        }
-    });
+    //         // cycles through clicks to change upper figure display
+    //         if (currentText === '') {
+    //             nextText = '7';
+    //         } else if (currentText === '7') {
+    //             nextText = '9';
+    //         } else if (currentText === '9') {
+    //             nextText = '11';
+    //         } else if (currentText === '11') {
+    //             nextText = '';
+    //         }
+
+    //         // updates upper figure
+    //         upperFigure.textContent = nextText;
+    //     }
+    // });
 
     let newUpperFigureDisplay = document.createElement("p");
     newUpperFigureDisplay.id = `upperFigure${numChordsDisplayed}`;
     newUpperFigureDisplay.className = "upperFigureDisplay";
-    newUpperFigureDisplay.addEventListener("click", (event) => {
-        // Ask the user if they want to remove the note
-        const shouldRemove = confirm(`Do you want to remove the note "${event.target.textContent}"?`);
-        if (shouldRemove) {
-            event.target.textContent = ""; // remove the note
-        }
-    });
+    // newUpperFigureDisplay.addEventListener("click", (event) => {
+    //     // Ask the user if they want to remove the note
+    //     const shouldRemove = confirm(`Do you want to remove the note "${event.target.textContent}"?`);
+    //     if (shouldRemove) {
+    //         event.target.textContent = ""; // remove the note
+    //     }
+    // });
 
     let newLowerFigureDisplay = document.createElement("p");
     newLowerFigureDisplay.id = `lowerFigure${numChordsDisplayed}`;
     newLowerFigureDisplay.className = "lowerFigureDisplay";
-    newLowerFigureDisplay.addEventListener("click", (event) => {
-        // Ask the user if they want to remove the note
-        const shouldRemove = confirm(`Do you want to remove the note "${event.target.textContent}"?`);
-        if (shouldRemove) {
-            event.target.textContent = ""; // remove the note
-        }
-    });
+    // newLowerFigureDisplay.addEventListener("click", (event) => {
+    //     // Ask the user if they want to remove the note
+    //     const shouldRemove = confirm(`Do you want to remove the note "${event.target.textContent}"?`);
+    //     if (shouldRemove) {
+    //         event.target.textContent = ""; // remove the note
+    //     }
+    // });
 
     let newBassNoteDisplay = document.createElement("p");
     newBassNoteDisplay.id = `bassNote${numChordsDisplayed}`;
     newBassNoteDisplay.className = "bassNoteDisplay";
-    newBassNoteDisplay.addEventListener("click", (event) => {
-        // Prompt the user for a new note
-        const currentNote = event.target.textContent || "";
-        const newNote = prompt("Enter a new bass note (e.g., C, D#, F):", currentNote);
+    // newBassNoteDisplay.addEventListener("click", (event) => {
+    //     // Prompt the user for a new note
+    //     const currentNote = event.target.textContent || "";
+    //     const newNote = prompt("Enter a new bass note (e.g., C, D#, F):", currentNote);
 
-        // Update the bass note if valid input is given
-        if (newNote !== null && newNote.trim() !== "") {
-            event.target.textContent = newNote.trim();
-        }
-    });
+    //     // Update the bass note if valid input is given
+    //     if (newNote !== null && newNote.trim() !== "") {
+    //         event.target.textContent = newNote.trim();
+    //     }
+    // });
 
     let newChord = document.createElement("div");
     newChord.id = `chord${numChordsDisplayed}`;
@@ -111,31 +125,21 @@ function addChord() {
  * @returns {string} A string containing the chord progression
  * @contributors Chris, Nolan, Ben
  */
-function getRandomProgression() {
-    let result = "";
+function genRandomRootNotes() {
+    const numChords = chordProgression.getNumChords();
+    for(let i = 0; i < numChords; i++) {
+        const randomPitchClass = getRandomArrayElement(SUPPORTED_PITCH_CLASSES);
+        chordProgression.setChord(i, randomPitchClass);
 
-    // loop 4 times to build the string
-    for(let i = 0; i < numChordsDisplayed; i++) {
-        // generate a random index between 0 and 6
-        const randIndex = getRandomInt(0, romanNotes.length - 1);
-
-        // get the Roman numeral and randomize case
-        const romanNumeral = Math.random() > 0.5 ? romanNotes[randIndex] : romanNotes[randIndex].toLowerCase();
-
-        // add it to the result string
-        result += romanNumeral + " ";
-
-        // display it on the webpage
         const displayElement = document.getElementById(`rootNote${i + 1}`);
-        displayElement.textContent = romanNumeral;
+        if (isDisplayingAlphabet) {
+            displayElement.textContent = chordProgression.getChordRepresentation(i).alphabeticalSymbol;
+        } else {
+            displayElement.textContent = chordProgression.getChordRepresentation(i).romanSymbol;
+        }
     }
 
-    isDisplayingAlphabet = false;
-    currentProgression = result.trim();
-
     updateChordNameDisplay();
-
-    return currentProgression;
 }
 
 
@@ -250,7 +254,7 @@ function init() {
     for (let i = 0; i < DEFAULT_NUM_CHORDS; i++) {
         addChord();
     }
-    currentProgression = currentProgression.trim();
+
     updateChordNameDisplay();
 };
 
