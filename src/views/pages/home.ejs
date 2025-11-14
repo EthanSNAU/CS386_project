@@ -22,7 +22,7 @@
 <br/>
 <br/>
 <form>
-    <select onchange="setRootKey(this.value)">
+    <select id="setRootKeySelection">
         <option value="C">C</option>
         <option value="C#/Db">C#/Db</option>
         <option value="D">D</option>
@@ -37,16 +37,19 @@
     </select>
 </form>
 
+<!-- set of buttons that let the user select what scale they want to be in (In order of degrees)-->
+
+<form>
+    <select id="setScaleSelection">
+        <option value="Ionian (Major)">Ionian (Major)</option>
+        <option value="Dorian">Dorian</option>
+        <option value="Phrygian">Phrygian</option>
+        <option value="Lydian">Lydian</option>
+        <option value="Mixolydian">Mixolydian</option>
+        <option value="Aeolian (Minor)">Aeolian (Minor)</option>
+        <option value="Locrain">Locrain</option>
+    </select>
+</form>
+
 <br/>
 <p id="wordDisplay"></p>
-
-<!-- set of buttons that let the user select what scale they want to be in (In order of degrees)-->
-<br/>
-<br/>
-<button onclick="setScale('Ionian (Major)')" data-key="Ionian (Major)">Ionian</button>
-<button onclick="setScale('Dorian')" data-key="Dorian">Dorian</button>
-<button onclick="setScale('Phrygian')" data-key="Phrygian">Phrygian</button>
-<button onclick="setScale('Lydian')" data-key="Lydian">Lydian</button>
-<button onclick="setScale('Mixolydian')" data-key="Mixolydian">Mixolydian</button>
-<button onclick="setScale('Aeolian (Minor)')" data-key="Aeolian (Minor)">Aeolian</button>
-<button onclick="setScale('Locrain')" data-key="Locrain">Locrain</button>

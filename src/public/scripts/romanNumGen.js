@@ -8,7 +8,7 @@ let isDisplayingAlphabet = false;
 const chordProgression = new ChordProgression(ChordProgression.PitchClass.C, ChordProgression.ReferentialScale.IONIAN_MAJOR);
 
 /**
- * Updates the displayed names of chord progressions
+ * Updates the displayed chord names
  * @contributors Marcus, Nolan
  */
 export function updateChordNameDisplay() {
@@ -29,6 +29,10 @@ export function updateChordNameDisplay() {
 }
 
 
+/**
+ * Updates the displayed chord symbols
+ * @contributors Nolan
+ */
 export function updateChordSymbolDisplay() {
     for (let i = 0; i < chordProgression.getNumChords(); i++) {
         const rootNoteDisplay = document.getElementById(`rootNote${i}`);
@@ -137,8 +141,7 @@ export function addChord() {
 }
 
 /**
- * Generates a random chord progression displays it on the webpage
- * @returns {string} A string containing the chord progression
+ * Randomizes the displayed chords' root notes
  * @contributors Chris, Nolan, Ben
  */
 export function randomizeChordRootNotes() {
@@ -152,7 +155,10 @@ export function randomizeChordRootNotes() {
     updateChordNameDisplay();
 }
 
-
+/**
+ * Randomizes the displayed chords' qualities (i.e. major vs. minor vs. diminished)
+ * @contributors Nolan
+ */
 export function randomizeChordQualities() {
     const numChords = chordProgression.getNumChords();
     for(let i = 0; i < numChords; i++) {
@@ -164,6 +170,10 @@ export function randomizeChordQualities() {
     updateChordNameDisplay();
 }
 
+/**
+ * Toggles the current display mode between alphabetical and Roman numeral
+ * @contributors Nolan, Ben
+ */
 export function toggleChordDisplayType() {
     if (isDisplayingAlphabet) {
         isDisplayingAlphabet = false;
@@ -172,6 +182,7 @@ export function toggleChordDisplayType() {
     }
 
     updateChordSymbolDisplay();
+    updateChordNameDisplay();
 }
 
 /**
@@ -256,7 +267,7 @@ export function toggleChordDisplayType() {
  */
 export function setKey(keyName) {
     // creates a display element for updating the webpage
-    const display = document.getElementById('keyDisplay');
+    const display = document.getElementById('rootKeyDisplay');
 
     // updates the display with the selected key name
     display.textContent = `Key: ${keyName}`;
@@ -268,7 +279,7 @@ export function setKey(keyName) {
  * @param {string} scaleName The name of the selected scale
  * @contributors Ethan
  */
-export function setScale(scaleName) {
+export function setReferentialScale(scaleName) {
     // creates a display element for updating the webpage
     const display = document.getElementById('scaleDisplay');
 
@@ -293,6 +304,9 @@ export function init() {
     document.getElementById("randomizeChordQualitiesButton").addEventListener("click", randomizeChordQualities);
     document.getElementById("toggleChordDisplayTypeButton").addEventListener("click", toggleChordDisplayType);
     document.getElementById("addChordButton").addEventListener("click", addChord);
+
+    document.getElementById("setRootKeySelection").onchange = (event) => setKey(event.target.value);
+    document.getElementById("setScaleSelection").onchange = (event) => setReferentialScale(event.target.value);
 };
 
 
