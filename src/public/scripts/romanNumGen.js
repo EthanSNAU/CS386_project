@@ -1,14 +1,11 @@
 // romanNumGen.js
 import { ChordProgression } from "./music/chordProgression.js";
-import { REFERENTIAL_SCALE } from "./music/scale.js";
-import { PITCH_CLASS, SUPPORTED_PITCH_CLASSES } from "./music/pitchClass.js";
-import { SUPPORTED_CHORD_QUALITIES } from "./music/chord.js";
 import { getRandomArrayElement } from "./math.js";
 
 export const DEFAULT_NUM_CHORDS = 4;
 export const MAX_CHORDS = 7;
 let isDisplayingAlphabet = false;
-const chordProgression = new ChordProgression(PITCH_CLASS.C, REFERENTIAL_SCALE.IONIAN_MAJOR);
+const chordProgression = new ChordProgression(ChordProgression.PitchClass.C, ChordProgression.ReferentialScale.IONIAN_MAJOR);
 
 /**
  * Updates the displayed names of chord progressions
@@ -145,11 +142,11 @@ export function addChord() {
  * @returns {string} A string containing the chord progression
  * @contributors Chris, Nolan, Ben
  */
-export function genRandomRootNotes() {
+export function randomizeChordRootNotes() {
     const numChords = chordProgression.getNumChords();
     for(let i = 0; i < numChords; i++) {
-        const randomPitchClass = getRandomArrayElement(SUPPORTED_PITCH_CLASSES);
-        chordProgression.setChord(i, randomPitchClass, );
+        const randomPitchClass = getRandomArrayElement(ChordProgression.ALL_SUPPORTED_PITCH_CLASSES);
+        chordProgression.setChordRootNote(i, randomPitchClass);
     }
 
     updateChordSymbolDisplay();
@@ -157,6 +154,16 @@ export function genRandomRootNotes() {
 }
 
 
+export function randomizeChordQualities() {
+    const numChords = chordProgression.getNumChords();
+    for(let i = 0; i < numChords; i++) {
+        const randomQuality = getRandomArrayElement(ChordProgression.ALL_SUPPORTED_CHORD_QUALITIES);
+        chordProgression.setChordQuality(i, randomQuality);
+    }
+
+    updateChordSymbolDisplay();
+    updateChordNameDisplay();
+}
 
 /**
  * Generates a random sequence of chord inversions and displays it on the webpage
@@ -273,7 +280,8 @@ export function init() {
     updateChordSymbolDisplay();
     updateChordNameDisplay();
 
-    document.getElementById("randomizeRootNotesButton").addEventListener("click", genRandomRootNotes);
+    document.getElementById("randomizeChordRootNotesButton").addEventListener("click", randomizeChordRootNotes);
+    document.getElementById("randomizeChordQualitiesButton").addEventListener("click", randomizeChordQualities);
     document.getElementById("addChordButton").addEventListener("click", addChord);
 };
 

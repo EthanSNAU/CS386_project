@@ -1,17 +1,5 @@
-import { PITCH_CLASS_REPRESENTATION_TYPE, SUPPORTED_PITCH_CLASSES, NUM_PITCH_CLASSES, getPitchClassRepresentation, } from "./pitchClass.js";
-
-export const REFERENTIAL_SCALE = Object.freeze({
-    IONIAN_MAJOR: 0,
-    IONIAN_NATURAL_MINOR: 1
-    // TODO: add more
-});
-
-// "steps" refers to half steps
-// the steps must be in order, so unless the constructor is changed, ionian natural minor and aeolian major are NOT the same
-const ReferentialScaleMap = Object.freeze({
-    [REFERENTIAL_SCALE.IONIAN_MAJOR]:         { steps: [2, 2, 1, 2, 2, 2] },
-    [REFERENTIAL_SCALE.IONIAN_NATURAL_MINOR]: { steps: [2, 1, 2, 2, 1, 2] }
-});
+import { PitchClass, PitchClassRepresentationType, ALL_SUPPORTED_PITCH_CLASSES, getPitchClassRepresentation, } from "./enums/pitchClass.js";
+import { ReferentialScale, getReferentialScaleSteps } from "./enums/referentialScale.js";
 
 const RomanNumMap = Object.freeze({
     1: "I",
@@ -45,15 +33,19 @@ function convertToWord(num) {
 // TODO: add ability for users to toggle between different symbols (eg. G# vs. Ab)
 // TODO: add ability to transpose a chord
 export class Scale {
+    static RootPitchClass = PitchClass;
+    static ReferentialScale = ReferentialScale;
+    static PitchClassRepresentationType = PitchClassRepresentationType;
+
     #rootPitchClass
     #octave // tracks the user's preferred symbols (eg. G# vs. Ab)
     #referentialScale // tracks the notes that are used for chord labeling
 
-    constructor(rootPitchClass, referentialScale = REFERENTIAL_SCALE.IONIAN_MAJOR) {
+    constructor(rootPitchClass, referentialScale = Scale.ReferentialScale.IONIAN_MAJOR) {
         this.#rootPitchClass = rootPitchClass;
         this.#octave = {};
 
-        let currentPitchClassIndex = SUPPORTED_PITCH_CLASSES.findIndex(pitchClass => pitchClass == rootPitchClass);
+        let currentPitchClassIndex = ALL_SUPPORTED_PITCH_CLASSES.findIndex(pitchClass => pitchClass == rootPitchClass);
 
         const addNewOctaveNote = () => {
             const newNote = {
@@ -62,22 +54,22 @@ export class Scale {
                 romanRepresentationIndex: 0,
             };
 
-            this.#octave[SUPPORTED_PITCH_CLASSES[currentPitchClassIndex]] = newNote;
+            this.#octave[ALL_SUPPORTED_PITCH_CLASSES[currentPitchClassIndex]] = newNote;
         }
 
         // fill in the octave
-        while (currentPitchClassIndex < NUM_PITCH_CLASSES) {
+        while (currentPitchClassIndex < ALL_SUPPORTED_PITCH_CLASSES.length) {
             addNewOctaveNote();
             currentPitchClassIndex++;
         }
 
-        for (currentPitchClassIndex = 0; SUPPORTED_PITCH_CLASSES[currentPitchClassIndex] != rootPitchClass; currentPitchClassIndex++) {
+        for (currentPitchClassIndex = 0; ALL_SUPPORTED_PITCH_CLASSES[currentPitchClassIndex] != rootPitchClass; currentPitchClassIndex++) {
             addNewOctaveNote();
         }
 
         // fill in the referential scale
         this.#referentialScale = [rootPitchClass];
-        const referentialScaleSteps = ReferentialScaleMap[referentialScale].steps;
+        const referentialScaleSteps = getReferentialScaleSteps(referentialScale);
         let currentPitchClass = rootPitchClass;
 
         for (const step of referentialScaleSteps) {
@@ -123,7 +115,7 @@ export class Scale {
                 octaveRepresentation.romanRepresentations.push({
                     symbol: convertToRoman(currentReferentialIndex + 1),
                     name: convertToWord(currentReferentialIndex + 1),
-                    type: PITCH_CLASS_REPRESENTATION_TYPE.NATURAL
+                    type: PitchClassRepresentationType.NATURAL
                 });
                 continue;
             }
@@ -165,13 +157,13 @@ export class Scale {
             octaveRepresentation.romanRepresentations.push({
                 symbol: lowerSymbol,
                 name: lowerName,
-                type: PITCH_CLASS_REPRESENTATION_TYPE.SHARP
+                type: Scale.PitchClassRepresentationType.SHARP
             });
 
             octaveRepresentation.romanRepresentations.push({
                 symbol: upperSymbol,
                 name: upperName,
-                type: PITCH_CLASS_REPRESENTATION_TYPE.FLAT
+                type: Scale.PitchClassRepresentationType.FLAT
             });
         }
     }
@@ -184,9 +176,9 @@ export class Scale {
             alphabeticalName:   alphabeticalRepresentation.name,
             alphabeticalSymbol: alphabeticalRepresentation.symbol,
             alphabeticalType:   alphabeticalRepresentation.type,
-            romanName:   romanRepresentation.name,
-            romanSymbol: romanRepresentation.symbol,
-            romanType:   romanRepresentation.type,
+            romanName:          romanRepresentation.name,
+            romanSymbol:        romanRepresentation.symbol,
+            romanType:          romanRepresentation.type,
         };
     }
 

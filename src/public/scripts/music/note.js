@@ -1,10 +1,13 @@
-import { OCTAVE_HALF_STEP_LENGTH, getPitchClassPitch } from "./pitchClass.js";
+import { PitchClass, ALL_SUPPORTED_PITCH_CLASSES, OCTAVE_HALF_STEP_LENGTH, getPitchClassPitch } from "./enums/pitchClass.js";
 
 const DEFAULT_OCTAVE = 4;
 
 // TODO: make octaves relative to the scale (?) the note lives in
 // might cause overhead
 export class Note {
+    static PitchClass = PitchClass;
+    static ALL_SUPPORTED_PITCH_CLASSES = ALL_SUPPORTED_PITCH_CLASSES;
+
     #pitchClass
     #pitch
     #octave

@@ -1,9 +1,20 @@
-import { CHORD_QUALITY, Chord } from "./chord.js";
+import { Chord } from "./chord.js";
 import { Scale } from "./scale.js";
 
 const DEFAULT_OCTAVE = 4;
 
 export class ChordProgression {
+    static PitchClass = Chord.RootPitchClass;
+    static ChordQuality = Chord.Quality;
+    static ChordInversion = Chord.Inversion;
+    static ChordPlaybackStyle = Chord.PlaybackStyle;
+
+    static ReferentialScale = Scale.ReferentialScale;
+    static PitchClassRepresentationType = Scale.PitchClassRepresentationType;
+
+    static ALL_SUPPORTED_PITCH_CLASSES = Chord.ALL_SUPPORTED_ROOT_PITCH_CLASSES;
+    static ALL_SUPPORTED_CHORD_QUALITIES = Chord.ALL_SUPPORTED_QUALITIES;
+
     #chords
     #scale
     
@@ -28,25 +39,26 @@ export class ChordProgression {
     getChordRepresentation(chordIndex) {
         // TODO: precompute all chord representations and store them in an array instead of running this every time
         const chord = this.#chords[chordIndex];
-        const chordPitchClass = chord.getRootNote().getPitchClass();
-        const qualityInformation = chord.getQualityInformation();
+        const chordPitchClass = chord.getRootPitchClass();
+        const qualityRepresentation = chord.getQualityRepresentation();
 
         const chordRepresentation = this.#scale.getRepresentationFor(chordPitchClass);
 
         // account for minor and diminished chords
-        if (qualityInformation.isLowercase) {
-            chordRepresentation.alphabeticalSymbol = chordRepresentation.alphabeticalSymbol.toLower();
-            chordRepresentation.romanSymbol = chordRepresentation.romanSymbol.toLower();
+        if (qualityRepresentation.isLowercase) {
+            chordRepresentation.romanSymbol = chordRepresentation.romanSymbol.toLowerCase();
         }
 
         // quality name + symbols
-        if (qualityInformation.name) {
-            chordRepresentation.alphabeticalName += " " + qualityInformation.name;
-            chordRepresentation.romanName += " " + qualityInformation.name;
+        if (qualityRepresentation.name) {
+            chordRepresentation.alphabeticalName += " " + qualityRepresentation.name;
+            chordRepresentation.romanName += " " + qualityRepresentation.name;
         }
 
-        chordRepresentation.alphabeticalSymbol += " " + qualityInformation.symbol;
-        chordRepresentation.romanSymbol += " " + qualityInformation.symbol;
+        if (qualityRepresentation.symbol) {
+            chordRepresentation.alphabeticalSymbol += " " + qualityRepresentation.symbol;
+            chordRepresentation.romanSymbol += " " + qualityRepresentation.symbol;
+        }
 
         return chordRepresentation;
     }
@@ -59,13 +71,17 @@ export class ChordProgression {
         this.#chords[chordIndex].transposeBy(numHalfSteps);
     }
 
-    setChord(chordIndex, pitchClass, octave = DEFAULT_OCTAVE, quality = CHORD_QUALITY.MAJOR) {
+    setChordRootNote(chordIndex, pitchClass, octave = DEFAULT_OCTAVE) {
         const chord = this.#chords[chordIndex];
         chord.transposeTo(pitchClass, octave);
+    }
+
+    setChordQuality(chordIndex, quality) {
+        const chord = this.#chords[chordIndex];
         chord.setQuality(quality);
     }
 
-    addChord(pitchClass = this.#scale.getRootPitchClass(), octave = DEFAULT_OCTAVE, quality = CHORD_QUALITY.MAJOR) {
+    addChord(pitchClass = this.#scale.getRootPitchClass(), octave = DEFAULT_OCTAVE, quality = ChordProgression.ChordQuality.MAJOR) {
         this.#chords.push(new Chord(pitchClass, octave, quality));
     }
 
