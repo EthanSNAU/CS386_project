@@ -128,7 +128,7 @@ const PitchClassMap = Object.freeze({
 const PITCH_CLASS_BASE_OCTAVE = 4
 
 /**
- * List of pitch classes supported by pitch class getter methods, such as {@link getPitchClassRepresentation}.
+ * List of {@link PitchClass}' supported by pitch class getter methods, such as {@link getPitchClassRepresentation}.
  * @type {number[]}
  * @readonly
  */

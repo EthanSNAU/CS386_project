@@ -17,6 +17,8 @@ export const MAX_CHORDS = 7;
 let isDisplayingAlphabet = false;
 const chordProgression = new ChordProgression(ChordProgression.PitchClass.C, ChordProgression.ReferentialScale.IONIAN_MAJOR);
 
+// TODO: combine the names and symbols updates into one function
+
 /**
  * Updates the displayed chord names
  * @contributors Marcus, Nolan
