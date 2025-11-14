@@ -30,15 +30,17 @@ export function updateChordNameDisplay() {
 
 
 export function updateChordSymbolDisplay() {
-    if (isDisplayingAlphabet) {
-        for (let i = 0; i < chordProgression.getNumChords(); i++) {
-            const displayElement = document.getElementById(`rootNote${i}`);
-            displayElement.textContent = chordProgression.getChordRepresentation(i).alphabeticalSymbol;
-        }
-    } else {
-        for (let i = 0; i < chordProgression.getNumChords(); i++) {
-            const displayElement = document.getElementById(`rootNote${i}`);
-            displayElement.textContent = chordProgression.getChordRepresentation(i).romanSymbol;
+    for (let i = 0; i < chordProgression.getNumChords(); i++) {
+        const rootNoteDisplay = document.getElementById(`rootNote${i}`);
+        const upperFigureDisplay = document.getElementById(`upperFigure${i}`);
+        const representation = chordProgression.getChordRepresentation(i);
+
+        if (isDisplayingAlphabet) {
+            rootNoteDisplay.textContent = representation.alphabeticalSymbol + representation.alphabeticalCenterSymbolDescriptors;
+            upperFigureDisplay.textContent = representation.upperSymbolDescriptors;
+        } else {
+            rootNoteDisplay.textContent = representation.romanSymbol + representation.romanCenterSymbolDescriptors;
+            upperFigureDisplay.textContent = representation.upperSymbolDescriptors;
         }
     }
 }
@@ -60,12 +62,6 @@ export function addChord() {
     let newRootNoteDisplay = document.createElement("p");
     newRootNoteDisplay.id = `rootNote${numChords}`;
     newRootNoteDisplay.className = "rootNoteDisplay";
-
-    if (isDisplayingAlphabet) {
-        newRootNoteDisplay.textContent = chordRepresentation.alphabeticalSymbol;
-    } else {
-        newRootNoteDisplay.textContent = chordRepresentation.romanSymbol;
-    }
 
     // newRootNoteDisplay.addEventListener('click', function(event) {
     //     const upperFigure = event.target.nextElementSibling; 
@@ -135,6 +131,9 @@ export function addChord() {
     newChord.appendChild(newBassNoteDisplay);
 
     document.getElementById("chordProgressionDisplay").appendChild(newChord);
+
+    updateChordSymbolDisplay();
+    updateChordNameDisplay();
 }
 
 /**
@@ -163,6 +162,16 @@ export function randomizeChordQualities() {
 
     updateChordSymbolDisplay();
     updateChordNameDisplay();
+}
+
+export function toggleChordDisplayType() {
+    if (isDisplayingAlphabet) {
+        isDisplayingAlphabet = false;
+    } else {
+        isDisplayingAlphabet = true;
+    }
+
+    updateChordSymbolDisplay();
 }
 
 /**
@@ -282,6 +291,7 @@ export function init() {
 
     document.getElementById("randomizeChordRootNotesButton").addEventListener("click", randomizeChordRootNotes);
     document.getElementById("randomizeChordQualitiesButton").addEventListener("click", randomizeChordQualities);
+    document.getElementById("toggleChordDisplayTypeButton").addEventListener("click", toggleChordDisplayType);
     document.getElementById("addChordButton").addEventListener("click", addChord);
 };
 

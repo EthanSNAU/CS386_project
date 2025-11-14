@@ -27,12 +27,16 @@ export class ChordProgression {
      * Gets a chord's representation information
      * @param {Number} chordIndex Index of the chord to get information on
      * @returns {{
-     *  alphabeticalName:   string,
-     *  alphabeticalSymbol: string,
-     *  alphabeticalType:   PITCH_CLASS_REPRESENTATION_TYPE
-     *  romanName:          string,
-     *  romanSymbol:        string,
-     *  romanType:          PITCH_CLASS_REPRESENTATION_TYPE
+     *  alphabeticalName:                    string,
+     *  alphabeticalSymbol:                  string,
+     *  alphabeticalType:                    PitchClassRepresentationType,
+     *  alphabeticalCenterSymbolDescriptors: string,
+     *  romanName:                           string,
+     *  romanSymbol:                         string,
+     *  romanType:                           PitchClassRepresentationType,
+     *  romanCenterSymbolDescriptors:        string
+     *  upperSymbolDescriptors:              string
+     *  lowerSymbolDescriptors:              string
      * }}
      * @contributors Marcus, Nolan
      */
@@ -40,8 +44,8 @@ export class ChordProgression {
         // TODO: precompute all chord representations and store them in an array instead of running this every time
         const chord = this.#chords[chordIndex];
         const chordPitchClass = chord.getRootPitchClass();
-        const qualityRepresentation = chord.getQualityRepresentation();
 
+        const qualityRepresentation = chord.getQualityRepresentation();
         const chordRepresentation = this.#scale.getRepresentationFor(chordPitchClass);
 
         // account for minor and diminished chords
@@ -55,10 +59,20 @@ export class ChordProgression {
             chordRepresentation.romanName += " " + qualityRepresentation.name;
         }
 
-        if (qualityRepresentation.symbol) {
-            chordRepresentation.alphabeticalSymbol += " " + qualityRepresentation.symbol;
-            chordRepresentation.romanSymbol += " " + qualityRepresentation.symbol;
+        // handle symbol descriptors
+
+        chordRepresentation.upperSymbolDescriptors = "";
+
+        if (qualityRepresentation.upperSymbolDescriptors) {
+            chordRepresentation.upperSymbolDescriptors = qualityRepresentation.upperSymbolDescriptors;
         }
+
+        if (qualityRepresentation.centerSymbolDescriptors) {
+            chordRepresentation.alphabeticalCenterSymbolDescriptors += qualityRepresentation.centerSymbolDescriptors;
+            chordRepresentation.romanCenterSymbolDescriptors += qualityRepresentation.centerSymbolDescriptors;
+        }
+
+        chordRepresentation.lowerSymbolDescriptors = "";
 
         return chordRepresentation;
     }

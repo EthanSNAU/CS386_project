@@ -115,7 +115,8 @@ export class Scale {
                 octaveRepresentation.romanRepresentations.push({
                     symbol: convertToRoman(currentReferentialIndex + 1),
                     name: convertToWord(currentReferentialIndex + 1),
-                    type: PitchClassRepresentationType.NATURAL
+                    type: PitchClassRepresentationType.NATURAL,
+                    symbolDescriptors: ""
                 });
                 continue;
             }
@@ -137,34 +138,41 @@ export class Scale {
 
             // build the final strings and push
             let lowerSymbol = convertToRoman(lowerReferentialIndex + 1);
+            let lowerSymbolDescriptors = "";
             let lowerName = convertToWord(lowerReferentialIndex + 1);
-            const numSharps = octaveRepresentation - this.#referentialScale[lowerReferentialIndex];
+            const numSharps = octavePitchClass - this.#referentialScale[lowerReferentialIndex];
 
             for (let i = 0; i < numSharps; i++) {
-                lowerSymbol += "#";
-                upperName += " sharp";
+                lowerSymbolDescriptors += "#";
+                lowerName += " sharp";
             }
 
             let upperSymbol = convertToRoman(upperReferentialIndex + 1);
+            let upperSymbolDescriptors = "";
             let upperName = convertToWord(upperReferentialIndex + 1);
-            const numFlats = this.#referentialScale[upperReferentialIndex] - octaveRepresentation;
+            const numFlats = this.#referentialScale[upperReferentialIndex] - octavePitchClass;
 
-            for (let i = 0; i < numSharps; i++) {
-                upperSymbol += "b";
+            for (let i = 0; i < numFlats; i++) {
+                upperSymbolDescriptors += "b";
                 upperName += " flat";
             }
-            
-            octaveRepresentation.romanRepresentations.push({
+
+            const lowerRepresentation = {
                 symbol: lowerSymbol,
+                symbolDescriptors: lowerSymbolDescriptors ?? "",
                 name: lowerName,
                 type: Scale.PitchClassRepresentationType.SHARP
-            });
+            };
 
-            octaveRepresentation.romanRepresentations.push({
+            const upperRepresentation = {
                 symbol: upperSymbol,
+                symbolDescriptors: upperSymbolDescriptors ?? "",
                 name: upperName,
                 type: Scale.PitchClassRepresentationType.FLAT
-            });
+            };
+
+            octaveRepresentation.romanRepresentations.push(lowerRepresentation);
+            octaveRepresentation.romanRepresentations.push(upperRepresentation);
         }
     }
 
@@ -172,14 +180,19 @@ export class Scale {
         const representationInfo = this.#octave[pitchClass];
         const alphabeticalRepresentation = getPitchClassRepresentation(pitchClass, representationInfo.alphabeticalRepresentationIndex);
         const romanRepresentation = representationInfo.romanRepresentations[representationInfo.romanRepresentationIndex];
-        return {
-            alphabeticalName:   alphabeticalRepresentation.name,
-            alphabeticalSymbol: alphabeticalRepresentation.symbol,
-            alphabeticalType:   alphabeticalRepresentation.type,
-            romanName:          romanRepresentation.name,
-            romanSymbol:        romanRepresentation.symbol,
-            romanType:          romanRepresentation.type,
+
+        const pitchClassRepresentation = {
+            alphabeticalName:                     alphabeticalRepresentation.name,
+            alphabeticalSymbol:                   alphabeticalRepresentation.symbol,
+            alphabeticalType:                     alphabeticalRepresentation.type,
+            alphabeticalCenterSymbolDescriptors:  alphabeticalRepresentation.symbolDescriptors,
+            romanName:                            romanRepresentation.name,
+            romanSymbol:                          romanRepresentation.symbol,
+            romanType:                            romanRepresentation.type,
+            romanCenterSymbolDescriptors:         romanRepresentation.symbolDescriptors,
         };
+
+        return pitchClassRepresentation;
     }
 
     getRootPitchClass() {
