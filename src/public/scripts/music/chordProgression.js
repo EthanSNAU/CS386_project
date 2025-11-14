@@ -70,6 +70,13 @@ export class ChordProgression {
         if (qualityRepresentation.centerSymbolDescriptors) {
             chordRepresentation.alphabeticalCenterSymbolDescriptors += qualityRepresentation.centerSymbolDescriptors;
             chordRepresentation.romanCenterSymbolDescriptors += qualityRepresentation.centerSymbolDescriptors;
+
+            // remove the m for relevant roman chords
+            // TODO: make this less duct tapey
+            const chordQuality = chord.getQuality();
+            if (chordQuality == Chord.Quality.MINOR || chordQuality == Chord.Quality.HALF_DIMINISHED) {
+                chordRepresentation.romanCenterSymbolDescriptors = chordRepresentation.romanCenterSymbolDescriptors.replace("m", "");
+            }
         }
 
         chordRepresentation.lowerSymbolDescriptors = "";

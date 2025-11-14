@@ -70,6 +70,10 @@ export class Chord {
         return this.#getRootNote().getOctave();
     }
 
+    getQuality() {
+        return this.#quality;
+    }
+
     getQualityRepresentation() {
         return getChordQualityRepresentation(this.#quality);
     }
