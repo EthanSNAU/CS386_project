@@ -1,46 +1,36 @@
-import { PitchClass, PitchClassRepresentationType, ALL_SUPPORTED_PITCH_CLASSES, getPitchClassRepresentation, } from "./enums/pitchClass.js";
+import { PitchClass, ALL_SUPPORTED_PITCH_CLASSES, getPitchClassRepresentation, } from "./enums/pitchClass.js";
 import { ReferentialScale, getReferentialScaleSteps } from "./enums/referentialScale.js";
+import { convertToRoman, convertToWord } from "./numberConversion.js"
 
-const RomanNumMap = Object.freeze({
-    1: "I",
-    2: "II",
-    3: "III",
-    4: "IV",
-    5: "V",
-    6: "VI",
-    7: "VII",
-});
-
-const WordNumMap = Object.freeze({
-    1: "one",
-    2: "two",
-    3: "three",
-    4: "four",
-    5: "five",
-    6: "six",
-    7: "seven",
-});
-
-function convertToRoman(num) {
-    return RomanNumMap[num];
-}
-
-function convertToWord(num) {
-    return WordNumMap[num];
-}
-
+// documentation imports
+import { PitchClassRepresentationType } from "./enums/pitchClassRepresentationType.js";
 
 // TODO: add ability for users to toggle between different symbols (eg. G# vs. Ab)
-// TODO: add ability to transpose a chord
+// TODO: add ability to switch to different referential scale
+
+/**
+ * Manages the alphabetical and Roman numeral representations of all pitch classes.
+ */
 export class Scale {
+    /** Re-export of {@link PitchClass} */
     static RootPitchClass = PitchClass;
+
+    /** Re-export of {@link ReferentialScale} */
     static ReferentialScale = ReferentialScale;
-    static PitchClassRepresentationType = PitchClassRepresentationType;
+
+    /** Re-export of {@link PitchClassRepresentationType} */
+    static PitchClassRepresentationType = PitchClass.RepresentationType;
 
     #rootPitchClass
     #octave // tracks the user's preferred symbols (eg. G# vs. Ab)
     #referentialScale // tracks the notes that are used for chord labeling
 
+    /**
+     * Creates an instance of {@link Scale}.
+     * @param {PitchClass} pitchClass Pitch class to represent the beginning of the scale
+     * @param {ReferentialScale} referentialScale Referential scale for Roman numeral conversion
+     * @contributors Nolan
+     */
     constructor(rootPitchClass, referentialScale = Scale.ReferentialScale.IONIAN_MAJOR) {
         this.#rootPitchClass = rootPitchClass;
         this.#octave = {};
@@ -115,7 +105,7 @@ export class Scale {
                 octaveRepresentation.romanRepresentations.push({
                     symbol: convertToRoman(currentReferentialIndex + 1),
                     name: convertToWord(currentReferentialIndex + 1),
-                    type: PitchClassRepresentationType.NATURAL,
+                    type: PitchClass.RepresentationType.NATURAL,
                     symbolDescriptors: ""
                 });
                 continue;
@@ -176,6 +166,21 @@ export class Scale {
         }
     }
 
+    /**
+     * Gets the currently-active representation of a pitch class.
+     * @param {PitchClass} pitchClass Pitch class to get the representation for
+     * @returns {{
+    *   alphabeticalName:                     string
+    *   alphabeticalSymbol:                   string
+    *   alphabeticalType:                     string
+    *   alphabeticalCenterSymbolDescriptors:  string
+    *   romanName:                            string
+    *   romanSymbol:                          string
+    *   romanType:                            string
+    *   romanCenterSymbolDescriptors:         string
+     * }} The pitch class' representation information
+     * @contributors Nolan
+     */
     getRepresentationFor(pitchClass) {
         const representationInfo = this.#octave[pitchClass];
         const alphabeticalRepresentation = getPitchClassRepresentation(pitchClass, representationInfo.alphabeticalRepresentationIndex);
@@ -195,6 +200,11 @@ export class Scale {
         return pitchClassRepresentation;
     }
 
+    /**
+     * Gets the scale's root pitch class.
+     * @returns {PitchClass} The scale's root note's pitch class
+     * @contributors Nolan
+     */
     getRootPitchClass() {
         return this.#rootPitchClass;
     }

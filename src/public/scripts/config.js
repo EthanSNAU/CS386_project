@@ -7,7 +7,12 @@ export const PATHS = {
     pages: "/pages/"
 }
 
-// asynchronously loads a script and returns a promise
+/**
+ * Asynchronously loads a scripts into the DOM head
+ * @param {string} scriptName Name of the script to load, relative to the static scripts directory
+ * @returns {Promise} A promise that resolves when the script loads, or rejects if an error occurs
+ * @contributors Nolan
+ */
 export function loadScript(scriptName) {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
@@ -22,14 +27,23 @@ export function loadScript(scriptName) {
     });
 }
 
-// loads scripts immediately in order
+
+/**
+ * Loads a sequence of scripts into the DOM head in order
+ * @param {string} scriptNames Names of the scripts to load, relative to the static scripts directory
+ * @contributors Nolan
+ */
 export async function loadScriptsInOrder(scriptNames) {
     for (const name of scriptNames) {
         await loadScript(name);
     }
 }
 
-// use for running code after the DOM is fully loaded
+/**
+ * Calls a function when the DOM is fully loaded
+ * @param {() => any} callback
+ * @contributors Nolan
+ */
 export function onDomLoad(callback) {
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', callback);

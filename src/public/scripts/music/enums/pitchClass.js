@@ -1,6 +1,14 @@
-// note: numbers are of ascending pitch class
-// a difference of one means one half step
+import { PitchClassRepresentationType } from "./pitchClassRepresentationType.js";
+
+/**
+ * Available pitch classes. A difference of one means an interval of one half step.
+ * @enum {number}
+ * @readonly
+ */
 export const PitchClass = Object.freeze({
+    /** Re-export of {@link PitchClassRepresentationType} */
+    RepresentationType: PitchClassRepresentationType,
+
     C:       0,
     C_SHARP: 1,
     D_FLAT:  1,
@@ -22,13 +30,7 @@ export const PitchClass = Object.freeze({
     B:       11,
 });
 
-export const PitchClassRepresentationType = Object.freeze({
-    NATURAL: 0,
-    SHARP:   1,
-    FLAT:    2
-})
-
-export const PitchClassMap = Object.freeze({
+const PitchClassMap = Object.freeze({
     [PitchClass.C]: {
         basePitch: 261.63,
         representations: [
@@ -123,33 +125,60 @@ export const PitchClassMap = Object.freeze({
     },
 });
 
-export const ALL_SUPPORTED_PITCH_CLASSES = Object.freeze(Object.keys(PitchClassMap))
 const PITCH_CLASS_BASE_OCTAVE = 4
-export const MIN_INTERVAL = 0;
-export const MAX_INTERVAL = 11;
+
+/**
+ * List of pitch classes supported by pitch class getter methods, such as {@link getPitchClassRepresentation}.
+ * @type {number[]}
+ * @readonly
+ */
+export const ALL_SUPPORTED_PITCH_CLASSES = Object.freeze(Object.keys(PitchClassMap).map(str => Number(str)));
+
+/**
+ * Number of half steps in an octave
+ * @type {number}
+ * @constant
+ */
 export const OCTAVE_HALF_STEP_LENGTH = 12;
 
+/**
+ * Gets the list of possible representations for a pitch class.
+ * @param {PitchClass} pitchClass Pitch class to get representations for. Must be in {@link ALL_SUPPORTED_PITCH_CLASSES} to work.
+ * @returns {{
+ *  symbol: string
+ *  symbolDescriptors: string
+ *  name: string
+ *  type: PitchClassRepresentationType
+ * }[]} List of representations for the inputted pitch class
+ * @contributors Nolan
+ */
 export function getPitchClassRepresentations(pitchClass) {
     return PitchClassMap[pitchClass].representations;
 }
 
+/**
+ * Gets the representation at an index for a pitch class.
+ * @param {PitchClass} pitchClass Pitch class to get representation for. Must be in {@link ALL_SUPPORTED_PITCH_CLASSES} to work.
+ * @param {number} index Integer index identifying which representation to fetch
+ * @returns {{
+ *  symbol: string
+ *  symbolDescriptors: string
+ *  name: string
+ *  type: PitchClassRepresentationType
+ * }} Representation for the inputted pitch class
+ * @contributors Nolan
+ */
 export function getPitchClassRepresentation(pitchClass, index) {
     return getPitchClassRepresentations(pitchClass)[index];
 }
 
+/**
+ * Calculates a pitch class' pitch in an octave
+ * @param {PitchClass} pitchClass Pitch class to get the pitch for. Must be in {@link ALL_SUPPORTED_PITCH_CLASSES} to work.
+ * @param {number} octave Integer identifying which octave the pitch class is in
+ * @returns {number} Pitch of the pitch class
+ * @contributors Nolan
+ */
 export function getPitchClassPitch(pitchClass, octave) {
     return Math.pow(2, octave - PITCH_CLASS_BASE_OCTAVE) * PitchClassMap[pitchClass].basePitch;
 }
-
-// module.exports = {
-//     PITCH_CLASS,
-//     PITCH_CLASS_REPRESENTATION_TYPE,
-//     SUPPORTED_PITCH_CLASSES,
-//     NUM_PITCH_CLASSES,
-//     MIN_INTERVAL,
-//     MAX_INTERVAL,
-//     OCTAVE_HALF_STEP_LENGTH,
-//     getPitchClassRepresentations,
-//     getPitchClassRepresentation,
-//     getPitchClassPitch
-// };

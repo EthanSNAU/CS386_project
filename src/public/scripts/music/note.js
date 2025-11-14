@@ -4,8 +4,15 @@ const DEFAULT_OCTAVE = 4;
 
 // TODO: make octaves relative to the scale (?) the note lives in
 // might cause overhead
+
+/**
+ * Manages the octave, pitch, and length of a pitch class.
+ */
 export class Note {
+    /** Re-export of {@link PitchClass} */
     static PitchClass = PitchClass;
+
+    /** Re-export of {@link ALL_SUPPORTED_PITCH_CLASSES} */
     static ALL_SUPPORTED_PITCH_CLASSES = ALL_SUPPORTED_PITCH_CLASSES;
 
     #pitchClass
@@ -13,20 +20,43 @@ export class Note {
     #octave
     #length // unused for now
 
+    /**
+     * Creates a Note instance.
+     * @param {PitchClass} pitchClass Pitch class for the note to play
+     * @param {number} octave Octave for the note to play in
+     * @contributors Nolan
+     */
     constructor(pitchClass, octave = DEFAULT_OCTAVE) {
         this.#pitchClass = pitchClass;
         this.#octave = octave;
         this.#pitch = getPitchClassPitch(pitchClass, octave);
     }
 
+    /**
+     * Gets the note's pitch class.
+     * @returns {PitchClass} The note's pitch class
+     * @contributors Nolan
+     */
     getPitchClass() {
         return this.#pitchClass;
     }
 
+    /**
+     * Gets the note's octave.
+     * @returns {number} The note's current octave
+     * @contributors Nolan
+     */
     getOctave() {
         return this.#octave;
     }
 
+    /**
+     * Transposes the note relative to its current state.
+     * @param {number} numHalfSteps The number of half steps to transpose the note by. Negative values tranpose down while
+     *                              positive values transpose up. The target pitch class must be in {@link ALL_SUPPORTED_PITCH_CLASSES} 
+     *                              to work.
+     * @contributors Nolan
+     */
     transposeBy(numHalfSteps) {
         let newPitchClass = (this.#pitchClass + numHalfSteps) % OCTAVE_HALF_STEP_LENGTH;
         while (newPitchClass < 0) newPitchClass += OCTAVE_HALF_STEP_LENGTH;
@@ -34,13 +64,15 @@ export class Note {
         this.transposeTo(newPitchClass, newOctave);
     }
 
+    /**
+     * Transposes the note to an octave and pitch class.
+     * @param {PitchClass} pitchClass The pitch class to transpose the note to. Must be in {@link ALL_SUPPORTED_PITCH_CLASSES} to work.
+     * @param {number} octave The octave to transpose the note to. If unspecified, no changes will be made to the octave.
+     * @contributors Nolan
+     */
     transposeTo(pitchClass, octave = this.#octave) {
         this.#pitchClass = pitchClass;
         this.#octave = octave;
         this.#pitch = getPitchClassPitch(pitchClass, octave);
     }
 }
-
-// this.modules = {
-//     Note
-// };

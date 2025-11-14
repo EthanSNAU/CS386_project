@@ -1,29 +1,34 @@
 import { OCTAVE_HALF_STEP_LENGTH } from "./enums/pitchClass.js";
 import { ChordQuality, ALL_SUPPORTED_CHORD_QUALITIES, getChordQualityRepresentation, getChordQualitySteps } from "./enums/chordQuality.js";
 import { Note } from "./note.js"
+import { ChordPlaybackStyle } from "./enums/chordPlaybackStyle.js";
+import { ChordInversion } from "./enums/chordInversion.js";
 
-export const ChordPlaybackStyle = Object.freeze({
-    BLOCK:         0,
-    ARPEGGIO_UP:   1,
-    ARPEGGIO_DOWN: 2,
-    BROKEN:        3
-});
-
-export const ChordInversion = Object.freeze({
-    ROOT:   0,
-    FIRST:  1,
-    SECOND: 2
-});
+// documentation imports
+import { PitchClass, ALL_SUPPORTED_PITCH_CLASSES } from "./enums/pitchClass.js";
 
 const DEFAULT_OCTAVE = 4;
 
+/**
+ * Represents a group of notes to be played simultaneously.
+ */
 export class Chord {
-    static RootPitchClass = Note.PitchClass;
+    /** Re-export of {@link PitchClass} */
+    static PitchClass = Note.PitchClass;
+
+    /** Re-export of {@link ChordQuality} */
     static Quality = ChordQuality;
+
+    /** Re-export of {@link ChordInversion} */
     static Inversion = ChordInversion;
+
+    /** Re-export of {@link ChordPlaybackStyle} */
     static PlaybackStyle = ChordPlaybackStyle;
 
+    /** Re-export of {@link ALL_SUPPORTED_PITCH_CLASSES} */
     static ALL_SUPPORTED_ROOT_PITCH_CLASSES = Note.ALL_SUPPORTED_PITCH_CLASSES;
+
+    /** Re-export of {@link ALL_SUPPORTED_CHORD_QUALITIES} */
     static ALL_SUPPORTED_QUALITIES = ALL_SUPPORTED_CHORD_QUALITIES;
 
     #rootNoteIndex
@@ -31,6 +36,15 @@ export class Chord {
     #quality
     #playbackStyle
 
+    /**
+     * Creates a Chord instance.
+     * @param {PitchClass}         rootNotePitchClass Pitch class of the chord's root note.
+     * @param {number}             rootNoteOctave     Octave of the chord's root note.
+     * @param {ChordQuality}       quality            The chord's quality. Major by default.
+     * @param {ChordInversion}     inversion          The chord's inversion (currently unused). Root by default.
+     * @param {ChordPlaybackStyle} playbackStyle      The chord's playback style (currently unused). Block by default.
+     * @contributors Nolan
+     */
     constructor(rootNotePitchClass, rootNoteOctave = DEFAULT_OCTAVE, quality = Chord.Quality.MAJOR, inversion = Chord.Inversion.ROOT,
                 playbackStyle = Chord.PlaybackStyle.BLOCK) {
 
@@ -62,33 +76,71 @@ export class Chord {
         return this.#notes[this.#rootNoteIndex];
     }
 
+    /**
+     * Gets the root note's pitch class.
+     * @returns {PitchClass} The root note's pitch class
+     * @contributors Nolan
+     */
     getRootPitchClass() {
         return this.#getRootNote().getPitchClass();
     }
 
+    /**
+     * Gets the root note's octave.
+     * @returns {number} The root note's octave.
+     * @contributors Nolan
+     */
     getRootOctave() {
         return this.#getRootNote().getOctave();
     }
 
+    /**
+     * Gets the chord's quality.
+     * @returns {ChordQuality} The chord's quality.
+     * @contributors Nolan
+     */
     getQuality() {
         return this.#quality;
     }
 
+    /**
+     * Gets the chord's representation information according to its quality
+     * @returns The chord quality's representation information
+     * @contributors Nolan
+     */
     getQualityRepresentation() {
         return getChordQualityRepresentation(this.#quality);
     }
 
+    /**
+     * Transposes the chord relative to its current state.
+     * @param {number} numHalfSteps The number of half steps to transpose the chord by. Negative values tranpose down while
+     *                              positive values transpose up. The chord's target pitch classes must be in {@link ALL_SUPPORTED_PITCH_CLASSES} 
+     *                              to work.
+     * @contributors Nolan
+     */
     transposeBy(numHalfSteps) {
         for (const note of this.#notes) {
             note.transposeBy(numHalfSteps);
         }
     }
 
-    transposeTo(pitchClass, octave) {
+    /**
+     * Transposes the chord to an octave and pitch class.
+     * @param {PitchClass} pitchClass The pitch class to transpose the chord's root note to. Must be in {@link ALL_SUPPORTED_PITCH_CLASSES} to work.
+     * @param {number} octave The octave to transpose the chord's root note to. If unspecified, no changes will be made to the octave.
+     * @contributors Nolan
+     */
+    transposeTo(pitchClass, octave = this.getRootOctave()) {
         const numHalfSteps = (octave - this.getRootOctave()) * OCTAVE_HALF_STEP_LENGTH + (pitchClass - this.getRootPitchClass());
         this.transposeBy(numHalfSteps);
     }
 
+    /**
+     * Sets the chord's quality, modifying its notes to match.
+     * @param {ChordQuality} quality The chord's new quality
+     * @contributors Nolan
+     */
     setQuality(quality) {
         this.#quality = quality;
         
@@ -126,10 +178,3 @@ export class Chord {
         this.#notes.splice(noteIndex, numNotes - noteIndex);
     }
 }
-
-// this.modules = {
-//     Chord,
-//     CHORD_PLAYBACK_STYLE,
-//     CHORD_INVERSION,
-//     CHORD_QUALITY,
-// };

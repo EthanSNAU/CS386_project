@@ -2,8 +2,18 @@
 import { ChordProgression } from "./music/chordProgression.js";
 import { getRandomArrayElement } from "./math.js";
 
+/**
+ * Number of chords in the progression on startup
+ * @constant
+ */
 export const DEFAULT_NUM_CHORDS = 4;
+
+/**
+ * Maximum number of chords allowed in the progression
+ */
 export const MAX_CHORDS = 7;
+
+
 let isDisplayingAlphabet = false;
 const chordProgression = new ChordProgression(ChordProgression.PitchClass.C, ChordProgression.ReferentialScale.IONIAN_MAJOR);
 
@@ -308,13 +318,3 @@ export function init() {
     document.getElementById("setRootKeySelection").onchange = (event) => setKey(event.target.value);
     document.getElementById("setScaleSelection").onchange = (event) => setReferentialScale(event.target.value);
 };
-
-
-// module.exports = { 
-//     MAX_CHORDS,
-//     addChord,
-//     updateChordNameDisplay,
-//     setKey,
-//     setScale,
-//     init
-// };

@@ -1,3 +1,8 @@
+/**
+ * Available chord qualities
+ * @enum {number}
+ * @readonly
+ */
 export const ChordQuality = Object.freeze({
     MAJOR:           0,
     MINOR:           1,
@@ -9,7 +14,6 @@ export const ChordQuality = Object.freeze({
     HALF_DIMINISHED: 7
 });
 
-// "steps" are in half steps
 const ChordQualityMap = Object.freeze({
     [ChordQuality.MAJOR]:           { steps: [4, 3],    centerSymbolDescriptors: "",     upperSymbolDescriptors: "",     name: "major",           isLowercase: false },
     [ChordQuality.MINOR]:           { steps: [3, 4],    centerSymbolDescriptors: "m",    upperSymbolDescriptors: "",     name: "minor",           isLowercase: true  },
@@ -21,12 +25,34 @@ const ChordQualityMap = Object.freeze({
     [ChordQuality.HALF_DIMINISHED]: { steps: [3, 3, 4], centerSymbolDescriptors: "m",    upperSymbolDescriptors: "7b5",  name: "half diminished", isLowercase: true  },
 })
 
-export const ALL_SUPPORTED_CHORD_QUALITIES = Object.freeze(Object.keys(ChordQualityMap));
+/**
+ * List of {@link ChordQuality}'s that are supported by getter methods such as {@link getChordQualityRepresentation} and {@link getChordQualitySteps}.
+ * @type ChordQuality[]
+ * @readonly
+ */
+export const ALL_SUPPORTED_CHORD_QUALITIES = Object.freeze(Object.keys(ChordQualityMap).map(str => parseInt(str)));
 
+/**
+ * Gets the interval sizes for a chord quality
+ * @param {ChordQuality} quality Quality to get the steps for. Must be in {@link ALL_SUPPORTED_CHORD_QUALITIES} to work.
+ * @returns {number[]} Array of step sizes for the inputted chord quality
+ * @contributors Nolan
+ */
 export function getChordQualitySteps(quality) {
     return ChordQualityMap[quality].steps;
 }
 
+/**
+ * Gets the representation information for a chord quality
+ * @param {ChordQuality} quality Quality to get the representation for. Must be in {@link ALL_SUPPORTED_CHORD_QUALITIES} to work.
+ * @returns {{
+ *  centerSymbolDescriptors: string
+ *  upperSymbolDescriptors:  string
+ *  name:                    string
+ *  isLowercase:             boolean
+ * }} The quality's representation information
+ * @contributors Nolan
+ */
 export function getChordQualityRepresentation(quality) {
     const info = ChordQualityMap[quality];
     return {
