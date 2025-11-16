@@ -16,6 +16,7 @@ export function getRandomInt(inclusiveMin, inclusiveMax) {
  * @contributors Nolan
  */
 export function getRandomArrayElement(array) {
+    if (!array || array.length === 0) return null;
     return array[getRandomInt(0, array.length - 1)];
 }
 
