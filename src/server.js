@@ -26,12 +26,16 @@ app.engine('ejs', (path, data, cb) => {
 
 // Home page
 app.get('/', (req, res) => {
+
     // render views/pages/home.ejs within views/layout.ejs
     res.render(LAYOUT_NAME, {
         body: "pages/home",
         styles: ["pages/home.css"],
         scripts: ["romanNumGen.js"],
-        startupFunction: "init();"
+        startupFunction: {
+        filepath: "/scripts/romanNumGen.js",
+        signature: "init"
+        }
     });
 })
 

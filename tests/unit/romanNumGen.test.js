@@ -1,46 +1,21 @@
 const FILE_PATH = "../../src/public/scripts/romanNumGen.js";
-const iterationCount = 100;
+import { addChord, randomizeChordRootNotes, randomizeChordQualities, randomizeChordBassNotes, removeChordBassNotes } from FILE_PATH;
 
-/* ============================================= getRandomInt tests ============================================= */
+/* =============================================  addChord ============================================= */
 
-describe(`getRandomInt`, () => {
-    const { getRandomInt } = require(FILE_PATH);
-    let lowerBound = 1;
-    let upperBound = 20;
+descrive("addChord", () => {
+    beforeEach(() => {
+        jest.resetModules();
 
-    const testWithinBounds = (lower, upper) => {
-        for (let i = 0; i < iterationCount; i++) {
-            const randInt = getRandomInt(lowerBound, upperBound);
-            expect(randInt).toBeGreaterThanOrEqual(lowerBound);
-            expect(randInt).toBeLessThanOrEqual(upperBound);
-        }
-    }
-
-    test(`Generate integers within positive range ${lowerBound} to ${upperBound} (inclusive)`, () => {
-        testWithinBounds(lowerBound, upperBound);
-    });
-
-    test(`Generate integers where lower and upper bounds are the same`, () => {
-        testWithinBounds(5, 5);
-    });
-
-    lowerBound = -10;
-    upperBound = 10;
-    test(`Generate integers with negative lower bound ${lowerBound} to ${upperBound} (inclusive)`, () => {
-        testWithinBounds(lowerBound, upperBound);
-    });
-
-    lowerBound = -20;
-    upperBound = -1;
-    test(`Generate integers within negative range ${lowerBound} to ${upperBound} (inclusive)`, () => {
-        testWithinBounds(lowerBound, upperBound);
+        const chordProgressionDisplay = document.createElement("div");
+        chordProgressionDisplay.id = "chordProgressionDisplay";
+        document.body.appendChild(chordProgressionDisplay);
     });
 });
 
-/* ============================================= genRomanNumeral tests ============================================= */
+/* =============================================  randomizeChordRootNotes ============================================= */
 
-describe(`genRomanNumeral`, () => {
-    const { genRomanNumeral } = require(FILE_PATH);
+describe(`randomizeChordRootNotes`, () => {
     beforeEach(() => {
         document.body.innerHTML = "";
 

@@ -11,19 +11,25 @@
         <% } %>
 
         <% if ((scripts && scripts.length) || startupFunction) { %>
-        <script>
+        <script type="module">
+            import { loadScript, onDomLoad } from "/scripts/config.js";
+            <% if (startupFunction) { %>
+                import { <%= startupFunction.signature %> } from "<%= startupFunction.filepath %>";
+            <% } %>
+
             <% if (scripts && scripts.length) { %>
                 const scriptsToLoad = <%- JSON.stringify(scripts) %>;
             <% } %>
 
             onDomLoad(async () => {
                 <% if (scripts && scripts.length) { %>
-                    await Promise.all(scriptsToLoad.map(loadScript));
+                    for (const script of scriptsToLoad) {
+                        await loadScript(script);
+                    }
                 <% } %>
 
-
                 <% if (startupFunction) { %>
-                    <%- startupFunction %>
+                    <%- startupFunction.signature %>();
                 <% } %>
             });
         </script>
