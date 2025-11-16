@@ -1,6 +1,6 @@
 // romanNumGen.js
 import { ChordProgression } from "./music/chordProgression.js";
-import { getRandomArrayElement, getRandomInt } from "./math.js";
+import { getRandomArrayElement, getRandomInt, capitalizeFirstChar } from "./util.js";
 import { ALL_SUPPORTED_PITCH_CLASSES } from "./music/enums/pitchClass.js";
 
 /**
@@ -23,19 +23,21 @@ const chordProgression = new ChordProgression(ChordProgression.PitchClass.C, Cho
  */
 export function updateChordNameDisplay() {
     const numChords = chordProgression.getNumChords();
-    let names = [];
+    let names = "";
 
     if (isDisplayingAlphabet) {
         for (let i = 0; i < numChords; i++) {
-            names.push(chordProgression.getChordRepresentation(i).alphabeticalName);
+            names += chordProgression.getChordRepresentation(i).alphabeticalName;
+            if (i < numChords - 1) names += ", ";
         }
     } else {
         for (let i = 0; i < numChords; i++) {
-            names.push(chordProgression.getChordRepresentation(i).romanName);
+            names += chordProgression.getChordRepresentation(i).romanName;
+            if (i < numChords - 1) names += ", ";
         }
     }
 
-    document.getElementById("wordDisplay").textContent = names;
+    document.getElementById("wordDisplay").textContent = capitalizeFirstChar(names);
 }
 
 
@@ -341,9 +343,6 @@ export function init() {
     for (let i = 0; i < DEFAULT_NUM_CHORDS; i++) {
         addChord();
     }
-
-    updateChordSymbolDisplay();
-    updateChordNameDisplay();
 
     document.getElementById("randomizeChordRootNotesButton").addEventListener("click", randomizeChordRootNotes);
     document.getElementById("randomizeChordQualitiesButton").addEventListener("click", randomizeChordQualities);

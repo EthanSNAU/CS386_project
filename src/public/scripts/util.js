@@ -19,7 +19,12 @@ export function getRandomArrayElement(array) {
     return array[getRandomInt(0, array.length - 1)];
 }
 
-// module.exports = {
-//     getRandomInt,
-//     getRandomArrayElement
-// };
+/**
+ * Returns a duplicate of the inputted string with its first character capitalized
+ * @param {string} str String to capitalize
+ * @returns {string} The inputted string with the first character capitalized
+ */
+export function capitalizeFirstChar(str) {
+    if (!str) return "";
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
