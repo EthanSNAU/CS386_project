@@ -33,6 +33,7 @@ export class Chord {
 
     #rootNoteIndex
     #notes
+    #bassNote
     #quality
     #playbackStyle
 
@@ -48,6 +49,7 @@ export class Chord {
     constructor(rootNotePitchClass, rootNoteOctave = DEFAULT_OCTAVE, quality = Chord.Quality.MAJOR, inversion = Chord.Inversion.ROOT,
                 playbackStyle = Chord.PlaybackStyle.BLOCK) {
 
+        this.#bassNote = null;
         this.#playbackStyle = playbackStyle;
         this.#quality = quality;
 
@@ -176,5 +178,55 @@ export class Chord {
 
         // if there are notes left, remove them
         this.#notes.splice(noteIndex, numNotes - noteIndex);
+    }
+
+    /**
+     * Sets the bass note of the chord. If a bass note already exists, it is transposed to the inputted parameters.
+     * @param {PitchClass} pitchClass Pitch class of the bass note. Must be in {@link ALL_SUPPORTED_PITCH_CLASSES} to work.
+     *                                If it is equal to the root note's pitch class, then the bass note is removed.
+     * @param {number}     octave     Octave of the bass note. Defaults to one octave below the chord's root note.
+     * @contributors Nolan
+     */
+    setBassNote(pitchClass, octave = this.getRootOctave() - 1) {
+        if (this.getRootPitchClass() === pitchClass) {
+            this.removeBassNote();
+            return;
+        }
+
+        if (this.#bassNote) {
+            this.#bassNote.transposeTo(pitchClass, octave);
+        } else {
+            this.#bassNote = new Note(pitchClass, octave);
+        }
+    }
+
+    /**
+     * Removes the bass note from the chord, destroying the {@link Note} object.
+     * @contributors Nolan
+     */
+    removeBassNote() {
+        this.#bassNote = null;
+    }
+
+    /**
+     * Gets the chord's bass note's pitch class.
+     * @returns {PitchClass} The bass note's pitch class, if it exists. If it doesn't, then {@link PitchClass.NONE} is returned
+     * @contrubutors Nolan
+     */
+    getBassNotePitchClass() {
+        if (this.#bassNote) {
+            return this.#bassNote.getPitchClass();
+        } else {
+            return Chord.PitchClass.NONE;
+        }
+    }
+
+    /**
+     * Returns true if the chord has a bass note.
+     * @returns {boolean} True if the chord has a bass note, false otherwise
+     * @contributors Nolan
+     */
+    hasBassNote() {
+        return (this.#bassNote !== null);
     }
 }

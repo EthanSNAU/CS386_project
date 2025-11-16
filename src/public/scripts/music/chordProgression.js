@@ -61,12 +61,14 @@ export class ChordProgression {
      *  alphabeticalSymbol:                  string,
      *  alphabeticalType:                    PitchClassRepresentationType,
      *  alphabeticalCenterSymbolDescriptors: string,
+     *  alphabeticalBassNoteSymbol:          string,
      *  romanName:                           string,
      *  romanSymbol:                         string,
      *  romanType:                           PitchClassRepresentationType,
-     *  romanCenterSymbolDescriptors:        string
-     *  upperSymbolDescriptors:              string
-     *  lowerSymbolDescriptors:              string
+     *  romanCenterSymbolDescriptors:        string,
+     *  romanBassNoteSymbol:                 string,
+     *  upperSymbolDescriptors:              string,
+     *  lowerSymbolDescriptors:              string,
      * }} The chord's representation information
      * @contributors Marcus, Nolan
      */
@@ -107,6 +109,19 @@ export class ChordProgression {
             if (chordQuality == Chord.Quality.MINOR || chordQuality == Chord.Quality.HALF_DIMINISHED) {
                 chordRepresentation.romanCenterSymbolDescriptors = chordRepresentation.romanCenterSymbolDescriptors.replace("m", "");
             }
+        }
+
+        if (chord.hasBassNote()) {
+            const bassNoteRepresentation = this.#scale.getRepresentationFor(chord.getBassNotePitchClass());
+
+            chordRepresentation.alphabeticalBassNoteSymbol = bassNoteRepresentation.alphabeticalSymbol + bassNoteRepresentation.alphabeticalCenterSymbolDescriptors
+            chordRepresentation.romanBassNoteSymbol = bassNoteRepresentation.romanSymbol + bassNoteRepresentation.romanCenterSymbolDescriptors
+
+            chordRepresentation.alphabeticalName += " over " + bassNoteRepresentation.alphabeticalName;
+            chordRepresentation.romanName += " over " + bassNoteRepresentation.romanName;
+        } else {
+            chordRepresentation.alphabeticalBassNoteSymbol = "";
+            chordRepresentation.romanBassNoteSymbol = "";
         }
 
         chordRepresentation.lowerSymbolDescriptors = "";
@@ -155,6 +170,28 @@ export class ChordProgression {
     setChordQuality(chordIndex, quality) {
         const chord = this.#chords[chordIndex];
         chord.setQuality(quality);
+    }
+
+    /**
+     * Sets a chord's bass note
+     * @param {number}     chordIndex Integer index of the chord to modify
+     * @param {PitchClass} pitchClass The bass note's pitch class
+     * @param {number}     octave     Octave of the bass note. Defaults to {@link Chord.setBassNote}'s default octave.
+     * @contributors Nolan
+     */
+    setChordBassNote(chordIndex, pitchClass, octave) {
+        const chord = this.#chords[chordIndex];
+        chord.setBassNote(pitchClass, octave);
+    }
+
+    /**
+     * Removes a chord's bass note, destroying its {@link Note} object.
+     * @param {number} chordIndex Integer index of the chord to modify
+     * @contributors Nolan
+     */
+    removeChordBassNote(chordIndex) {
+        const chord = this.#chords[chordIndex];
+        chord.removeBassNote();
     }
 
     /**

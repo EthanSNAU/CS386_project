@@ -134,7 +134,7 @@ export class Scale {
 
             for (let i = 0; i < numSharps; i++) {
                 lowerSymbolDescriptors += "#";
-                lowerName += " sharp";
+                lowerName = "sharp " + lowerName;
             }
 
             let upperSymbol = convertToRoman(upperReferentialIndex + 1);
@@ -144,7 +144,7 @@ export class Scale {
 
             for (let i = 0; i < numFlats; i++) {
                 upperSymbolDescriptors += "b";
-                upperName += " flat";
+                upperName = "flat " + lowerName;
             }
 
             const lowerRepresentation = {

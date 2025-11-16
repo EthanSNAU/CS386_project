@@ -1,6 +1,7 @@
 // romanNumGen.js
 import { ChordProgression } from "./music/chordProgression.js";
-import { getRandomArrayElement } from "./math.js";
+import { getRandomArrayElement, getRandomInt } from "./math.js";
+import { ALL_SUPPORTED_PITCH_CLASSES } from "./music/enums/pitchClass.js";
 
 /**
  * Number of chords in the progression on startup
@@ -13,11 +14,8 @@ export const DEFAULT_NUM_CHORDS = 4;
  */
 export const MAX_CHORDS = 7;
 
-
 let isDisplayingAlphabet = false;
 const chordProgression = new ChordProgression(ChordProgression.PitchClass.C, ChordProgression.ReferentialScale.IONIAN_MAJOR);
-
-// TODO: combine the names and symbols updates into one function
 
 /**
  * Updates the displayed chord names
@@ -49,15 +47,29 @@ export function updateChordSymbolDisplay() {
     for (let i = 0; i < chordProgression.getNumChords(); i++) {
         const rootNoteDisplay = document.getElementById(`rootNote${i}`);
         const upperFigureDisplay = document.getElementById(`upperFigure${i}`);
+        const lowerFigureDisplay = document.getElementById(`lowerFigure${i}`);
+        const bassNoteDisplay = document.getElementById(`bassNote${i}`);
+
         const representation = chordProgression.getChordRepresentation(i);
 
         if (isDisplayingAlphabet) {
             rootNoteDisplay.textContent = representation.alphabeticalSymbol + representation.alphabeticalCenterSymbolDescriptors;
-            upperFigureDisplay.textContent = representation.upperSymbolDescriptors;
+            if (representation.alphabeticalBassNoteSymbol) {
+                bassNoteDisplay.textContent = "/" + representation.alphabeticalBassNoteSymbol;
+            } else {
+                bassNoteDisplay.textContent = "";
+            }
         } else {
             rootNoteDisplay.textContent = representation.romanSymbol + representation.romanCenterSymbolDescriptors;
-            upperFigureDisplay.textContent = representation.upperSymbolDescriptors;
+            if (representation.romanBassNoteSymbol) {
+                bassNoteDisplay.textContent = "/" + representation.romanBassNoteSymbol;
+            } else {
+                bassNoteDisplay.textContent = "";
+            }
         }
+
+        upperFigureDisplay.textContent = representation.upperSymbolDescriptors;
+        lowerFigureDisplay.textContent = representation.lowerSymbolDescriptors;
     }
 }
 
@@ -126,16 +138,6 @@ export function addChord() {
     let newBassNoteDisplay = document.createElement("p");
     newBassNoteDisplay.id = `bassNote${numChords}`;
     newBassNoteDisplay.className = "bassNoteDisplay";
-    // newBassNoteDisplay.addEventListener("click", (event) => {
-    //     // Prompt the user for a new note
-    //     const currentNote = event.target.textContent || "";
-    //     const newNote = prompt("Enter a new bass note (e.g., C, D#, F):", currentNote);
-
-    //     // Update the bass note if valid input is given
-    //     if (newNote !== null && newNote.trim() !== "") {
-    //         event.target.textContent = newNote.trim();
-    //     }
-    // });
 
     let newChord = document.createElement("div");
     newChord.id = `chord${numChords}`;
@@ -271,6 +273,37 @@ export function toggleChordDisplayType() {
 //     return result.trim();
 // }
 
+/**
+ * Randomizes the displayed chords' bass notes
+ * @contributors Adolfo, Nolan
+ */
+export function randomizeChordBassNotes() {
+    for (let i = 0; i < chordProgression.getNumChords(); i++) {
+        const randIndex = getRandomInt(0, ALL_SUPPORTED_PITCH_CLASSES.length);
+
+        if (randIndex == ALL_SUPPORTED_PITCH_CLASSES.length) {
+            chordProgression.removeChordBassNote(i);
+        } else {
+            chordProgression.setChordBassNote(i, ALL_SUPPORTED_PITCH_CLASSES[randIndex]);
+        }
+    }
+
+    updateChordSymbolDisplay();
+    updateChordNameDisplay();
+}
+
+/**
+ * Remvoes the displayed chords' bass notes
+ * @contributors Adolfo, Nolan
+ */
+export function removeChordBassNotes() {
+    for (let i = 0; i < chordProgression.getNumChords(); i++) {
+        chordProgression.removeChordBassNote(i);
+    }
+
+    updateChordSymbolDisplay();
+    updateChordNameDisplay();
+}
 
 /**
  * Updates the root key on the webpage
@@ -314,6 +347,8 @@ export function init() {
 
     document.getElementById("randomizeChordRootNotesButton").addEventListener("click", randomizeChordRootNotes);
     document.getElementById("randomizeChordQualitiesButton").addEventListener("click", randomizeChordQualities);
+    document.getElementById("randomizeChordBassNotesButton").addEventListener("click", randomizeChordBassNotes);
+    document.getElementById("removeChordBassNotesButton").addEventListener("click", removeChordBassNotes);
     document.getElementById("toggleChordDisplayTypeButton").addEventListener("click", toggleChordDisplayType);
     document.getElementById("addChordButton").addEventListener("click", addChord);
 

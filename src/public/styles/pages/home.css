@@ -14,8 +14,8 @@
     width: 80px;
     display: grid;
     grid-template:
-        "rootNote upperFigure"
-        "rootNote lowerFigure";
+        "rootNote upperFigure bassNote"
+        "rootNote lowerFigure bassNote";
     place-items: center;
     grid-auto-columns: max-content;
     justify-content: center;
@@ -35,4 +35,11 @@
     margin: 0;
     padding: 0;
     grid-area: upperFigure, lowerFigure;
+}
+
+.bassNoteDisplay {
+    font-size: 3em;
+    margin: 0;
+    padding: 0;
+    grid-area: bassNote;
 }

@@ -28,6 +28,8 @@ export const PitchClass = Object.freeze({
     A_SHARP: 10,
     B_FLAT:  10,
     B:       11,
+
+    NONE: -1
 });
 
 const PitchClassMap = Object.freeze({
