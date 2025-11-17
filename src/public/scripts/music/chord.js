@@ -104,6 +104,10 @@ export class Chord {
     transposeTo(pitchClass, octave = this.getRootOctave()) {
         const numHalfSteps = (octave - this.getRootOctave()) * OCTAVE_HALF_STEP_LENGTH + (pitchClass - this.getRootPitchClass());
         this.transposeBy(numHalfSteps);
+
+        if (this.getBassNotePitchClass() === pitchClass) {
+            this.removeBassNote();
+        }
     }
 
     /**

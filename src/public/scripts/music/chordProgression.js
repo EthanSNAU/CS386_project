@@ -47,7 +47,7 @@ export class ChordProgression {
         const chordQuality = chord.getQuality();
 
         const qualityRepresentation = ChordQuality.getRepresentation(chordQuality);
-        const chordRepresentation = this.#scale.getRepresentationFor(chordPitchClass);
+        const chordRepresentation = this.#scale.getRepresentation(chordPitchClass);
 
         // account for minor and diminished chords
         if (qualityRepresentation.isLowercase) {
@@ -79,7 +79,7 @@ export class ChordProgression {
 
         // bass note
         if (chord.hasBassNote()) {
-            const bassNoteRepresentation = this.#scale.getRepresentationFor(chord.getBassNotePitchClass());
+            const bassNoteRepresentation = this.#scale.getRepresentation(chord.getBassNotePitchClass());
 
             chordRepresentation.alphabeticalBassNoteSymbol = bassNoteRepresentation.alphabeticalSymbol;
             chordRepresentation.romanBassNoteSymbol = bassNoteRepresentation.romanSymbol;

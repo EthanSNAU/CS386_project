@@ -166,7 +166,7 @@ export class Scale {
      * }} The pitch class' representation information
      * @contributors Nolan
      */
-    getRepresentationFor(pitchClass) {
+    getRepresentation(pitchClass) {
         const representationInfo = this.#octave[pitchClass];
         const alphabeticalRepresentation = PitchClass.getRepresentation(pitchClass, representationInfo.alphabeticalRepresentationIndex);
         const romanRepresentation = representationInfo.romanRepresentations[representationInfo.romanRepresentationIndex];
