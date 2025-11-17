@@ -2,12 +2,7 @@ import { Chord } from "./chord.js";
 import { Scale } from "./scale.js";
 
 // documentation imports
-import { PitchClass, ALL_SUPPORTED_PITCH_CLASSES } from "./enums/pitchClass.js";
-import { Accidental } from "./enums/pitchClassDescriptor.js";
-import { ChordQuality, ALL_SUPPORTED_CHORD_QUALITIES } from "./enums/chordQuality.js"
-import { ChordInversion } from "./enums/chordInversion.js"
-import { ChordPlaybackStyle } from "./enums/chordPlaybackStyle.js";
-import { ReferentialScale } from "./enums/referentialScale.js";
+import { Accidental, ChordQuality, isLowercaseChordQuality, ALL_SUPPORTED_CHORD_QUALITIES, PitchClass, ALL_SUPPORTED_PITCH_CLASSES, ReferentialScale } from "./enums";
 
 const DEFAULT_OCTAVE = 4;
 
@@ -15,30 +10,6 @@ const DEFAULT_OCTAVE = 4;
  * Represents a set of chords to be played in sequence. Manages chord representations.
  */
 export class ChordProgression {
-    /** Re-export of {@link PitchClass} */
-    static PitchClass = Chord.PitchClass;
-
-    /** Re-export of {@link Accidental} */
-    static Accidental = Scale.Accidental;
-
-    /** Re-export of {@link ChordQuality} */
-    static ChordQuality = Chord.Quality;
-
-    /** Re-export of {@link ChordInversion} */
-    static ChordInversion = Chord.Inversion;
-
-    /** Re-export of {@link ChordPlaybackStyle} */
-    static ChordPlaybackStyle = Chord.PlaybackStyle;
-
-    /** Re-export of {@link ReferentialScale} */
-    static ReferentialScale = Scale.ReferentialScale;
-
-    /** Re-export of {@link ALL_SUPPORTED_PITCH_CLASSES} */
-    static ALL_SUPPORTED_PITCH_CLASSES = Chord.ALL_SUPPORTED_ROOT_PITCH_CLASSES;
-
-    /** Re-export of {@link ALL_SUPPORTED_CHORD_QUALITIES} */
-    static ALL_SUPPORTED_CHORD_QUALITIES = Chord.ALL_SUPPORTED_QUALITIES;
-
     #chords
     #scale
     
@@ -106,7 +77,7 @@ export class ChordProgression {
             // remove the m for relevant roman chords
             // TODO: make this less duct tapey
             const chordQuality = chord.getQuality();
-            if (chordQuality == Chord.Quality.MINOR || chordQuality == Chord.Quality.HALF_DIMINISHED) {
+            if (chordQuality == ChordQuality.MINOR || chordQuality == ChordQuality.HALF_DIMINISHED) {
                 chordRepresentation.romanCenterSymbolDescriptors = chordRepresentation.romanCenterSymbolDescriptors.replace("m", "");
             }
         }
@@ -164,7 +135,7 @@ export class ChordProgression {
     /**
      * Sets a chord's quality, modifying its notes to match.
      * @param {number}       chordIndex Integer index of the chord to modify
-     * @param {ChordQuality} quality    The chord's new quality
+     * @param {ChordQuality} quality    The chord's new quality. Must be in {@link ALL_SUPPORTED_CHORD_QUALITIES} to work.
      * @contributors Nolan
      */
     setChordQuality(chordIndex, quality) {
@@ -201,7 +172,7 @@ export class ChordProgression {
      * @param {ChordQuality} quality    The new chord's quality. Defaults to major.
      * @contributors Nolan
      */
-    addChord(pitchClass = this.#scale.getRootPitchClass(), octave = DEFAULT_OCTAVE, quality = ChordProgression.ChordQuality.MAJOR) {
+    addChord(pitchClass = this.#scale.getRootPitchClass(), octave = DEFAULT_OCTAVE, quality = ChordQuality.MAJOR) {
         this.#chords.push(new Chord(pitchClass, octave, quality));
     }
 

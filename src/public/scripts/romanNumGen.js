@@ -1,7 +1,7 @@
 // romanNumGen.js
 import { ChordProgression } from "./music/chordProgression.js";
+import { PitchClass, ReferentialScale, ALL_SUPPORTED_PITCH_CLASSES, ALL_SUPPORTED_CHORD_QUALITIES } from "./music/enums";
 import { getRandomArrayElement, getRandomInt, capitalizeFirstChar } from "./util.js";
-import { ALL_SUPPORTED_PITCH_CLASSES } from "./music/enums/pitchClass.js";
 
 /**
  * Number of chords in the progression on startup
@@ -15,7 +15,7 @@ export const DEFAULT_NUM_CHORDS = 4;
 export const MAX_CHORDS = 7;
 
 let isDisplayingAlphabet = false;
-const chordProgression = new ChordProgression(ChordProgression.PitchClass.C, ChordProgression.ReferentialScale.IONIAN_MAJOR);
+const chordProgression = new ChordProgression(PitchClass.C, ReferentialScale.IONIAN_MAJOR);
 
 /**
  * Updates the displayed chord names
@@ -163,7 +163,7 @@ export function addChord() {
 export function randomizeChordRootNotes() {
     const numChords = chordProgression.getNumChords();
     for(let i = 0; i < numChords; i++) {
-        const randomPitchClass = getRandomArrayElement(ChordProgression.ALL_SUPPORTED_PITCH_CLASSES);
+        const randomPitchClass = getRandomArrayElement(ALL_SUPPORTED_PITCH_CLASSES);
         chordProgression.setChordRootNote(i, randomPitchClass);
     }
 
@@ -178,7 +178,7 @@ export function randomizeChordRootNotes() {
 export function randomizeChordQualities() {
     const numChords = chordProgression.getNumChords();
     for(let i = 0; i < numChords; i++) {
-        const randomQuality = getRandomArrayElement(ChordProgression.ALL_SUPPORTED_CHORD_QUALITIES);
+        const randomQuality = getRandomArrayElement(ALL_SUPPORTED_CHORD_QUALITIES);
         chordProgression.setChordQuality(i, randomQuality);
     }
 

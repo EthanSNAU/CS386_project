@@ -9,12 +9,6 @@ const DEFAULT_OCTAVE = 4;
  * Manages the octave, pitch, and length of a pitch class.
  */
 export class Note {
-    /** Re-export of {@link PitchClass} */
-    static PitchClass = PitchClass;
-
-    /** Re-export of {@link ALL_SUPPORTED_PITCH_CLASSES} */
-    static ALL_SUPPORTED_PITCH_CLASSES = ALL_SUPPORTED_PITCH_CLASSES;
-
     #pitchClass
     #pitch
     #octave

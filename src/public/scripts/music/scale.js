@@ -1,9 +1,5 @@
-import { PitchClass, ALL_SUPPORTED_PITCH_CLASSES, getPitchClassRepresentation, } from "./enums/pitchClass.js";
-import { ReferentialScale, getReferentialScaleSteps } from "./enums/referentialScale.js";
+import { Accidental, getAccidentalRepresentation, PitchClass, ALL_SUPPORTED_PITCH_CLASSES, getPitchClassRepresentation, ReferentialScale, getReferentialScaleSteps } from "./enums";
 import { convertToRoman, convertToWord } from "./numberConversion.js"
-
-// documentation imports
-import { Accidental, getAccidentalRepresentation } from "./enums/pitchClassDescriptor.js";
 
 // TODO: add ability for users to toggle between different symbols (eg. G# vs. Ab)
 // TODO: add ability to switch to different referential scale
@@ -12,15 +8,6 @@ import { Accidental, getAccidentalRepresentation } from "./enums/pitchClassDescr
  * Manages the alphabetical and Roman numeral representations of all pitch classes.
  */
 export class Scale {
-    /** Re-export of {@link PitchClass} */
-    static PitchClass = PitchClass;
-
-    /** Re-export of {@link ReferentialScale} */
-    static ReferentialScale = ReferentialScale;
-
-    /** Re-export of {@link Accidental} */
-    static Accidental = PitchClass.Accidental;
-
     #rootPitchClass
     #octave // tracks the user's preferred symbols (eg. G# vs. Ab)
     #referentialScale // tracks the notes that are used for chord labeling
@@ -31,7 +18,7 @@ export class Scale {
      * @param {ReferentialScale} referentialScale Referential scale for Roman numeral conversion
      * @contributors Nolan
      */
-    constructor(rootPitchClass, referentialScale = Scale.ReferentialScale.IONIAN_MAJOR) {
+    constructor(rootPitchClass, referentialScale = ReferentialScale.IONIAN_MAJOR) {
         this.#rootPitchClass = rootPitchClass;
         this.#octave = {};
 
@@ -72,8 +59,8 @@ export class Scale {
 
         // fill in the roman numerals
 
-        const SHARP_REPRESENTATION = getAccidentalRepresentation(Scale.Accidental.SHARP);
-        const FLAT_REPRESENTATION  = getAccidentalRepresentation(Scale.Accidental.SHARP);
+        const SHARP_REPRESENTATION = getAccidentalRepresentation(Accidental.SHARP);
+        const FLAT_REPRESENTATION  = getAccidentalRepresentation(Accidental.FLAT);
 
         for (const [octavePitchClass, octaveRepresentation] of Object.entries(this.#octave)) {
             // find where the pitch class resides on the referential scale
@@ -109,7 +96,7 @@ export class Scale {
                 octaveRepresentation.romanRepresentations.push({
                     symbol: convertToRoman(currentReferentialIndex + 1),
                     name: convertToWord(currentReferentialIndex + 1),
-                    accidental: PitchClass.Accidental.NATURAL,
+                    accidental: Accidental.NATURAL,
                     symbolDescriptors: ""
                 });
                 continue;
@@ -156,14 +143,14 @@ export class Scale {
                 symbol:            lowerSymbol,
                 symbolDescriptors: lowerSymbolDescriptors,
                 name:              lowerName,
-                accidental:        Scale.Accidental.SHARP
+                accidental:        Accidental.SHARP
             };
 
             const upperRepresentation = {
                 symbol:            upperSymbol,
                 symbolDescriptors: upperSymbolDescriptors,
                 name:              upperName,
-                accidental:        Scale.Accidental.FLAT
+                accidental:        Accidental.FLAT
             };
 
             octaveRepresentation.romanRepresentations.push(lowerRepresentation);

@@ -1,11 +1,8 @@
-import { OCTAVE_HALF_STEP_LENGTH } from "./enums/pitchClass.js";
-import { ChordQuality, ALL_SUPPORTED_CHORD_QUALITIES, getChordQualityRepresentation, getChordQualitySteps } from "./enums/chordQuality.js";
 import { Note } from "./note.js"
-import { ChordPlaybackStyle } from "./enums/chordPlaybackStyle.js";
-import { ChordInversion } from "./enums/chordInversion.js";
+import { ChordPlaybackStyle, ChordInversion, ChordQuality, getChordQualityRepresentation, getChordQualitySteps, OCTAVE_HALF_STEP_LENGTH, PitchClass } from "./enums";
 
 // documentation imports
-import { PitchClass, ALL_SUPPORTED_PITCH_CLASSES } from "./enums/pitchClass.js";
+import { ALL_SUPPORTED_PITCH_CLASSES } from "./enums";
 
 const DEFAULT_OCTAVE = 4;
 
@@ -13,24 +10,6 @@ const DEFAULT_OCTAVE = 4;
  * Represents a group of notes to be played simultaneously.
  */
 export class Chord {
-    /** Re-export of {@link PitchClass} */
-    static PitchClass = Note.PitchClass;
-
-    /** Re-export of {@link ChordQuality} */
-    static Quality = ChordQuality;
-
-    /** Re-export of {@link ChordInversion} */
-    static Inversion = ChordInversion;
-
-    /** Re-export of {@link ChordPlaybackStyle} */
-    static PlaybackStyle = ChordPlaybackStyle;
-
-    /** Re-export of {@link ALL_SUPPORTED_PITCH_CLASSES} */
-    static ALL_SUPPORTED_ROOT_PITCH_CLASSES = Note.ALL_SUPPORTED_PITCH_CLASSES;
-
-    /** Re-export of {@link ALL_SUPPORTED_CHORD_QUALITIES} */
-    static ALL_SUPPORTED_QUALITIES = ALL_SUPPORTED_CHORD_QUALITIES;
-
     #rootNoteIndex
     #notes
     #bassNote
@@ -46,8 +25,8 @@ export class Chord {
      * @param {ChordPlaybackStyle} playbackStyle      The chord's playback style (currently unused). Block by default.
      * @contributors Nolan
      */
-    constructor(rootNotePitchClass, rootNoteOctave = DEFAULT_OCTAVE, quality = Chord.Quality.MAJOR, inversion = Chord.Inversion.ROOT,
-                playbackStyle = Chord.PlaybackStyle.BLOCK) {
+    constructor(rootNotePitchClass, rootNoteOctave = DEFAULT_OCTAVE, quality = ChordQuality.MAJOR, inversion = ChordInversion.ROOT,
+                playbackStyle = ChordPlaybackStyle.BLOCK) {
 
         this.#bassNote = null;
         this.#playbackStyle = playbackStyle;
@@ -217,7 +196,7 @@ export class Chord {
         if (this.#bassNote) {
             return this.#bassNote.getPitchClass();
         } else {
-            return Chord.PitchClass.NONE;
+            return PitchClass.NONE;
         }
     }
 

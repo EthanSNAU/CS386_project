@@ -17,6 +17,8 @@ const AccidentalMap = Object.freeze({
 
 /**
  * List of {@link Accidental}s supported by getter methods, such as {@link getAccidentalRepresentation}.
+ * @type Accidental[]
+ * @readonly
  */
 export const ALL_SUPPORTED_ACCIDENTALS = Object.freeze(Object.keys(AccidentalMap).map(str => parseInt(str)));
 

@@ -62,3 +62,13 @@ export function getChordQualityRepresentation(quality) {
         isLowercase:       info.isLowercase
     };
 }
+
+/**
+ * Returns true if the quality should make a Roman numeral symbol lowercase
+ * @param {*} quality Quality to get the information for
+ * @returns {boolean} True if the chord quality is lowercase, false otherwise
+ * @contributors Nolan
+ */
+export function isLowercaseChordQuality(quality) {
+    return (ChordQualityMap[quality].isLowercase);
+}
