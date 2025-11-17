@@ -1,4 +1,4 @@
-import { Accidental, getAccidentalRepresentation, PitchClass, ALL_SUPPORTED_PITCH_CLASSES, getPitchClassRepresentation, ReferentialScale, getReferentialScaleSteps } from "./enums";
+import { Accidental, PitchClass, ReferentialScale } from "./enums";
 import { convertToRoman, convertToWord } from "./numberConversion.js"
 
 // TODO: add ability for users to toggle between different symbols (eg. G# vs. Ab)
@@ -22,7 +22,7 @@ export class Scale {
         this.#rootPitchClass = rootPitchClass;
         this.#octave = {};
 
-        let currentPitchClassIndex = ALL_SUPPORTED_PITCH_CLASSES.findIndex(pitchClass => pitchClass == rootPitchClass);
+        let currentPitchClassIndex = PitchClass.SUPPORTED_PITCH_CLASSES.findIndex(pitchClass => pitchClass === rootPitchClass);
 
         const addNewOctaveNote = () => {
             const newNote = {
@@ -31,22 +31,22 @@ export class Scale {
                 romanRepresentationIndex: 0,
             };
 
-            this.#octave[ALL_SUPPORTED_PITCH_CLASSES[currentPitchClassIndex]] = newNote;
+            this.#octave[PitchClass.SUPPORTED_PITCH_CLASSES[currentPitchClassIndex]] = newNote;
         }
 
         // fill in the octave
-        while (currentPitchClassIndex < ALL_SUPPORTED_PITCH_CLASSES.length) {
+        while (currentPitchClassIndex < PitchClass.SUPPORTED_PITCH_CLASSES.length) {
             addNewOctaveNote();
             currentPitchClassIndex++;
         }
 
-        for (currentPitchClassIndex = 0; ALL_SUPPORTED_PITCH_CLASSES[currentPitchClassIndex] != rootPitchClass; currentPitchClassIndex++) {
+        for (currentPitchClassIndex = 0; PitchClass.SUPPORTED_PITCH_CLASSES[currentPitchClassIndex] != rootPitchClass; currentPitchClassIndex++) {
             addNewOctaveNote();
         }
 
         // fill in the referential scale
         this.#referentialScale = [rootPitchClass];
-        const referentialScaleSteps = getReferentialScaleSteps(referentialScale);
+        const referentialScaleSteps = ReferentialScale.getSteps(referentialScale);
         let currentPitchClass = rootPitchClass;
 
         for (const step of referentialScaleSteps) {
@@ -59,8 +59,8 @@ export class Scale {
 
         // fill in the roman numerals
 
-        const SHARP_REPRESENTATION = getAccidentalRepresentation(Accidental.SHARP);
-        const FLAT_REPRESENTATION  = getAccidentalRepresentation(Accidental.FLAT);
+        const SHARP_REPRESENTATION = Accidental.getRepresentation(Accidental.SHARP);
+        const FLAT_REPRESENTATION  = Accidental.getRepresentation(Accidental.FLAT);
 
         for (const [octavePitchClass, octaveRepresentation] of Object.entries(this.#octave)) {
             // find where the pitch class resides on the referential scale
@@ -175,7 +175,7 @@ export class Scale {
      */
     getRepresentationFor(pitchClass) {
         const representationInfo = this.#octave[pitchClass];
-        const alphabeticalRepresentation = getPitchClassRepresentation(pitchClass, representationInfo.alphabeticalRepresentationIndex);
+        const alphabeticalRepresentation = PitchClass.getRepresentation(pitchClass, representationInfo.alphabeticalRepresentationIndex);
         const romanRepresentation = representationInfo.romanRepresentations[representationInfo.romanRepresentationIndex];
 
         const pitchClassRepresentation = {

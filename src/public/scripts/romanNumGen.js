@@ -1,6 +1,6 @@
 // romanNumGen.js
 import { ChordProgression } from "./music/chordProgression.js";
-import { PitchClass, ReferentialScale, ALL_SUPPORTED_PITCH_CLASSES, ALL_SUPPORTED_CHORD_QUALITIES } from "./music/enums";
+import { PitchClass, ChordQuality, ReferentialScale } from "./music/enums";
 import { getRandomArrayElement, getRandomInt, capitalizeFirstChar } from "./util.js";
 
 /**
@@ -163,7 +163,7 @@ export function addChord() {
 export function randomizeChordRootNotes() {
     const numChords = chordProgression.getNumChords();
     for(let i = 0; i < numChords; i++) {
-        const randomPitchClass = getRandomArrayElement(ALL_SUPPORTED_PITCH_CLASSES);
+        const randomPitchClass = getRandomArrayElement(PitchClass.SUPPORTED_PITCH_CLASSES);
         chordProgression.setChordRootNote(i, randomPitchClass);
     }
 
@@ -178,7 +178,7 @@ export function randomizeChordRootNotes() {
 export function randomizeChordQualities() {
     const numChords = chordProgression.getNumChords();
     for(let i = 0; i < numChords; i++) {
-        const randomQuality = getRandomArrayElement(ALL_SUPPORTED_CHORD_QUALITIES);
+        const randomQuality = getRandomArrayElement(ChordQuality.SUPPORTED_QUALITIES);
         chordProgression.setChordQuality(i, randomQuality);
     }
 
@@ -281,12 +281,12 @@ export function toggleChordDisplayType() {
  */
 export function randomizeChordBassNotes() {
     for (let i = 0; i < chordProgression.getNumChords(); i++) {
-        const randIndex = getRandomInt(0, ALL_SUPPORTED_PITCH_CLASSES.length);
+        const randIndex = getRandomInt(0, PitchClass.SUPPORTED_PITCH_CLASSES.length);
 
-        if (randIndex == ALL_SUPPORTED_PITCH_CLASSES.length) {
+        if (randIndex == PitchClass.SUPPORTED_PITCH_CLASSES.length) {
             chordProgression.removeChordBassNote(i);
         } else {
-            chordProgression.setChordBassNote(i, ALL_SUPPORTED_PITCH_CLASSES[randIndex]);
+            chordProgression.setChordBassNote(i, PitchClass.SUPPORTED_PITCH_CLASSES[randIndex]);
         }
     }
 

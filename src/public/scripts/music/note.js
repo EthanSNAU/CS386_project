@@ -1,6 +1,7 @@
-import { PitchClass, ALL_SUPPORTED_PITCH_CLASSES, OCTAVE_HALF_STEP_LENGTH, getPitchClassPitch } from "./enums/pitchClass.js";
+import { PitchClass } from "./enums";
 
 const DEFAULT_OCTAVE = 4;
+const OCTAVE_HALF_STEP_LENGTH = 12;
 
 // TODO: make octaves relative to the scale (?) the note lives in
 // might cause overhead
@@ -23,7 +24,7 @@ export class Note {
     constructor(pitchClass, octave = DEFAULT_OCTAVE) {
         this.#pitchClass = pitchClass;
         this.#octave = octave;
-        this.#pitch = getPitchClassPitch(pitchClass, octave);
+        this.#pitch = PitchClass.getPitch(pitchClass, octave);
     }
 
     /**
@@ -47,7 +48,7 @@ export class Note {
     /**
      * Transposes the note relative to its current state.
      * @param {number} numHalfSteps The number of half steps to transpose the note by. Negative values tranpose down while
-     *                              positive values transpose up. The target pitch class must be in {@link ALL_SUPPORTED_PITCH_CLASSES} 
+     *                              positive values transpose up. The target pitch class must be in {@link PitchClass.SUPPORTED_PITCH_CLASSES} 
      *                              to work.
      * @contributors Nolan
      */
@@ -60,13 +61,13 @@ export class Note {
 
     /**
      * Transposes the note to an octave and pitch class.
-     * @param {PitchClass} pitchClass The pitch class to transpose the note to. Must be in {@link ALL_SUPPORTED_PITCH_CLASSES} to work.
+     * @param {PitchClass} pitchClass The pitch class to transpose the note to. Must be in {@link PitchClass.SUPPORTED_PITCH_CLASSES} to work.
      * @param {number} octave The octave to transpose the note to. If unspecified, no changes will be made to the octave.
      * @contributors Nolan
      */
     transposeTo(pitchClass, octave = this.#octave) {
         this.#pitchClass = pitchClass;
         this.#octave = octave;
-        this.#pitch = getPitchClassPitch(pitchClass, octave);
+        this.#pitch = PitchClass.getPitch(pitchClass, octave);
     }
 }

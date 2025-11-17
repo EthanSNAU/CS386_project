@@ -1,10 +1,8 @@
 import { Note } from "./note.js"
-import { ChordPlaybackStyle, ChordInversion, ChordQuality, getChordQualityRepresentation, getChordQualitySteps, OCTAVE_HALF_STEP_LENGTH, PitchClass } from "./enums";
-
-// documentation imports
-import { ALL_SUPPORTED_PITCH_CLASSES } from "./enums";
+import { ChordPlaybackStyle, ChordInversion, ChordQuality, PitchClass } from "./enums";
 
 const DEFAULT_OCTAVE = 4;
+const OCTAVE_HALF_STEP_LENGTH = 12;
 
 /**
  * Represents a group of notes to be played simultaneously.
@@ -37,7 +35,7 @@ export class Chord {
         this.#notes = [new Note(rootNotePitchClass, rootNoteOctave)]
 
         // add notes based on the quality
-        const chordQualitySteps = getChordQualitySteps(quality);
+        const chordQualitySteps = ChordQuality.getSteps(quality);
         let currentPitchClass = rootNotePitchClass;
         let currentOctave = rootNoteOctave;
 
@@ -90,13 +88,13 @@ export class Chord {
      * @contributors Nolan
      */
     getQualityRepresentation() {
-        return getChordQualityRepresentation(this.#quality);
+        return ChordQuality.getRepresentation(this.#quality);
     }
 
     /**
      * Transposes the chord relative to its current state.
      * @param {number} numHalfSteps The number of half steps to transpose the chord by. Negative values tranpose down while
-     *                              positive values transpose up. The chord's target pitch classes must be in {@link ALL_SUPPORTED_PITCH_CLASSES} 
+     *                              positive values transpose up. The chord's target pitch classes must be in {@link PitchClass.SUPPORTED_PITCH_CLASSES} 
      *                              to work.
      * @contributors Nolan
      */
@@ -108,7 +106,7 @@ export class Chord {
 
     /**
      * Transposes the chord to an octave and pitch class.
-     * @param {PitchClass} pitchClass The pitch class to transpose the chord's root note to. Must be in {@link ALL_SUPPORTED_PITCH_CLASSES} to work.
+     * @param {PitchClass} pitchClass The pitch class to transpose the chord's root note to. Must be in {@link PitchClass.SUPPORTED_PITCH_CLASSES} to work.
      * @param {number} octave The octave to transpose the chord's root note to. If unspecified, no changes will be made to the octave.
      * @contributors Nolan
      */
@@ -126,7 +124,7 @@ export class Chord {
         this.#quality = quality;
         
         // adjust current notes
-        const qualitySteps = getChordQualitySteps(this.#quality);
+        const qualitySteps = ChordQuality.getSteps(this.#quality);
         const numSteps = qualitySteps.length;
         const numNotes = this.#notes.length;
 
@@ -161,7 +159,7 @@ export class Chord {
 
     /**
      * Sets the bass note of the chord. If a bass note already exists, it is transposed to the inputted parameters.
-     * @param {PitchClass} pitchClass Pitch class of the bass note. Must be in {@link ALL_SUPPORTED_PITCH_CLASSES} to work.
+     * @param {PitchClass} pitchClass Pitch class of the bass note. Must be in {@link PitchClass.SUPPORTED_PITCH_CLASSES} to work.
      *                                If it is equal to the root note's pitch class, then the bass note is removed.
      * @param {number}     octave     Octave of the bass note. Defaults to one octave below the chord's root note.
      * @contributors Nolan

@@ -2,7 +2,7 @@ import { Chord } from "./chord.js";
 import { Scale } from "./scale.js";
 
 // documentation imports
-import { Accidental, ChordQuality, isLowercaseChordQuality, ALL_SUPPORTED_CHORD_QUALITIES, PitchClass, ALL_SUPPORTED_PITCH_CLASSES, ReferentialScale } from "./enums";
+import { Accidental, ChordQuality, PitchClass, ReferentialScale } from "./enums";
 
 const DEFAULT_OCTAVE = 4;
 
@@ -113,7 +113,7 @@ export class ChordProgression {
      * Transposes a chord relative to its current state.
      * @param {number} chordIndex   Integer index of the chord to transpose
      * @param {number} numHalfSteps Number of half steps to transpose the chord by. Negative values tranpose down while
-     *                              positive values transpose up. The chord's target pitch classes must be in {@link ALL_SUPPORTED_PITCH_CLASSES} 
+     *                              positive values transpose up. The chord's target pitch classes must be in {@link PitchClass.SUPPORTED_PITCH_CLASSES} 
      *                              to work.
      */
     transposeChord(chordIndex, numHalfSteps) {
@@ -123,7 +123,7 @@ export class ChordProgression {
     /**
      * Transposes a chord to a pitch class and octave.
      * @param {number}     chordIndex Integer index of the chord to transpose
-     * @param {PitchClass} pitchClass The pitch class to transpose the note to. Must be in {@link ALL_SUPPORTED_PITCH_CLASSES} to work.
+     * @param {PitchClass} pitchClass The pitch class to transpose the note to. Must be in {@link PitchClass.SUPPORTED_PITCH_CLASSES} to work.
      * @param {number}     octave     The octave to transpose the note to. If unspecified, no changes will be made to the octave.
      * @contributors Nolan
      */
@@ -135,7 +135,7 @@ export class ChordProgression {
     /**
      * Sets a chord's quality, modifying its notes to match.
      * @param {number}       chordIndex Integer index of the chord to modify
-     * @param {ChordQuality} quality    The chord's new quality. Must be in {@link ALL_SUPPORTED_CHORD_QUALITIES} to work.
+     * @param {ChordQuality} quality    The chord's new quality. Must be in {@link ChordQuality.SUPPORTED_QUALITIES} to work.
      * @contributors Nolan
      */
     setChordQuality(chordIndex, quality) {
