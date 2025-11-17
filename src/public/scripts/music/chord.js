@@ -83,15 +83,6 @@ export class Chord {
     }
 
     /**
-     * Gets the chord's representation information according to its quality
-     * @returns The chord quality's representation information
-     * @contributors Nolan
-     */
-    getQualityRepresentation() {
-        return ChordQuality.getRepresentation(this.#quality);
-    }
-
-    /**
      * Transposes the chord relative to its current state.
      * @param {number} numHalfSteps The number of half steps to transpose the chord by. Negative values tranpose down while
      *                              positive values transpose up. The chord's target pitch classes must be in {@link PitchClass.SUPPORTED_PITCH_CLASSES} 

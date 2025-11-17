@@ -97,7 +97,6 @@ export class Scale {
                     symbol: convertToRoman(currentReferentialIndex + 1),
                     name: convertToWord(currentReferentialIndex + 1),
                     accidental: Accidental.NATURAL,
-                    symbolDescriptors: ""
                 });
                 continue;
             }
@@ -120,35 +119,31 @@ export class Scale {
             // build the final strings and push
             // TODO: if we add double sharps and double flats, use those representations instead of repeated sharps/flats
             let lowerSymbol = convertToRoman(lowerReferentialIndex + 1);
-            let lowerSymbolDescriptors = "";
             let lowerName = convertToWord(lowerReferentialIndex + 1);
             const numSharps = octavePitchClass - this.#referentialScale[lowerReferentialIndex];
 
             for (let i = 0; i < numSharps; i++) {
-                lowerSymbolDescriptors += SHARP_REPRESENTATION.symbol;
+                lowerSymbol = SHARP_REPRESENTATION.symbol + lowerSymbol;
                 lowerName = SHARP_REPRESENTATION.name + " " + lowerName;
             }
 
             let upperSymbol = convertToRoman(upperReferentialIndex + 1);
-            let upperSymbolDescriptors = "";
             let upperName = convertToWord(upperReferentialIndex + 1);
             const numFlats = this.#referentialScale[upperReferentialIndex] - octavePitchClass;
 
             for (let i = 0; i < numFlats; i++) {
-                upperSymbolDescriptors += FLAT_REPRESENTATION.symbol;
+                upperSymbol = FLAT_REPRESENTATION.symbol + upperSymbol;
                 upperName = FLAT_REPRESENTATION.name + " " + upperName;
             }
 
             const lowerRepresentation = {
                 symbol:            lowerSymbol,
-                symbolDescriptors: lowerSymbolDescriptors,
                 name:              lowerName,
                 accidental:        Accidental.SHARP
             };
 
             const upperRepresentation = {
                 symbol:            upperSymbol,
-                symbolDescriptors: upperSymbolDescriptors,
                 name:              upperName,
                 accidental:        Accidental.FLAT
             };
@@ -165,13 +160,9 @@ export class Scale {
     *   alphabeticalName:                     string
     *   alphabeticalSymbol:                   string
     *   alphabeticalAccidental:               Accidental
-    *   alphabeticalPrefixSymbolDescriptors:  string
-    *   alphabeticalSuffixSymbolDescriptors:  string
     *   romanName:                            string
     *   romanSymbol:                          string
     *   romanAccidental:                      Accidental
-    *   romanPrefixSymbolDescriptors:         string
-    *   romanSuffixSymbolDescriptors:         string
      * }} The pitch class' representation information
      * @contributors Nolan
      */
@@ -184,13 +175,9 @@ export class Scale {
             alphabeticalName:                     alphabeticalRepresentation.name,
             alphabeticalSymbol:                   alphabeticalRepresentation.symbol,
             alphabeticalAccidental:               alphabeticalRepresentation.accidental,
-            alphabeticalPrefixSymbolDescriptors:  "",
-            alphabeticalSuffixSymbolDescriptors:  alphabeticalRepresentation.symbolDescriptors,
             romanName:                            romanRepresentation.name,
             romanSymbol:                          romanRepresentation.symbol,
             romanAccidental:                      romanRepresentation.accidental,
-            romanPrefixSymbolDescriptors:         romanRepresentation.symbolDescriptors,
-            romanSuffixSymbolDescriptors:         "",
         };
 
         return pitchClassRepresentation;

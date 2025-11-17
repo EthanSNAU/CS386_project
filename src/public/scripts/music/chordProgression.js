@@ -31,14 +31,10 @@ export class ChordProgression {
      *  alphabeticalName:                    string,
      *  alphabeticalSymbol:                  string,
      *  alphabeticalAccidental:              Accidental,
-     *  alphabeticalPrefixSymbolDescriptors: string,
-     *  alphabeticalSuffixSymbolDescriptors: string,
      *  alphabeticalBassNoteSymbol:          string,
      *  romanName:                           string,
      *  romanSymbol:                         string,
      *  romanAccidental:                     Accidental,
-     *  romanPrefixSymbolDescriptors:        string,
-     *  romanSuffixSymbolDescriptors:        string,
      *  romanBassNoteSymbol:                 string,
      *  upperSymbolDescriptors:              string,
      *  lowerSymbolDescriptors:              string,
@@ -48,8 +44,9 @@ export class ChordProgression {
     getChordRepresentation(chordIndex) {
         const chord = this.#chords[chordIndex];
         const chordPitchClass = chord.getRootPitchClass();
+        const chordQuality = chord.getQuality();
 
-        const qualityRepresentation = chord.getQualityRepresentation();
+        const qualityRepresentation = ChordQuality.getRepresentation(chordQuality);
         const chordRepresentation = this.#scale.getRepresentationFor(chordPitchClass);
 
         // account for minor and diminished chords
@@ -71,24 +68,21 @@ export class ChordProgression {
         }
 
         // suffix/prefix descriptors
-        if (qualityRepresentation.centerSymbolDescriptors) {
-            chordRepresentation.alphabeticalSuffixSymbolDescriptors += qualityRepresentation.centerSymbolDescriptors;
-            chordRepresentation.romanSuffixSymbolDescriptors += qualityRepresentation.centerSymbolDescriptors;
+        chordRepresentation.alphabeticalSymbol = qualityRepresentation.prefixSymbolDescriptors + chordRepresentation.alphabeticalSymbol + qualityRepresentation.suffixSymbolDescriptors;
+        chordRepresentation.romanSymbol = qualityRepresentation.prefixSymbolDescriptors + chordRepresentation.romanSymbol + qualityRepresentation.suffixSymbolDescriptors;
 
-            // remove the m for relevant roman chords
-            // TODO: make this less duct tapey
-            const chordQuality = chord.getQuality();
-            if (chordQuality == ChordQuality.MINOR || chordQuality == ChordQuality.HALF_DIMINISHED) {
-                chordRepresentation.romanSuffixSymbolDescriptors = chordRepresentation.romanSuffixSymbolDescriptors.replace("m", "");
-            }
+        // remove the m for relevant roman chords
+        // TODO: make this less duct tapey
+        if (chordQuality == ChordQuality.MINOR || chordQuality == ChordQuality.HALF_DIMINISHED) {
+            chordRepresentation.romanSymbol = chordRepresentation.romanSymbol.replace("m", "");
         }
 
         // bass note
         if (chord.hasBassNote()) {
             const bassNoteRepresentation = this.#scale.getRepresentationFor(chord.getBassNotePitchClass());
 
-            chordRepresentation.alphabeticalBassNoteSymbol = bassNoteRepresentation.alphabeticalPrefixSymbolDescriptors + bassNoteRepresentation.alphabeticalSymbol + bassNoteRepresentation.alphabeticalSuffixSymbolDescriptors
-            chordRepresentation.romanBassNoteSymbol = bassNoteRepresentation.romanPrefixSymbolDescriptors + bassNoteRepresentation.romanSymbol + bassNoteRepresentation.romanSuffixSymbolDescriptors
+            chordRepresentation.alphabeticalBassNoteSymbol = bassNoteRepresentation.alphabeticalSymbol;
+            chordRepresentation.romanBassNoteSymbol = bassNoteRepresentation.romanSymbol;
 
             chordRepresentation.alphabeticalName += " over " + bassNoteRepresentation.alphabeticalName;
             chordRepresentation.romanName += " over " + bassNoteRepresentation.romanName;

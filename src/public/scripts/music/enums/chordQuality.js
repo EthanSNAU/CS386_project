@@ -16,14 +16,14 @@ const ChordQuality = (() => {
     });
 
     const PROPERTIES = Object.freeze({
-        [VALUES.MAJOR]:           { steps: [4, 3],    centerSymbolDescriptors: "",     upperSymbolDescriptors: "",     name: "major",           isLowercase: false },
-        [VALUES.MINOR]:           { steps: [3, 4],    centerSymbolDescriptors: "m",    upperSymbolDescriptors: "",     name: "minor",           isLowercase: true  },
-        [VALUES.DIMINISHED]:      { steps: [3, 3],    centerSymbolDescriptors: "dim",  upperSymbolDescriptors: "",     name: "diminished",      isLowercase: true  },
-        [VALUES.AUGMENTED]:       { steps: [4, 4],    centerSymbolDescriptors: "aug",  upperSymbolDescriptors: "",     name: "augmented",       isLowercase: false },
-        [VALUES.SUSPENDED_TWO]:   { steps: [2, 5],    centerSymbolDescriptors: "",     upperSymbolDescriptors: "sus2", name: "suspended two",   isLowercase: false },
-        [VALUES.SUSPENDED_FOUR]:  { steps: [5, 2],    centerSymbolDescriptors: "",     upperSymbolDescriptors: "sus4", name: "suspended four",  isLowercase: false },
-        [VALUES.DOMINANT_SEVEN]:  { steps: [4, 3, 3], centerSymbolDescriptors: "",     upperSymbolDescriptors: "7",    name: "dominant seven",  isLowercase: false },
-        [VALUES.HALF_DIMINISHED]: { steps: [3, 3, 4], centerSymbolDescriptors: "m",    upperSymbolDescriptors: "7b5",  name: "half diminished", isLowercase: true  },
+        [VALUES.MAJOR]:           { steps: [4, 3],    prefixSymbolDescriptors: "", suffixSymbolDescriptors: "",     lowerSymbolDescriptors: "", upperSymbolDescriptors: "",     name: "major",           isLowercase: false },
+        [VALUES.MINOR]:           { steps: [3, 4],    prefixSymbolDescriptors: "", suffixSymbolDescriptors: "m",    lowerSymbolDescriptors: "", upperSymbolDescriptors: "",     name: "minor",           isLowercase: true  },
+        [VALUES.DIMINISHED]:      { steps: [3, 3],    prefixSymbolDescriptors: "", suffixSymbolDescriptors: "dim",  lowerSymbolDescriptors: "", upperSymbolDescriptors: "",     name: "diminished",      isLowercase: true  },
+        [VALUES.AUGMENTED]:       { steps: [4, 4],    prefixSymbolDescriptors: "", suffixSymbolDescriptors: "aug",  lowerSymbolDescriptors: "", upperSymbolDescriptors: "",     name: "augmented",       isLowercase: false },
+        [VALUES.SUSPENDED_TWO]:   { steps: [2, 5],    prefixSymbolDescriptors: "", suffixSymbolDescriptors: "",     lowerSymbolDescriptors: "", upperSymbolDescriptors: "sus2", name: "suspended two",   isLowercase: false },
+        [VALUES.SUSPENDED_FOUR]:  { steps: [5, 2],    prefixSymbolDescriptors: "", suffixSymbolDescriptors: "",     lowerSymbolDescriptors: "", upperSymbolDescriptors: "sus4", name: "suspended four",  isLowercase: false },
+        [VALUES.DOMINANT_SEVEN]:  { steps: [4, 3, 3], prefixSymbolDescriptors: "", suffixSymbolDescriptors: "",     lowerSymbolDescriptors: "", upperSymbolDescriptors: "7",    name: "dominant seven",  isLowercase: false },
+        [VALUES.HALF_DIMINISHED]: { steps: [3, 3, 4], prefixSymbolDescriptors: "", suffixSymbolDescriptors: "m",    lowerSymbolDescriptors: "", upperSymbolDescriptors: "7b5",  name: "half diminished", isLowercase: true  },
     });
 
     /**
@@ -40,9 +40,11 @@ const ChordQuality = (() => {
      * Gets the representation information for a chord quality
      * @param {ChordQuality} quality Quality to get the representation for. Must be in {@link ChordQuality.SUPPORTED_QUALITIES} to work.
      * @returns {{
-     *  centerSymbolDescriptors: string
-     *  upperSymbolDescriptors:  string
-     *  name:                    string
+     *  prefixSymbolDescriptors: string,
+     *  suffixSymbolDescriptors: string,
+     *  lowerSymbolDescriptors:  string,
+     *  upperSymbolDescriptors:  string,
+     *  name:                    string,
      *  isLowercase:             boolean
      * }} The quality's representation information
      * @contributors Nolan
@@ -50,10 +52,12 @@ const ChordQuality = (() => {
     function getRepresentation(quality) {
         const info = PROPERTIES[quality];
         return {
-            centerSymbolDescriptors: info.centerSymbolDescriptors,
+            prefixSymbolDescriptors: info.prefixSymbolDescriptors,
+            suffixSymbolDescriptors: info.suffixSymbolDescriptors,
+            lowerSymbolDescriptors:  info.lowerSymbolDescriptors,
             upperSymbolDescriptors:  info.upperSymbolDescriptors,
-            name:              info.name,
-            isLowercase:       info.isLowercase
+            name:                    info.name,
+            isLowercase:             info.isLowercase
         };
     }
 

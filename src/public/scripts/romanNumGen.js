@@ -57,14 +57,14 @@ export function updateChordSymbolDisplay() {
         const representation = chordProgression.getChordRepresentation(i);
 
         if (isDisplayingAlphabet) {
-            rootNoteDisplay.textContent = representation.alphabeticalPrefixSymbolDescriptors + representation.alphabeticalSymbol + representation.alphabeticalSuffixSymbolDescriptors;
+            rootNoteDisplay.textContent = representation.alphabeticalSymbol;
             if (representation.alphabeticalBassNoteSymbol) {
                 bassNoteDisplay.textContent = "/" + representation.alphabeticalBassNoteSymbol;
             } else {
                 bassNoteDisplay.textContent = "";
             }
         } else {
-            rootNoteDisplay.textContent = representation.romanPrefixSymbolDescriptors + representation.romanSymbol + representation.romanSuffixSymbolDescriptors;
+            rootNoteDisplay.textContent = representation.romanSymbol;
             if (representation.romanBassNoteSymbol) {
                 bassNoteDisplay.textContent = "/" + representation.romanBassNoteSymbol;
             } else {

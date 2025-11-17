@@ -132,14 +132,13 @@ const PitchClass = (() => {
      * @param {PitchClass} pitchClass Pitch class to get representations for. Must be in {@link PitchClass.SUPPORTED_PITCH_CLASSES} to work.
      * @returns {{
      *  symbol:            string
-     *  symbolDescriptors: string
      *  name:              string
      *  accidental:        Accidental
      * }[]} List of representations for the inputted pitch class
      * @contributors Nolan
      */
     function getRepresentations(pitchClass) {
-        const representations = PROPERTIES[pitchClass].representations;
+        const representations = structuredClone(PROPERTIES[pitchClass].representations);
 
         for (const representation of representations) {
             const accidentalRepresentation = Accidental.getRepresentation(representation.accidental);
@@ -150,7 +149,7 @@ const PitchClass = (() => {
                 representation.name += " " + accidentalRepresentation.name;
             }
 
-            representation.symbolDescriptors = accidentalRepresentation.symbol;
+            representation.symbol += accidentalRepresentation.symbol;
         }
 
         return representations;
@@ -162,7 +161,6 @@ const PitchClass = (() => {
      * @param {number} index Integer index identifying which representation to fetch
      * @returns {{
      *  symbol:            string
-     *  symbolDescriptors: string
      *  name:              string
      *  accidental:        Accidental
      * }} Representation for the inputted pitch class
