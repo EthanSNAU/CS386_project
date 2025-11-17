@@ -22,6 +22,7 @@ const chordProgression = new ChordProgression(PitchClass.C, ReferentialScale.ION
  * @contributors Marcus, Nolan
  */
 export function updateChordNameDisplay() {
+    // TODO: store chord representations instead of calling getChordRepresentation() every time
     const numChords = chordProgression.getNumChords();
     let names = "";
 
@@ -46,6 +47,7 @@ export function updateChordNameDisplay() {
  * @contributors Nolan
  */
 export function updateChordSymbolDisplay() {
+    // TODO: store chord representations instead of calling getChordRepresentation() every time
     for (let i = 0; i < chordProgression.getNumChords(); i++) {
         const rootNoteDisplay = document.getElementById(`rootNote${i}`);
         const upperFigureDisplay = document.getElementById(`upperFigure${i}`);
@@ -55,14 +57,14 @@ export function updateChordSymbolDisplay() {
         const representation = chordProgression.getChordRepresentation(i);
 
         if (isDisplayingAlphabet) {
-            rootNoteDisplay.textContent = representation.alphabeticalSymbol + representation.alphabeticalCenterSymbolDescriptors;
+            rootNoteDisplay.textContent = representation.alphabeticalPrefixSymbolDescriptors + representation.alphabeticalSymbol + representation.alphabeticalSuffixSymbolDescriptors;
             if (representation.alphabeticalBassNoteSymbol) {
                 bassNoteDisplay.textContent = "/" + representation.alphabeticalBassNoteSymbol;
             } else {
                 bassNoteDisplay.textContent = "";
             }
         } else {
-            rootNoteDisplay.textContent = representation.romanSymbol + representation.romanCenterSymbolDescriptors;
+            rootNoteDisplay.textContent = representation.romanPrefixSymbolDescriptors + representation.romanSymbol + representation.romanSuffixSymbolDescriptors;
             if (representation.romanBassNoteSymbol) {
                 bassNoteDisplay.textContent = "/" + representation.romanBassNoteSymbol;
             } else {

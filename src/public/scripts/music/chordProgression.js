@@ -31,12 +31,14 @@ export class ChordProgression {
      *  alphabeticalName:                    string,
      *  alphabeticalSymbol:                  string,
      *  alphabeticalAccidental:              Accidental,
-     *  alphabeticalCenterSymbolDescriptors: string,
+     *  alphabeticalPrefixSymbolDescriptors: string,
+     *  alphabeticalSuffixSymbolDescriptors: string,
      *  alphabeticalBassNoteSymbol:          string,
      *  romanName:                           string,
      *  romanSymbol:                         string,
      *  romanAccidental:                     Accidental,
-     *  romanCenterSymbolDescriptors:        string,
+     *  romanPrefixSymbolDescriptors:        string,
+     *  romanSuffixSymbolDescriptors:        string,
      *  romanBassNoteSymbol:                 string,
      *  upperSymbolDescriptors:              string,
      *  lowerSymbolDescriptors:              string,
@@ -44,7 +46,6 @@ export class ChordProgression {
      * @contributors Marcus, Nolan
      */
     getChordRepresentation(chordIndex) {
-        // TODO: precompute all chord representations and store them in an array instead of running this every time
         const chord = this.#chords[chordIndex];
         const chordPitchClass = chord.getRootPitchClass();
 
@@ -62,31 +63,32 @@ export class ChordProgression {
             chordRepresentation.romanName += " " + qualityRepresentation.name;
         }
 
-        // handle symbol descriptors
-
+        // upper descriptors
         chordRepresentation.upperSymbolDescriptors = "";
 
         if (qualityRepresentation.upperSymbolDescriptors) {
             chordRepresentation.upperSymbolDescriptors = qualityRepresentation.upperSymbolDescriptors;
         }
 
+        // suffix/prefix descriptors
         if (qualityRepresentation.centerSymbolDescriptors) {
-            chordRepresentation.alphabeticalCenterSymbolDescriptors += qualityRepresentation.centerSymbolDescriptors;
-            chordRepresentation.romanCenterSymbolDescriptors += qualityRepresentation.centerSymbolDescriptors;
+            chordRepresentation.alphabeticalSuffixSymbolDescriptors += qualityRepresentation.centerSymbolDescriptors;
+            chordRepresentation.romanSuffixSymbolDescriptors += qualityRepresentation.centerSymbolDescriptors;
 
             // remove the m for relevant roman chords
             // TODO: make this less duct tapey
             const chordQuality = chord.getQuality();
             if (chordQuality == ChordQuality.MINOR || chordQuality == ChordQuality.HALF_DIMINISHED) {
-                chordRepresentation.romanCenterSymbolDescriptors = chordRepresentation.romanCenterSymbolDescriptors.replace("m", "");
+                chordRepresentation.romanSuffixSymbolDescriptors = chordRepresentation.romanSuffixSymbolDescriptors.replace("m", "");
             }
         }
 
+        // bass note
         if (chord.hasBassNote()) {
             const bassNoteRepresentation = this.#scale.getRepresentationFor(chord.getBassNotePitchClass());
 
-            chordRepresentation.alphabeticalBassNoteSymbol = bassNoteRepresentation.alphabeticalSymbol + bassNoteRepresentation.alphabeticalCenterSymbolDescriptors
-            chordRepresentation.romanBassNoteSymbol = bassNoteRepresentation.romanSymbol + bassNoteRepresentation.romanCenterSymbolDescriptors
+            chordRepresentation.alphabeticalBassNoteSymbol = bassNoteRepresentation.alphabeticalPrefixSymbolDescriptors + bassNoteRepresentation.alphabeticalSymbol + bassNoteRepresentation.alphabeticalSuffixSymbolDescriptors
+            chordRepresentation.romanBassNoteSymbol = bassNoteRepresentation.romanPrefixSymbolDescriptors + bassNoteRepresentation.romanSymbol + bassNoteRepresentation.romanSuffixSymbolDescriptors
 
             chordRepresentation.alphabeticalName += " over " + bassNoteRepresentation.alphabeticalName;
             chordRepresentation.romanName += " over " + bassNoteRepresentation.romanName;
@@ -95,6 +97,7 @@ export class ChordProgression {
             chordRepresentation.romanBassNoteSymbol = "";
         }
 
+        // lower descriptors unused for now
         chordRepresentation.lowerSymbolDescriptors = "";
 
         return chordRepresentation;

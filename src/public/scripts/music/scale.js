@@ -165,11 +165,13 @@ export class Scale {
     *   alphabeticalName:                     string
     *   alphabeticalSymbol:                   string
     *   alphabeticalAccidental:               Accidental
-    *   alphabeticalCenterSymbolDescriptors:  string
+    *   alphabeticalPrefixSymbolDescriptors:  string
+    *   alphabeticalSuffixSymbolDescriptors:  string
     *   romanName:                            string
     *   romanSymbol:                          string
     *   romanAccidental:                      Accidental
-    *   romanCenterSymbolDescriptors:         string
+    *   romanPrefixSymbolDescriptors:         string
+    *   romanSuffixSymbolDescriptors:         string
      * }} The pitch class' representation information
      * @contributors Nolan
      */
@@ -182,11 +184,13 @@ export class Scale {
             alphabeticalName:                     alphabeticalRepresentation.name,
             alphabeticalSymbol:                   alphabeticalRepresentation.symbol,
             alphabeticalAccidental:               alphabeticalRepresentation.accidental,
-            alphabeticalCenterSymbolDescriptors:  alphabeticalRepresentation.symbolDescriptors,
+            alphabeticalPrefixSymbolDescriptors:  "",
+            alphabeticalSuffixSymbolDescriptors:  alphabeticalRepresentation.symbolDescriptors,
             romanName:                            romanRepresentation.name,
             romanSymbol:                          romanRepresentation.symbol,
             romanAccidental:                      romanRepresentation.accidental,
-            romanCenterSymbolDescriptors:         romanRepresentation.symbolDescriptors,
+            romanPrefixSymbolDescriptors:         romanRepresentation.symbolDescriptors,
+            romanSuffixSymbolDescriptors:         "",
         };
 
         return pitchClassRepresentation;
