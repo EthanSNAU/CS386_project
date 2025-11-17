@@ -3,7 +3,7 @@ import { ReferentialScale, getReferentialScaleSteps } from "./enums/referentialS
 import { convertToRoman, convertToWord } from "./numberConversion.js"
 
 // documentation imports
-import { PitchClassRepresentationType } from "./enums/pitchClassRepresentationType.js";
+import { Accidental, getAccidentalRepresentation } from "./enums/pitchClassDescriptor.js";
 
 // TODO: add ability for users to toggle between different symbols (eg. G# vs. Ab)
 // TODO: add ability to switch to different referential scale
@@ -13,13 +13,13 @@ import { PitchClassRepresentationType } from "./enums/pitchClassRepresentationTy
  */
 export class Scale {
     /** Re-export of {@link PitchClass} */
-    static RootPitchClass = PitchClass;
+    static PitchClass = PitchClass;
 
     /** Re-export of {@link ReferentialScale} */
     static ReferentialScale = ReferentialScale;
 
-    /** Re-export of {@link PitchClassRepresentationType} */
-    static PitchClassRepresentationType = PitchClass.RepresentationType;
+    /** Re-export of {@link Accidental} */
+    static Accidental = PitchClass.Accidental;
 
     #rootPitchClass
     #octave // tracks the user's preferred symbols (eg. G# vs. Ab)
@@ -71,9 +71,13 @@ export class Scale {
         const minReferentialScaleIndex = this.#referentialScale.indexOf(Math.min(...this.#referentialScale));
 
         // fill in the roman numerals
+
+        const SHARP_REPRESENTATION = getAccidentalRepresentation(Scale.Accidental.SHARP);
+        const FLAT_REPRESENTATION  = getAccidentalRepresentation(Scale.Accidental.SHARP);
+
         for (const [octavePitchClass, octaveRepresentation] of Object.entries(this.#octave)) {
             // find where the pitch class resides on the referential scale
-            // find the minimum, then loop through the array until a pitch higher than the inputted pitch class is found
+            // find the minimum pitch class, then loop through the array until a pitch higher than the inputted pitch class is found
             // (implement binary search for optimization later)
             let numIterations = 0;
             let currentReferentialIndex = minReferentialScaleIndex;
@@ -105,7 +109,7 @@ export class Scale {
                 octaveRepresentation.romanRepresentations.push({
                     symbol: convertToRoman(currentReferentialIndex + 1),
                     name: convertToWord(currentReferentialIndex + 1),
-                    type: PitchClass.RepresentationType.NATURAL,
+                    accidental: PitchClass.Accidental.NATURAL,
                     symbolDescriptors: ""
                 });
                 continue;
@@ -127,14 +131,15 @@ export class Scale {
             }
 
             // build the final strings and push
+            // TODO: if we add double sharps and double flats, use those representations instead of repeated sharps/flats
             let lowerSymbol = convertToRoman(lowerReferentialIndex + 1);
             let lowerSymbolDescriptors = "";
             let lowerName = convertToWord(lowerReferentialIndex + 1);
             const numSharps = octavePitchClass - this.#referentialScale[lowerReferentialIndex];
 
             for (let i = 0; i < numSharps; i++) {
-                lowerSymbolDescriptors += "#";
-                lowerName = "sharp " + lowerName;
+                lowerSymbolDescriptors += SHARP_REPRESENTATION.symbol;
+                lowerName = SHARP_REPRESENTATION.name + " " + lowerName;
             }
 
             let upperSymbol = convertToRoman(upperReferentialIndex + 1);
@@ -143,22 +148,22 @@ export class Scale {
             const numFlats = this.#referentialScale[upperReferentialIndex] - octavePitchClass;
 
             for (let i = 0; i < numFlats; i++) {
-                upperSymbolDescriptors += "b";
-                upperName = "flat " + lowerName;
+                upperSymbolDescriptors += FLAT_REPRESENTATION.symbol;
+                upperName = FLAT_REPRESENTATION.name + " " + upperName;
             }
 
             const lowerRepresentation = {
-                symbol: lowerSymbol,
-                symbolDescriptors: lowerSymbolDescriptors ?? "",
-                name: lowerName,
-                type: Scale.PitchClassRepresentationType.SHARP
+                symbol:            lowerSymbol,
+                symbolDescriptors: lowerSymbolDescriptors,
+                name:              lowerName,
+                accidental:        Scale.Accidental.SHARP
             };
 
             const upperRepresentation = {
-                symbol: upperSymbol,
-                symbolDescriptors: upperSymbolDescriptors ?? "",
-                name: upperName,
-                type: Scale.PitchClassRepresentationType.FLAT
+                symbol:            upperSymbol,
+                symbolDescriptors: upperSymbolDescriptors,
+                name:              upperName,
+                accidental:        Scale.Accidental.FLAT
             };
 
             octaveRepresentation.romanRepresentations.push(lowerRepresentation);
@@ -172,11 +177,11 @@ export class Scale {
      * @returns {{
     *   alphabeticalName:                     string
     *   alphabeticalSymbol:                   string
-    *   alphabeticalType:                     string
+    *   alphabeticalAccidental:               Accidental
     *   alphabeticalCenterSymbolDescriptors:  string
     *   romanName:                            string
     *   romanSymbol:                          string
-    *   romanType:                            string
+    *   romanAccidental:                      Accidental
     *   romanCenterSymbolDescriptors:         string
      * }} The pitch class' representation information
      * @contributors Nolan
@@ -189,11 +194,11 @@ export class Scale {
         const pitchClassRepresentation = {
             alphabeticalName:                     alphabeticalRepresentation.name,
             alphabeticalSymbol:                   alphabeticalRepresentation.symbol,
-            alphabeticalType:                     alphabeticalRepresentation.type,
+            alphabeticalAccidental:               alphabeticalRepresentation.accidental,
             alphabeticalCenterSymbolDescriptors:  alphabeticalRepresentation.symbolDescriptors,
             romanName:                            romanRepresentation.name,
             romanSymbol:                          romanRepresentation.symbol,
-            romanType:                            romanRepresentation.type,
+            romanAccidental:                      romanRepresentation.accidental,
             romanCenterSymbolDescriptors:         romanRepresentation.symbolDescriptors,
         };
 
@@ -209,8 +214,3 @@ export class Scale {
         return this.#rootPitchClass;
     }
 }
-
-// module.exports = {
-//     Scale,
-//     REFERENTIAL_SCALE
-// }

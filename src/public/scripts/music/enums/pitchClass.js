@@ -1,4 +1,4 @@
-import { PitchClassRepresentationType } from "./pitchClassRepresentationType.js";
+import { Accidental, getAccidentalRepresentation } from "./pitchClassDescriptor.js";
 
 /**
  * Available pitch classes. A difference of one means an interval of one half step.
@@ -6,9 +6,6 @@ import { PitchClassRepresentationType } from "./pitchClassRepresentationType.js"
  * @readonly
  */
 export const PitchClass = Object.freeze({
-    /** Re-export of {@link PitchClassRepresentationType} */
-    RepresentationType: PitchClassRepresentationType,
-
     C:       0,
     C_SHARP: 1,
     D_FLAT:  1,
@@ -29,105 +26,106 @@ export const PitchClass = Object.freeze({
     B_FLAT:  10,
     B:       11,
 
-    NONE: -1
+    NONE:    -1,
+
+    /** Re-export of {@link Accidental} */
+    Accidental: Accidental
 });
 
 const PitchClassMap = Object.freeze({
     [PitchClass.C]: {
         basePitch: 261.63,
         representations: [
-            { symbol: "B", symbolDescriptors: "#", name: "B sharp", type: PitchClassRepresentationType.SHARP   },
-            { symbol: "C", symbolDescriptors: "",  name: "C",       type: PitchClassRepresentationType.NATURAL },
+            { symbol: "B", accidental: PitchClass.Accidental.SHARP   },
+            { symbol: "C", accidental: PitchClass.Accidental.NATURAL },
         ]
     },
 
     [PitchClass.C_SHARP]: {
         basePitch: 277.18,
         representations: [
-            { symbol: "C", symbolDescriptors: "#", name: "C sharp", type: PitchClassRepresentationType.SHARP   },
-            { symbol: "D", symbolDescriptors: "b", name: "D flat",  type: PitchClassRepresentationType.FLAT    },
+            { symbol: "C", accidental: PitchClass.Accidental.SHARP   },
+            { symbol: "D", accidental: PitchClass.Accidental.FLAT    },
         ]
     },
 
     [PitchClass.D]: {
         basePitch: 293.66,
         representations: [
-            { symbol: "D", symbolDescriptors: "",  name: "D",       type: PitchClassRepresentationType.NATURAL },
+            { symbol: "D", accidental: PitchClass.Accidental.NATURAL },
         ]
     },
 
     [PitchClass.D_SHARP]: {
         basePitch: 311.13,
         representations: [
-            { symbol: "D", symbolDescriptors: "#", name: "D sharp", type: PitchClassRepresentationType.SHARP   },
-            { symbol: "E", symbolDescriptors: "b", name: "E flat",  type: PitchClassRepresentationType.FLAT    },
+            { symbol: "D", accidental: PitchClass.Accidental.SHARP   },
+            { symbol: "E", accidental: PitchClass.Accidental.FLAT    },
         ]
     },
 
     [PitchClass.E]: {
         basePitch: 329.63,
         representations: [
-            { symbol: "E", symbolDescriptors: "",  name: "E",       type: PitchClassRepresentationType.NATURAL },
-            { symbol: "F", symbolDescriptors: "b", name: "F flat",  type: PitchClassRepresentationType.FLAT    },
+            { symbol: "E", accidental: PitchClass.Accidental.NATURAL },
+            { symbol: "F", accidental: PitchClass.Accidental.FLAT    },
         ]
     },
 
     [PitchClass.F]: {
         basePitch: 349.23,
         representations: [
-            { symbol: "E", symbolDescriptors: "#", name: "E sharp", type: PitchClassRepresentationType.SHARP   },
-            { symbol: "F", symbolDescriptors: "",  name: "F",       type: PitchClassRepresentationType.NATURAL },
+            { symbol: "E", accidental: PitchClass.Accidental.SHARP   },
+            { symbol: "F", accidental: PitchClass.Accidental.NATURAL },
         ]
     },
 
     [PitchClass.F_SHARP]: {
         basePitch: 329.99,
         representations: [
-            { symbol: "F", symbolDescriptors: "#", name: "F sharp", type: PitchClassRepresentationType.SHARP   },
-            { symbol: "G", symbolDescriptors: "b", name: "G flat",  type: PitchClassRepresentationType.FLAT    }
+            { symbol: "F", accidental: PitchClass.Accidental.SHARP   },
+            { symbol: "G", accidental: PitchClass.Accidental.FLAT    }
         ]
     },
     
     [PitchClass.G]: {
         basePitch: 392,
         representations: [
-            { symbol: "G", symbolDescriptors: "",  name: "G",       type: PitchClassRepresentationType.NATURAL }
+            { symbol: "G", accidental: PitchClass.Accidental.NATURAL }
         ]
     },
 
     [PitchClass.G_SHARP]: {
         basePitch: 415.3,
         representations: [
-            { symbol: "G", symbolDescriptors: "#", name: "G sharp", type: PitchClassRepresentationType.SHARP   },
-            { symbol: "A", symbolDescriptors: "b", name: "A flat",  type: PitchClassRepresentationType.FLAT    }
+            { symbol: "G", accidental: PitchClass.Accidental.SHARP   },
+            { symbol: "A", accidental: PitchClass.Accidental.FLAT    }
         ]
     },
 
     [PitchClass.A]: {
         basePitch: 440,
         representations: [
-            { symbol: "A", symbolDescriptors: "",  name: "A",       type: PitchClassRepresentationType.NATURAL },
+            { symbol: "A", accidental: PitchClass.Accidental.NATURAL },
         ]
     },
 
     [PitchClass.A_SHARP]: {
         basePitch: 466.16,
         representations: [
-            { symbol: "A", symbolDescriptors: "#", name: "A sharp", type: PitchClassRepresentationType.SHARP   },
-            { symbol: "B", symbolDescriptors: "b", name: "B flat",  type: PitchClassRepresentationType.FLAT    },
+            { symbol: "A", accidental: PitchClass.Accidental.SHARP   },
+            { symbol: "B", accidental: PitchClass.Accidental.FLAT    },
         ]
     },
 
     [PitchClass.B]: {
         basePitch: 492.88,
         representations: [
-            { symbol: "B", symbolDescriptors: "",  name: "B",       type: PitchClassRepresentationType.NATURAL },
-            { symbol: "C", symbolDescriptors: "b", name: "C flat",  type: PitchClassRepresentationType.FLAT    },
+            { symbol: "B", accidental: PitchClass.Accidental.NATURAL },
+            { symbol: "C", accidental: PitchClass.Accidental.FLAT    },
         ]
     },
 });
-
-const PITCH_CLASS_BASE_OCTAVE = 4
 
 /**
  * List of {@link PitchClass}' supported by pitch class getter methods, such as {@link getPitchClassRepresentation}.
@@ -143,19 +141,35 @@ export const ALL_SUPPORTED_PITCH_CLASSES = Object.freeze(Object.keys(PitchClassM
  */
 export const OCTAVE_HALF_STEP_LENGTH = 12;
 
+const PITCH_CLASS_BASE_OCTAVE = 4
+
 /**
  * Gets the list of possible representations for a pitch class.
  * @param {PitchClass} pitchClass Pitch class to get representations for. Must be in {@link ALL_SUPPORTED_PITCH_CLASSES} to work.
  * @returns {{
- *  symbol: string
+ *  symbol:            string
  *  symbolDescriptors: string
- *  name: string
- *  type: PitchClassRepresentationType
+ *  name:              string
+ *  accidental:        Accidental
  * }[]} List of representations for the inputted pitch class
  * @contributors Nolan
  */
 export function getPitchClassRepresentations(pitchClass) {
-    return PitchClassMap[pitchClass].representations;
+    const representations = PitchClassMap[pitchClass].representations;
+
+    for (const representation of representations) {
+        const accidentalRepresentation = getAccidentalRepresentation(representation.accidental);
+
+        representation.name = representation.symbol;
+
+        if (accidentalRepresentation.name) {
+            representation.name += " " + accidentalRepresentation.name;
+        }
+
+        representation.symbolDescriptors = accidentalRepresentation.symbol;
+    }
+
+    return representations;
 }
 
 /**
@@ -163,10 +177,10 @@ export function getPitchClassRepresentations(pitchClass) {
  * @param {PitchClass} pitchClass Pitch class to get representation for. Must be in {@link ALL_SUPPORTED_PITCH_CLASSES} to work.
  * @param {number} index Integer index identifying which representation to fetch
  * @returns {{
- *  symbol: string
+ *  symbol:            string
  *  symbolDescriptors: string
- *  name: string
- *  type: PitchClassRepresentationType
+ *  name:              string
+ *  accidental:        Accidental
  * }} Representation for the inputted pitch class
  * @contributors Nolan
  */

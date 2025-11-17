@@ -3,7 +3,7 @@ import { Scale } from "./scale.js";
 
 // documentation imports
 import { PitchClass, ALL_SUPPORTED_PITCH_CLASSES } from "./enums/pitchClass.js";
-import { PitchClassRepresentationType } from "./enums/pitchClassRepresentationType.js";
+import { Accidental } from "./enums/pitchClassDescriptor.js";
 import { ChordQuality, ALL_SUPPORTED_CHORD_QUALITIES } from "./enums/chordQuality.js"
 import { ChordInversion } from "./enums/chordInversion.js"
 import { ChordPlaybackStyle } from "./enums/chordPlaybackStyle.js";
@@ -18,8 +18,8 @@ export class ChordProgression {
     /** Re-export of {@link PitchClass} */
     static PitchClass = Chord.PitchClass;
 
-    /** Re-export of {@link PitchClassRepresentationType} */
-    static PitchClassRepresentationType = Scale.PitchClassRepresentationType;
+    /** Re-export of {@link Accidental} */
+    static Accidental = Scale.Accidental;
 
     /** Re-export of {@link ChordQuality} */
     static ChordQuality = Chord.Quality;
@@ -59,12 +59,12 @@ export class ChordProgression {
      * @returns {{
      *  alphabeticalName:                    string,
      *  alphabeticalSymbol:                  string,
-     *  alphabeticalType:                    PitchClassRepresentationType,
+     *  alphabeticalAccidental:              Accidental,
      *  alphabeticalCenterSymbolDescriptors: string,
      *  alphabeticalBassNoteSymbol:          string,
      *  romanName:                           string,
      *  romanSymbol:                         string,
-     *  romanType:                           PitchClassRepresentationType,
+     *  romanAccidental:                     Accidental,
      *  romanCenterSymbolDescriptors:        string,
      *  romanBassNoteSymbol:                 string,
      *  upperSymbolDescriptors:              string,
