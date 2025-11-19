@@ -196,6 +196,7 @@ export class Chord {
      * @contributors Nolan
      */
     setQuality(quality) {
+        // TODO: add a paramater that takes in the quality's root note
         // adjust current notes
         const qualitySteps = ChordQuality.getIntervals(quality);
         const numSteps = qualitySteps.length;

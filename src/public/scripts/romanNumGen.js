@@ -11,61 +11,55 @@ export const DEFAULT_NUM_CHORDS = 4;
 
 /**
  * Maximum number of chords allowed in the progression
+ * @constant
  */
 export const MAX_CHORDS = 7;
 
+/**
+ * True if the chord progression is displaying alphabetical symbols/names, false otherwise
+ */
 let isDisplayingAlphabet = false;
-const chordProgression = new ChordProgression(PitchClass.C, ReferentialScale.IONIAN_MAJOR);
 
 /**
- * Updates the displayed chord names
+ * Chord progression object used to manage existing chords
+ */
+const chordProgression = new ChordProgression(PitchClass.C, ReferentialScale.IONIAN_MAJOR);
+
+
+/**
+ * Updates a displayed chord's symbol and name
+ * @param {number} index Integer index of the chord to update
  * @contributors Marcus, Nolan
  */
-export function updateChordNameDisplay() {
-    const numChords = chordProgression.getNumChords();
-    let names = "";
+export function updateChordDisplay(index) {
+    const representation = chordProgression.getChordRepresentation(index);
+    
+    const rootNoteDisplay = document.getElementById(`rootNote${index}`);
+    const upperFigureDisplay = document.getElementById(`upperFigure${index}`);
+    const lowerFigureDisplay = document.getElementById(`lowerFigure${index}`);
+    const bassFigureDisplay = document.getElementById(`bassFigure${index}`);
+    const nameDisplay = document.getElementById(`chordName${index}`);
 
     if (isDisplayingAlphabet) {
-        for (let i = 0; i < numChords; i++) {
-            names += chordProgression.getChordRepresentation(i).alphabetical.name;
-            if (i < numChords - 1) names += ", ";
-        }
+        rootNoteDisplay.textContent = representation.alphabetical.symbol;
+        upperFigureDisplay.textContent = representation.alphabetical.upperFigure;
+        lowerFigureDisplay.textContent = representation.alphabetical.lowerFigure;
+        bassFigureDisplay.textContent = representation.alphabetical.bassFigure;
+        nameDisplay.textContent = capitalizeFirstChar(representation.alphabetical.name);
     } else {
-        for (let i = 0; i < numChords; i++) {
-            names += chordProgression.getChordRepresentation(i).roman.name;
-            if (i < numChords - 1) names += ", ";
-        }
+        rootNoteDisplay.textContent = representation.roman.symbol;
+        upperFigureDisplay.textContent = representation.roman.upperFigure;
+        lowerFigureDisplay.textContent = representation.roman.lowerFigure;
+        bassFigureDisplay.textContent = representation.roman.bassFigure;
+        nameDisplay.textContent = capitalizeFirstChar(representation.roman.name);
     }
-
-    document.getElementById("wordDisplay").textContent = capitalizeFirstChar(names);
 }
 
 
-/**
- * Updates the displayed chord symbols
- * @contributors Nolan
- */
-export function updateChordSymbolDisplay() {
-    for (let i = 0; i < chordProgression.getNumChords(); i++) {
-        const rootNoteDisplay = document.getElementById(`rootNote${i}`);
-        const upperFigureDisplay = document.getElementById(`upperFigure${i}`);
-        const lowerFigureDisplay = document.getElementById(`lowerFigure${i}`);
-        const bassFigureDisplay = document.getElementById(`bassFigure${i}`);
-
-        const representation = chordProgression.getChordRepresentation(i);
-
-        if (isDisplayingAlphabet) {
-            rootNoteDisplay.textContent = representation.alphabetical.symbol;
-            upperFigureDisplay.textContent = representation.alphabetical.upperFigure;
-            lowerFigureDisplay.textContent = representation.alphabetical.lowerFigure;
-            bassFigureDisplay.textContent = representation.alphabetical.bassFigure;
-        } else {
-            rootNoteDisplay.textContent = representation.roman.symbol;
-            upperFigureDisplay.textContent = representation.roman.upperFigure;
-            lowerFigureDisplay.textContent = representation.roman.lowerFigure;
-            bassFigureDisplay.textContent = representation.roman.bassFigure;
-        }
-
+export function updateAllChordDisplays() {
+    const numChords = chordProgression.getNumChords();
+    for (let i = 0; i < numChords; i++) {
+        updateChordDisplay(i);
     }
 }
 
@@ -107,83 +101,149 @@ export function addChord() {
     let newBassFigureDisplay = document.createElement("p");
     newBassFigureDisplay.id = `bassFigure${numChords}`;
     newBassFigureDisplay.className = "bassFigureDisplay";
+    // newBassFigureDisplay.addEventListener("click", (event) => {
+    //     Remove the figure (?)
+    // });
 
-    let newChord = document.createElement("div");
-    newChord.id = `chord${numChords}`;
-    newChord.className = "chordDisplay";
+    let newChordSymbolDisplay = document.createElement("div");
+    newChordSymbolDisplay.id = `chordSymbol${numChords}`;
+    newChordSymbolDisplay.className = "chordSymbolDisplay";
 
-    newChord.appendChild(newRootNoteDisplay);
-    newChord.appendChild(newUpperFigureDisplay);
-    newChord.appendChild(newLowerFigureDisplay);
-    newChord.appendChild(newBassFigureDisplay);
+    newChordSymbolDisplay.appendChild(newRootNoteDisplay);
+    newChordSymbolDisplay.appendChild(newUpperFigureDisplay);
+    newChordSymbolDisplay.appendChild(newLowerFigureDisplay);
+    newChordSymbolDisplay.appendChild(newBassFigureDisplay);
 
-    document.getElementById("chordProgressionDisplay").appendChild(newChord);
+    let newChordNameDisplay = document.createElement("p");
+    newChordNameDisplay.id = `chordName${numChords}`;
+    newChordNameDisplay.className = "chordNameDisplay";
 
-    updateChordSymbolDisplay();
-    updateChordNameDisplay();
+    let newChordDisplay = document.createElement("div");
+    newChordDisplay.id = `chord${numChords}`;
+    newChordDisplay.className = `chordDisplay`;
+    newChordDisplay.appendChild(newChordSymbolDisplay);
+    newChordDisplay.appendChild(newChordNameDisplay);
+
+    const chordProgressionDisplay = document.getElementById("chordProgressionDisplay");
+    chordProgressionDisplay.appendChild(newChordDisplay);
+
+    updateChordDisplay(numChords);
+}
+
+
+/**
+ * Changes a chord's root note and updates the display
+ * @param {number} index Integer index of the chord to modify
+ * @param {PitchClass} pitchClass Pitch class of the chord's new root note
+ * @contributors Nolan
+ */
+export function setChordRootNote(index, pitchClass) {
+    chordProgression.setChordRootNote(index, pitchClass);
+    updateChordDisplay(index);
 }
 
 /**
- * Randomizes the displayed chords' root notes
+ * Sets a chord's root note to a random pitch classs and updates the display
+ * @param {number} index Integer index of the chord to modify
+ * @contributors Nolan
+ */
+export function randomizeChordRootNote(index) {
+    setChordRootNote(index, getRandomArrayElement(PitchClass.SUPPORTED_PITCH_CLASSES));
+}
+
+/**
+ * Randomizes all the displayed chords' root notes
  * @contributors Chris, Nolan, Ben
  */
-export function randomizeChordRootNotes() {
+export function randomizeAllChordRootNotes() {
     const numChords = chordProgression.getNumChords();
     for (let i = 0; i < numChords; i++) {
-        const randomPitchClass = getRandomArrayElement(PitchClass.SUPPORTED_PITCH_CLASSES);
-        chordProgression.setChordRootNote(i, randomPitchClass);
-        chordProgression.setChordQuality(i, ChordQuality.MAJOR_TRIAD);
+        randomizeChordRootNote(i);
     }
+}
 
-    updateChordSymbolDisplay();
-    updateChordNameDisplay();
+
+/**
+ * Sets an individual chord's quality and updates the display
+ * @param {number} index Integer index of the chord to modify
+ * @param {ChordQuality} quality Quality of the new chord
+ * @contributors Nolan
+ */
+export function setChordQuality(index, pitchClass) {
+    chordProgression.setChordQuality(index, pitchClass);
+    updateChordDisplay(index);
 }
 
 /**
- * Randomizes the displayed chords' qualities (i.e. major vs. minor vs. diminished)
+ * Sets a chord's quality to a random quality and updates the display
+ * @param {number} index Integer index of the chord to modify
  * @contributors Nolan
  */
-export function randomizeChordQualities() {
-    const numChords = chordProgression.getNumChords();
-    for (let i = 0; i < numChords; i++) {
-        const randomQuality = getRandomArrayElement(ChordQuality.SUPPORTED_QUALITIES);
-        chordProgression.setChordQuality(i, randomQuality);
-    }
-
-    updateChordSymbolDisplay();
-    updateChordNameDisplay();
+export function randomizeChordQuality(index) {
+    setChordQuality(index, getRandomArrayElement(PitchClass.SUPPORTED_PITCH_CLASSES));
 }
 
 /**
- * Randomizes the displayed chord's inversions
+ * Randomizes all chords' qualities
  * @contributors Nolan
  */
-export function randomizeChordInversions() {
-    const maxNumInversions = 2;
+export function randomizeAllChordQualities() {
+    const numChords = chordProgression.getNumChords();
+    for (let i = 0; i < numChords; i++) {
+        randomizeChordQuality(i);
+    }
+}
+
+
+/**
+ * Inverts a chord and updates the chord display
+ * @param {number} index         Integer index of the chord to modify
+ * @param {number} numInversions The (integer) number of times to invert the chord. Positive values indicate inverting up
+ *                               while negative values indicate inverting down.
+ * @contributors Nolan
+ */
+export function invertChord(index, numInversions) {
+    chordProgression.invertChord(index, numInversions);
+    updateChordDisplay(index);
+}
+
+
+/**
+ * Sets a chord's quality to a random quality and updates the display
+ * @param {number} index Integer index of the chord to modify
+ * @param {number} minNumInversions The minimum number of times to invert the chord. Can be negative.
+ * @param {number} maxNumInversions The maximum number of times to invert the chord. Can be negative.
+ * @contributors Nolan
+ */
+export function randomizeChordInversion(index, minNumInversions, maxNumInversions) {
+    invertChord(index, getRandomInt(minNumInversions, maxNumInversions));
+}
+
+
+/**
+ * Randomly inverts all chords
+ * @contributors Nolan
+ */
+export function randomizeAllChordInversions() {
     const minNumInversions = -2;
-
+    const maxNumInversions = 2;
     const numChords = chordProgression.getNumChords();
 
     for (let i = 0; i < numChords; i++) {
-        const numInversions = getRandomInt(minNumInversions, maxNumInversions);
-        chordProgression.invertChord(i, numInversions);
+        randomizeChordInversion(i, minNumInversions, maxNumInversions);
     }
-
-    updateChordSymbolDisplay();
-    updateChordNameDisplay();
 }
 
 
 /**
- * Toggles the current display mode between alphabetical and Roman numeral
+ * Toggles the current display mode between alphabetical and Roman numeral and updates all chord displays
  * @contributors Nolan, Ben
  */
 export function toggleChordDisplayType() {
     isDisplayingAlphabet = !isDisplayingAlphabet;
-
-    updateChordSymbolDisplay();
-    updateChordNameDisplay();
+    updateAllChordDisplays();
 }
+
 
 /**
  * Updates the root key on the webpage
@@ -214,6 +274,50 @@ export function setReferentialScale(scaleName) {
 
 
 /**
+ * Hides a chord's name display
+ * @param {number} index Integer index of the chord name to hide
+ * @contributors Nolan
+ */
+export function hideChordName(index) {
+    const chordNameDisplay = document.getElementById(`chordName${index}`);
+    chordNameDisplay.style.display = "none";
+}
+
+
+/**
+ * Shows a chord's name display
+ * @param {number} index Integer index of the chord name to show
+ * @contributors Nolan
+ */
+export function showChordName(index) {
+    const chordNameDisplay = document.getElementById(`chordName${index}`);
+    chordNameDisplay.style.display = "block";
+}
+
+
+/**
+ * Hides all chord names
+ * @contributors Nolan
+ */
+export function hideAllChordNames() {
+    const numChords = chordProgression.getNumChords();
+    for (let i = 0; i < numChords; i++) {
+        hideChordName(i);
+    }
+}
+
+/**
+ * Hides all chord names
+ * @contributors Nolan
+ */
+export function showAllChordNames() {
+    const numChords = chordProgression.getNumChords();
+    for (let i = 0; i < numChords; i++) {
+        showChordName(i);
+    }
+}
+
+/**
  * Called on DOM load. Attaches event listeners for hydration.
  * @contributors Ethan, Adolfo, Nolan
  */
@@ -222,11 +326,13 @@ export function init() {
         addChord();
     }
 
-    document.getElementById("randomizeChordRootNotesButton").addEventListener("click", randomizeChordRootNotes);
-    document.getElementById("randomizeChordQualitiesButton").addEventListener("click", randomizeChordQualities);
-    document.getElementById("randomizeChordInversionsButton").addEventListener("click", randomizeChordInversions);
+    document.getElementById("randomizeChordRootNotesButton").addEventListener("click", randomizeAllChordRootNotes);
+    document.getElementById("randomizeChordQualitiesButton").addEventListener("click", randomizeAllChordQualities);
+    document.getElementById("randomizeChordInversionsButton").addEventListener("click", randomizeAllChordInversions);
     document.getElementById("toggleChordDisplayTypeButton").addEventListener("click", toggleChordDisplayType);
     document.getElementById("addChordButton").addEventListener("click", addChord);
+    document.getElementById("hideChordNamesButton").addEventListener("click", hideAllChordNames);
+    document.getElementById("showChordNamesButton").addEventListener("click", showAllChordNames);
 
     document.getElementById("setRootKeySelection").onchange = (event) => setKey(event.target.value);
     document.getElementById("setScaleSelection").onchange = (event) => setReferentialScale(event.target.value);
