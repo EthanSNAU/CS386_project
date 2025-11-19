@@ -129,11 +129,16 @@ export function addChord() {
     newChordNameDisplay.id = `chordName${numChords}`;
     newChordNameDisplay.className = "chordNameDisplay";
 
+    let chordNameButton = document.createElement('button');
+    chordNameButton.addEventListener("click", () => {hideChordName(numChords)});
+    chordNameButton.addEventListener("click", () => {showChordName(numChords)});
+    
     let newChordDisplay = document.createElement("div");
     newChordDisplay.id = `chord${numChords}`;
     newChordDisplay.className = `chordDisplay`;
     newChordDisplay.appendChild(newChordSymbolDisplay);
     newChordDisplay.appendChild(newChordNameDisplay);
+    newChordDisplay.appendChild(chordNameButton);
 
     const chordProgressionDisplay = document.getElementById("chordProgressionDisplay");
     chordProgressionDisplay.appendChild(newChordDisplay);
@@ -294,6 +299,7 @@ export function setReferentialScale(scaleName) {
  * @contributors Nolan
  */
 export function hideChordName(index) {
+    console.log(index);
     const chordNameDisplay = document.getElementById(`chordName${index}`);
     chordNameDisplay.style.display = "none";
 }
@@ -320,6 +326,8 @@ export function hideAllChordNames() {
         hideChordName(i);
     }
 }
+
+
 
 
 /**
