@@ -1,5 +1,7 @@
 // romanNumGen.js
-import { ChordProgression } from "./music/chordProgression.js";
+import ChordProgression from "./music/chordProgression.js";
+import Chord from "./music/chord.js";
+import ChordRepresentationObserver from "./music/chordRepresentationObserver.js";
 import { PitchClass, ChordQuality, ReferentialScale } from "./music/enums";
 import { getRandomArrayElement, getRandomInt, capitalizeFirstChar } from "./util.js";
 
@@ -32,7 +34,7 @@ const chordProgression = new ChordProgression(PitchClass.C, ReferentialScale.ION
  * @contributors Marcus, Nolan
  */
 export function updateChordDisplay(index) {
-    const representation = chordProgression.getChordRepresentation(index);
+    const representation = chordProgression.getChord(index).getRepresentation();
     
     const rootNoteDisplay = document.getElementById(`rootNote${index}`);
     const upperFigureDisplay = document.getElementById(`upperFigure${index}`);
@@ -73,7 +75,12 @@ export function addChord() {
     if (numChords >= MAX_CHORDS) return;
 
     // add the chord to the progression manager
-    chordProgression.addChord(numChords);
+    const scale = chordProgression.getScale();
+
+    let newChord = new Chord(scale.getRootPitchClass());
+    newChord.addRepresentationObserver(new ChordRepresentationObserver(scale))
+
+    chordProgression.addChord(numChords, newChord);
 
     // create the root note
     let newRootNoteDisplay = document.createElement("p");
@@ -138,7 +145,7 @@ export function addChord() {
  * @contributors Nolan
  */
 export function setChordRootNote(index, pitchClass) {
-    chordProgression.setChordRootNote(index, pitchClass);
+    chordProgression.getChord(index).transposeTo(pitchClass);
     updateChordDisplay(index);
 }
 
@@ -169,8 +176,8 @@ export function randomizeAllChordRootNotes() {
  * @param {ChordQuality} quality Quality of the new chord
  * @contributors Nolan
  */
-export function setChordQuality(index, pitchClass) {
-    chordProgression.setChordQuality(index, pitchClass);
+export function setChordQuality(index, quality) {
+    chordProgression.getChord(index).setQuality(quality);
     updateChordDisplay(index);
 }
 
@@ -203,7 +210,7 @@ export function randomizeAllChordQualities() {
  * @contributors Nolan
  */
 export function invertChord(index, numInversions) {
-    chordProgression.invertChord(index, numInversions);
+    chordProgression.getChord(index).invert(numInversions);
     updateChordDisplay(index);
 }
 

@@ -9,7 +9,7 @@ const OCTAVE_HALF_STEP_LENGTH = 12;
 /**
  * Manages the octave, pitch, and length of a pitch class.
  */
-export class Note {
+export default class Note {
     #pitchClass
     #pitch
     #octave

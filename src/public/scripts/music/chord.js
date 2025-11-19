@@ -1,72 +1,17 @@
-import { Note } from "./note.js"
+import Note from "./note.js"
 import { ChordPlaybackStyle, ChordQuality, PitchClass } from "./enums";
 
 const DEFAULT_OCTAVE = 4;
 const OCTAVE_HALF_STEP_LENGTH = 12;
 
-const NO_INVERSION = -1;
-
-function getInversionFromIntervals(chordIntervals, rootInversionIntervals) {
-    const numBaseIntervals = rootInversionIntervals.length;
-    const numIntervals = chordIntervals.length;
-    if (numBaseIntervals !== numIntervals) return NO_INVERSION;
-
-    // check if chordIntervals is an inversion of rootInversionIntervals
-
-    const sumRootInversionIntervals = rootInversionIntervals.reduce((acc, curr) => {
-        return acc + curr;
-    }, 0);
-
-    const allAllowedIntervals = [...rootInversionIntervals, OCTAVE_HALF_STEP_LENGTH - (sumRootInversionIntervals % OCTAVE_HALF_STEP_LENGTH)];
-    const numPossibleInversions = allAllowedIntervals.length;
-
-    // Try to find a case where removing one element from allAllowedIntervals produces an array that matches chordInvervals
-    // [a, b, c, d, e, f] => removing c produces [d, e, f, a, b]
-
-    // TODO: make this part more efficient
-
-    const getReducedArray = (arr, index) => {
-        let reduced = [];
-        let removedIndex = index;
-        index++;
-
-        // go until end of array
-        while (index < arr.length) {
-            reduced.push(arr[index]);
-            index++;
-        }
-
-        // loop back and continue until all elements have been covered
-        index = 0;
-        while (index < removedIndex) {
-            reduced.push(arr[index]);
-            index++;
-        }
-
-        return reduced;
-    }
-
-    // i points to the element being excluded
-    for (let i = numPossibleInversions - 1; i >= 0; i--) {
-        const possibleInversion = getReducedArray(allAllowedIntervals, i);
-
-        // check if match, and if so, find and return the inversion number
-        if (possibleInversion.every((element, index) => (element === chordIntervals[index]))) {
-            if (i === numPossibleInversions - 1) return 0;
-            return i + 1;
-        }
-    }
-
-    return NO_INVERSION;
-}
-
 /**
  * Represents a group of notes to be played simultaneously.
  */
-export class Chord {
+export default class Chord {
     #notes
     #intervals
     #playbackStyle
+    #representationObserver
 
     /**
      * Creates a Chord instance.
@@ -123,47 +68,12 @@ export class Chord {
         return this.#notes[index].getOctave();
     }
 
-    /**
-     * Gets a list of qualities (and associated attributes) that fit the chord.
-     * @returns {{
-     *  quality:        string
-     *  inversion:      number
-     *  rootPitchClass: PitchClass
-     *  bassPitchClass: PitchClass
-     * }} The chord's possible qualities
-     * @contributors Nolan
-     */
-    getPossibleQualities() {
-        const numNotes = this.#notes.length;
-        let possibleQualities = [];
+    getNumNotes() {
+        return this.#notes.length;
+    }
 
-        // iterate through all chord qualities. If any of them match, add them to the array.
-        for (const quality of ChordQuality.SUPPORTED_QUALITIES) {
-            const inversion = getInversionFromIntervals(this.#intervals, ChordQuality.getIntervals(quality))
-
-            if (inversion === NO_INVERSION) continue;
-
-            if (inversion >= numNotes || inversion < 0) {
-                console.error("[Chord.prototype.getPossibleQualities] Error: Received erroneous inversion.");
-                return [];
-            }
-
-            let rootPitchClass;
-            if (inversion === 0) {
-                rootPitchClass = this.getPitchClassAt(0);
-            } else {
-                rootPitchClass = this.getPitchClassAt(numNotes - inversion);
-            }
-
-            possibleQualities.push({
-                quality:        quality,
-                inversion:      inversion,
-                rootPitchClass: rootPitchClass,
-                bassPitchClass: this.getPitchClassAt(0)
-            });
-        }
-
-        return possibleQualities;
+    getIntervals() {
+        return this.#intervals;
     }
 
     /**
@@ -177,6 +87,8 @@ export class Chord {
         for (const note of this.#notes) {
             note.transposeBy(numHalfSteps);
         }
+
+        this.notifyObservers(this);
     }
 
     /**
@@ -231,6 +143,8 @@ export class Chord {
         this.#notes.splice(noteIndex, numNotes - noteIndex);
 
         this.#intervals = [...qualitySteps];
+
+        this.notifyObservers(this);
     }
 
     #invertUpOnce() {
@@ -285,5 +199,24 @@ export class Chord {
                 this.#invertDownOnce();
             }
         }
+
+        this.notifyObservers(this);
+    }
+
+    addRepresentationObserver(observer) {
+        this.#representationObserver = observer;
+        observer.notify(this);
+    }
+
+    removeRepresentationObserver() {
+        this.#representationObserver = null;
+    }
+
+    notifyObservers() {
+        this.#representationObserver.notify(this);
+    }
+
+    getRepresentation() {
+        return this.#representationObserver.getRepresentation();
     }
 }

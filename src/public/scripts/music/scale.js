@@ -7,7 +7,7 @@ import { convertToRoman, convertToWord } from "./numberConversion.js"
 /**
  * Manages the alphabetical and Roman numeral representations of all pitch classes.
  */
-export class Scale {
+export default class Scale {
     #rootPitchClass
     #octave // tracks the user's preferred symbols (eg. G# vs. Ab)
     #referentialScale // tracks the notes that are used for chord labeling

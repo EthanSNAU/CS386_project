@@ -1,6 +1,6 @@
 /**
  * Represents referential scales and their associated properties.
- * @enum {number}
+ * @enum {number} 
  * @readonly
  */
 const ReferentialScale = (() => {
