@@ -46,7 +46,7 @@ export class Scale {
 
         // fill in the referential scale
         this.#referentialScale = [rootPitchClass];
-        const referentialScaleSteps = ReferentialScale.getSteps(referentialScale);
+        const referentialScaleSteps = ReferentialScale.getIntervals(referentialScale);
         let currentPitchClass = rootPitchClass;
 
         for (const step of referentialScaleSteps) {
@@ -157,12 +157,16 @@ export class Scale {
      * Gets the currently-active representation of a pitch class.
      * @param {PitchClass} pitchClass Pitch class to get the representation for
      * @returns {{
-    *   alphabeticalName:                     string
-    *   alphabeticalSymbol:                   string
-    *   alphabeticalAccidental:               Accidental
-    *   romanName:                            string
-    *   romanSymbol:                          string
-    *   romanAccidental:                      Accidental
+     *  alphabetical: {
+     *      name:       string,
+     *      symbol:     string,
+     *      accidental: Accidental
+     *  },
+     *  roman: {
+     *      name:       string
+     *      symbol:     string
+     *      accidental: Accidental
+     *  }
      * }} The pitch class' representation information
      * @contributors Nolan
      */
@@ -172,12 +176,16 @@ export class Scale {
         const romanRepresentation = representationInfo.romanRepresentations[representationInfo.romanRepresentationIndex];
 
         const pitchClassRepresentation = {
-            alphabeticalName:                     alphabeticalRepresentation.name,
-            alphabeticalSymbol:                   alphabeticalRepresentation.symbol,
-            alphabeticalAccidental:               alphabeticalRepresentation.accidental,
-            romanName:                            romanRepresentation.name,
-            romanSymbol:                          romanRepresentation.symbol,
-            romanAccidental:                      romanRepresentation.accidental,
+            alphabetical: {
+                name:       alphabeticalRepresentation.name,
+                symbol:     alphabeticalRepresentation.symbol,
+                accidental: alphabeticalRepresentation.accidental,
+            },
+            roman: {
+                name:       romanRepresentation.name,
+                symbol:     romanRepresentation.symbol,
+                accidental: romanRepresentation.accidental,
+            }
         };
 
         return pitchClassRepresentation;

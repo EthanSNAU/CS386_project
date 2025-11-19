@@ -6,6 +6,7 @@
  * @contributors Nolan
  */
 export function getRandomInt(inclusiveMin, inclusiveMax) {
+    // TODO: account for max < min
     return Math.floor(Math.random() * (inclusiveMax - inclusiveMin + 1)) + inclusiveMin;
 }
 

@@ -1,3 +1,5 @@
+import ChordQualityType from "./chordQualityType.js";
+
 /**
  * Represents chord qualities with their associated properties.
  * @enum {number} 
@@ -5,60 +7,166 @@
  */
 const ChordQuality = (() => {
     const VALUES = Object.freeze({
-        MAJOR:           0,
-        MINOR:           1,
-        DIMINISHED:      2,
-        AUGMENTED:       3,
-        SUSPENDED_TWO:   4,
-        SUSPENDED_FOUR:  5,
-        DOMINANT_SEVEN:  6,
-        HALF_DIMINISHED: 7
+        MAJOR_TRIAD:                 0,
+        MINOR_TRIAD:                 1,
+        DIMINISHED_TRIAD:            2,
+        AUGMENTED_TRIAD:             3,
+        SUSPENDED_TWO:               4,
+        SUSPENDED_FOUR:              5,
+        MAJOR_MAJOR_SEVEN:           6, // AKA major seven
+        MAJOR_MINOR_SEVEN:           7, // AKA dominant seven
+        MINOR_MAJOR_SEVEN:           8,
+        MINOR_MINOR_SEVEN:           9, // AKA minor seven
+        HALF_DIMINISHED_SEVEN:       10,
+        DIMINISHED_SEVEN:            11,
     });
 
+    // Note: all properties are relative to the root inversion
     const PROPERTIES = Object.freeze({
-        [VALUES.MAJOR]:           { steps: [4, 3],    prefixSymbolDescriptors: "", suffixSymbolDescriptors: "",     lowerSymbolDescriptors: "", upperSymbolDescriptors: "",     name: "major",           isLowercase: false },
-        [VALUES.MINOR]:           { steps: [3, 4],    prefixSymbolDescriptors: "", suffixSymbolDescriptors: "m",    lowerSymbolDescriptors: "", upperSymbolDescriptors: "",     name: "minor",           isLowercase: true  },
-        [VALUES.DIMINISHED]:      { steps: [3, 3],    prefixSymbolDescriptors: "", suffixSymbolDescriptors: "dim",  lowerSymbolDescriptors: "", upperSymbolDescriptors: "",     name: "diminished",      isLowercase: true  },
-        [VALUES.AUGMENTED]:       { steps: [4, 4],    prefixSymbolDescriptors: "", suffixSymbolDescriptors: "aug",  lowerSymbolDescriptors: "", upperSymbolDescriptors: "",     name: "augmented",       isLowercase: false },
-        [VALUES.SUSPENDED_TWO]:   { steps: [2, 5],    prefixSymbolDescriptors: "", suffixSymbolDescriptors: "",     lowerSymbolDescriptors: "", upperSymbolDescriptors: "sus2", name: "suspended two",   isLowercase: false },
-        [VALUES.SUSPENDED_FOUR]:  { steps: [5, 2],    prefixSymbolDescriptors: "", suffixSymbolDescriptors: "",     lowerSymbolDescriptors: "", upperSymbolDescriptors: "sus4", name: "suspended four",  isLowercase: false },
-        [VALUES.DOMINANT_SEVEN]:  { steps: [4, 3, 3], prefixSymbolDescriptors: "", suffixSymbolDescriptors: "",     lowerSymbolDescriptors: "", upperSymbolDescriptors: "7",    name: "dominant seven",  isLowercase: false },
-        [VALUES.HALF_DIMINISHED]: { steps: [3, 3, 4], prefixSymbolDescriptors: "", suffixSymbolDescriptors: "m",    lowerSymbolDescriptors: "", upperSymbolDescriptors: "7b5",  name: "half diminished", isLowercase: true  },
+        [VALUES.MAJOR_TRIAD]: {
+            intervals: [4, 3],
+            name: "major",
+            symbolDescriptors: { prefix: "", suffix: "", lower: "", upper: "" },
+            isLowercase: false,
+            type: ChordQualityType.TRIAD
+        },
+
+        [VALUES.MINOR_TRIAD]: {
+            intervals: [3, 4],
+            name: "minor",
+            symbolDescriptors: { prefix: "", suffix: "m", lower: "", upper: "" },
+            isLowercase: true,
+            type: ChordQualityType.TRIAD
+        },
+
+        [VALUES.DIMINISHED_TRIAD]: {
+            intervals: [3, 3],
+            name: "diminished",
+            symbolDescriptors: { prefix: "", suffix: "°", lower: "", upper: "" },
+            isLowercase: true,
+            type: ChordQualityType.TRIAD
+        },
+
+        [VALUES.AUGMENTED_TRIAD]: {
+            intervals: [4, 4],
+            name: "augmented",
+            symbolDescriptors: { prefix: "", suffix: "", lower: "", upper: "+" },
+            isLowercase: false,
+            type: ChordQualityType.TRIAD
+        },
+
+        [VALUES.SUSPENDED_TWO]: {
+            intervals: [2, 5],
+            name: "suspended two",
+            symbolDescriptors: { prefix: "", suffix: "", lower: "", upper: "sus2" },
+            isLowercase: false,
+            type: ChordQualityType.OTHER
+        },
+
+        [VALUES.SUSPENDED_FOUR]: {
+            intervals: [5, 2],
+            name: "suspended four",
+            symbolDescriptors: { prefix: "", suffix: "", lower: "", upper: "sus4" },
+            isLowercase: false,
+            type: ChordQualityType.OTHER
+        },
+
+        [VALUES.MAJOR_MAJOR_SEVEN]: {
+            intervals: [4, 3, 4],
+            name: "major seven",
+            symbolDescriptors: { prefix: "", suffix: "", lower: "", upper: "M7" },
+            isLowercase: false,
+            type: ChordQualityType.SEVENTH
+        },
+
+        [VALUES.MAJOR_MINOR_SEVEN]: {
+            intervals: [4, 3, 3],
+            name: "dominant seven",
+            symbolDescriptors: { prefix: "", suffix: "", lower: "", upper: "7" },
+            isLowercase: false,
+            type: ChordQualityType.SEVENTH
+        },
+
+        [VALUES.MINOR_MAJOR_SEVEN]: {
+            intervals: [3, 4, 4],
+            name: "minor major seven",
+            symbolDescriptors: { prefix: "", suffix: "m", lower: "", upper: "M7" },
+            isLowercase: true,
+            type: ChordQualityType.SEVENTH
+        },
+
+        [VALUES.MINOR_MINOR_SEVEN]: {
+            intervals: [3, 4, 3],
+            name: "minor dominant seven",
+            symbolDescriptors: { prefix: "", suffix: "m", lower: "", upper: "7" },
+            isLowercase: true,
+            type: ChordQualityType.SEVENTH
+        },
+
+        [VALUES.HALF_DIMINISHED_SEVEN]: {
+            intervals: [3, 3, 4],
+            name: "half diminished",
+            symbolDescriptors: { prefix: "", suffix: "", lower: "", upper: "ø7" },
+            isLowercase: true,
+            type: ChordQualityType.SEVENTH
+        },
+
+        // TODO: find better symbol for the suffix
+        [VALUES.DIMINISHED_SEVEN]: {
+            intervals: [3, 3, 3],
+            name: "diminised seven",
+            symbolDescriptors: { prefix: "", suffix: "°", lower: "", upper: "7" },
+            isLowercase: true,
+            type: ChordQualityType.SEVENTH
+        },
     });
 
     /**
-     * Gets the interval sizes for a chord quality
+     * Gets the interval sizes for a chord quality's root inversion.
      * @param {ChordQuality} quality Quality to get the steps for. Must be in {@link ChordQuality.SUPPORTED_QUALITIES} to work.
      * @returns {number[]} Array of step sizes for the inputted chord quality (in half steps)
      * @contributors Nolan
      */
-    function getSteps(quality) {
-        return PROPERTIES[quality].steps;
+    function getIntervals(quality) {
+        return PROPERTIES[quality].intervals;
     }
 
     /**
      * Gets the representation information for a chord quality
      * @param {ChordQuality} quality Quality to get the representation for. Must be in {@link ChordQuality.SUPPORTED_QUALITIES} to work.
      * @returns {{
-     *  prefixSymbolDescriptors: string,
-     *  suffixSymbolDescriptors: string,
-     *  lowerSymbolDescriptors:  string,
-     *  upperSymbolDescriptors:  string,
-     *  name:                    string,
-     *  isLowercase:             boolean
-     * }} The quality's representation information
+     *  name:        string,
+     *  isLowercase: boolean
+     *  symbolDescriptors: {
+     *      prefix:  string,
+     *      suffix:  string,
+     *      lower:   string,
+     *      upper:   string
+     *  },
+     * }} The quality's representation information as a root inversion.
      * @contributors Nolan
      */
     function getRepresentation(quality) {
         const info = PROPERTIES[quality];
         return {
-            prefixSymbolDescriptors: info.prefixSymbolDescriptors,
-            suffixSymbolDescriptors: info.suffixSymbolDescriptors,
-            lowerSymbolDescriptors:  info.lowerSymbolDescriptors,
-            upperSymbolDescriptors:  info.upperSymbolDescriptors,
-            name:                    info.name,
-            isLowercase:             info.isLowercase
+            name:        info.name,
+            isLowercase: info.isLowercase,
+            symbolDescriptors: {
+                prefix:  info.symbolDescriptors.prefix,
+                suffix:  info.symbolDescriptors.suffix,
+                lower:   info.symbolDescriptors.lower,
+                upper:   info.symbolDescriptors.upper
+            },
         };
+    }
+
+    /**
+     * Gets the type of a chord quality
+     * @param {ChordQuality} quality Quality to get the type of
+     * @returns {ChordQualityType} The type of the inputted chord quality
+     */
+    function getType(quality) {
+        return PROPERTIES[quality].type;
     }
 
     /**
@@ -68,7 +176,16 @@ const ChordQuality = (() => {
      * @contributors Nolan
      */
     function isLowercase(quality) {
-        return (VALUES[quality].isLowercase);
+        return (PROPERTIES[quality].isLowercase);
+    }
+
+    /**
+     * Returns true if the quality requires "m" to be a suffix, indicating a minor chord
+     * @param {ChordQuality} quality Quality to get information on
+     * @returns {boolean} True if the quality's symbol descriptors has "m" as a suffix
+     */
+    function hasMinorSymbol(quality) {
+        return (PROPERTIES[quality].symbolDescriptors.suffix === "m");
     }
 
     /**
@@ -80,9 +197,11 @@ const ChordQuality = (() => {
 
     return Object.freeze({
         ...VALUES,
-        getSteps,
+        getIntervals,
         getRepresentation,
+        getType,
         isLowercase,
+        hasMinorSymbol,
         SUPPORTED_QUALITIES
     });
 })();

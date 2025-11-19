@@ -22,18 +22,17 @@ const chordProgression = new ChordProgression(PitchClass.C, ReferentialScale.ION
  * @contributors Marcus, Nolan
  */
 export function updateChordNameDisplay() {
-    // TODO: store chord representations instead of calling getChordRepresentation() every time
     const numChords = chordProgression.getNumChords();
     let names = "";
 
     if (isDisplayingAlphabet) {
         for (let i = 0; i < numChords; i++) {
-            names += chordProgression.getChordRepresentation(i).alphabeticalName;
+            names += chordProgression.getChordRepresentation(i).alphabetical.name;
             if (i < numChords - 1) names += ", ";
         }
     } else {
         for (let i = 0; i < numChords; i++) {
-            names += chordProgression.getChordRepresentation(i).romanName;
+            names += chordProgression.getChordRepresentation(i).roman.name;
             if (i < numChords - 1) names += ", ";
         }
     }
@@ -47,33 +46,26 @@ export function updateChordNameDisplay() {
  * @contributors Nolan
  */
 export function updateChordSymbolDisplay() {
-    // TODO: store chord representations instead of calling getChordRepresentation() every time
     for (let i = 0; i < chordProgression.getNumChords(); i++) {
         const rootNoteDisplay = document.getElementById(`rootNote${i}`);
         const upperFigureDisplay = document.getElementById(`upperFigure${i}`);
         const lowerFigureDisplay = document.getElementById(`lowerFigure${i}`);
-        const bassNoteDisplay = document.getElementById(`bassNote${i}`);
+        const bassFigureDisplay = document.getElementById(`bassFigure${i}`);
 
         const representation = chordProgression.getChordRepresentation(i);
 
         if (isDisplayingAlphabet) {
-            rootNoteDisplay.textContent = representation.alphabeticalSymbol;
-            if (representation.alphabeticalBassNoteSymbol) {
-                bassNoteDisplay.textContent = "/" + representation.alphabeticalBassNoteSymbol;
-            } else {
-                bassNoteDisplay.textContent = "";
-            }
+            rootNoteDisplay.textContent = representation.alphabetical.symbol;
+            upperFigureDisplay.textContent = representation.alphabetical.upperFigure;
+            lowerFigureDisplay.textContent = representation.alphabetical.lowerFigure;
+            bassFigureDisplay.textContent = representation.alphabetical.bassFigure;
         } else {
-            rootNoteDisplay.textContent = representation.romanSymbol;
-            if (representation.romanBassNoteSymbol) {
-                bassNoteDisplay.textContent = "/" + representation.romanBassNoteSymbol;
-            } else {
-                bassNoteDisplay.textContent = "";
-            }
+            rootNoteDisplay.textContent = representation.roman.symbol;
+            upperFigureDisplay.textContent = representation.roman.upperFigure;
+            lowerFigureDisplay.textContent = representation.roman.lowerFigure;
+            bassFigureDisplay.textContent = representation.roman.bassFigure;
         }
 
-        upperFigureDisplay.textContent = representation.upperSymbolDescriptors;
-        lowerFigureDisplay.textContent = representation.lowerSymbolDescriptors;
     }
 }
 
@@ -87,8 +79,7 @@ export function addChord() {
     if (numChords >= MAX_CHORDS) return;
 
     // add the chord to the progression manager
-    chordProgression.addChord();
-    const chordRepresentation = chordProgression.getChordRepresentation(numChords);
+    chordProgression.addChord(numChords);
 
     // create the root note
     let newRootNoteDisplay = document.createElement("p");
@@ -96,52 +87,26 @@ export function addChord() {
     newRootNoteDisplay.className = "rootNoteDisplay";
 
     // newRootNoteDisplay.addEventListener('click', function(event) {
-    //     const upperFigure = event.target.nextElementSibling; 
-    //     if (upperFigure && upperFigure.classList.contains('upperFigureDisplay')) {
-    //         const currentText = upperFigure.textContent;
-    //         let nextText = '';
-
-    //         // cycles through clicks to change upper figure display
-    //         if (currentText === '') {
-    //             nextText = '7';
-    //         } else if (currentText === '7') {
-    //             nextText = '9';
-    //         } else if (currentText === '9') {
-    //             nextText = '11';
-    //         } else if (currentText === '11') {
-    //             nextText = '';
-    //         }
-
-    //         // updates upper figure
-    //         upperFigure.textContent = nextText;
-    //     }
+    //     Cycle through possible chord qualities
     // });
 
     let newUpperFigureDisplay = document.createElement("p");
     newUpperFigureDisplay.id = `upperFigure${numChords}`;
     newUpperFigureDisplay.className = "upperFigureDisplay";
     // newUpperFigureDisplay.addEventListener("click", (event) => {
-    //     // Ask the user if they want to remove the note
-    //     const shouldRemove = confirm(`Do you want to remove the note "${event.target.textContent}"?`);
-    //     if (shouldRemove) {
-    //         event.target.textContent = ""; // remove the note
-    //     }
+    //     Remove the figure (?)
     // });
 
     let newLowerFigureDisplay = document.createElement("p");
     newLowerFigureDisplay.id = `lowerFigure${numChords}`;
     newLowerFigureDisplay.className = "lowerFigureDisplay";
     // newLowerFigureDisplay.addEventListener("click", (event) => {
-    //     // Ask the user if they want to remove the note
-    //     const shouldRemove = confirm(`Do you want to remove the note "${event.target.textContent}"?`);
-    //     if (shouldRemove) {
-    //         event.target.textContent = ""; // remove the note
-    //     }
+    //     Remove the figure (?)
     // });
 
-    let newBassNoteDisplay = document.createElement("p");
-    newBassNoteDisplay.id = `bassNote${numChords}`;
-    newBassNoteDisplay.className = "bassNoteDisplay";
+    let newBassFigureDisplay = document.createElement("p");
+    newBassFigureDisplay.id = `bassFigure${numChords}`;
+    newBassFigureDisplay.className = "bassFigureDisplay";
 
     let newChord = document.createElement("div");
     newChord.id = `chord${numChords}`;
@@ -150,7 +115,7 @@ export function addChord() {
     newChord.appendChild(newRootNoteDisplay);
     newChord.appendChild(newUpperFigureDisplay);
     newChord.appendChild(newLowerFigureDisplay);
-    newChord.appendChild(newBassNoteDisplay);
+    newChord.appendChild(newBassFigureDisplay);
 
     document.getElementById("chordProgressionDisplay").appendChild(newChord);
 
@@ -164,9 +129,10 @@ export function addChord() {
  */
 export function randomizeChordRootNotes() {
     const numChords = chordProgression.getNumChords();
-    for(let i = 0; i < numChords; i++) {
+    for (let i = 0; i < numChords; i++) {
         const randomPitchClass = getRandomArrayElement(PitchClass.SUPPORTED_PITCH_CLASSES);
         chordProgression.setChordRootNote(i, randomPitchClass);
+        chordProgression.setChordQuality(i, ChordQuality.MAJOR_TRIAD);
     }
 
     updateChordSymbolDisplay();
@@ -179,7 +145,7 @@ export function randomizeChordRootNotes() {
  */
 export function randomizeChordQualities() {
     const numChords = chordProgression.getNumChords();
-    for(let i = 0; i < numChords; i++) {
+    for (let i = 0; i < numChords; i++) {
         const randomQuality = getRandomArrayElement(ChordQuality.SUPPORTED_QUALITIES);
         chordProgression.setChordQuality(i, randomQuality);
     }
@@ -189,121 +155,31 @@ export function randomizeChordQualities() {
 }
 
 /**
+ * Randomizes the displayed chord's inversions
+ * @contributors Nolan
+ */
+export function randomizeChordInversions() {
+    const maxNumInversions = 2;
+    const minNumInversions = -2;
+
+    const numChords = chordProgression.getNumChords();
+
+    for (let i = 0; i < numChords; i++) {
+        const numInversions = getRandomInt(minNumInversions, maxNumInversions);
+        chordProgression.invertChord(i, numInversions);
+    }
+
+    updateChordSymbolDisplay();
+    updateChordNameDisplay();
+}
+
+
+/**
  * Toggles the current display mode between alphabetical and Roman numeral
  * @contributors Nolan, Ben
  */
 export function toggleChordDisplayType() {
-    if (isDisplayingAlphabet) {
-        isDisplayingAlphabet = false;
-    } else {
-        isDisplayingAlphabet = true;
-    }
-
-    updateChordSymbolDisplay();
-    updateChordNameDisplay();
-}
-
-/**
- * Generates a random sequence of chord inversions and displays it on the webpage
- * @returns {string} A string containing the inversions
- * @contributors Nolan
- */
-// export function genInversions() {
-//     let result = "";
-// 
-//     for (let i = 0; i < numChordsDisplayed; i++) {
-//         const randIndex = getRandomInt(0, inversions.length - 1);
-//         const randInversion = inversions[randIndex];
-// 
-//         result += randInversion + " ";
-// 
-//         const upperFigureDisplayElement = document.getElementById(`upperFigure${i + 1}`);
-//         const lowerFigureDisplayElement = document.getElementById(`lowerFigure${i + 1}`);
-// 
-//         if (randInversion === "53") {
-//             upperFigureDisplayElement.textContent = "";
-//             lowerFigureDisplayElement.textContent = "";
-//         } else {
-//             upperFigureDisplayElement.textContent = randInversion.charAt(0);
-//             lowerFigureDisplayElement.textContent = randInversion.charAt(1);
-//         }
-//     }
-// 
-//     return result.trim();
-// }
-
-
-/**
- * Clears the displayed inversions on the webpage
- * @contributors Nolan
- */
-// export function clearInversions() {
-//     for (let i = 0; i < numChordsDisplayed; i++) {
-//         const upperFigureDisplayElement = document.getElementById(`upperFigure${i + 1}`);
-//         const lowerFigureDisplayElement = document.getElementById(`lowerFigure${i + 1}`);
-// 
-//         upperFigureDisplayElement.textContent = "";
-//         lowerFigureDisplayElement.textContent = "";
-//     }
-// }
-
-/**
- * Generate random bass notes for each chord and displays them
- * @returns {string} A string of bass notes
- * @contributors Adolfo, Nolan
- */
-// export function genBassNotes() {
-//     // Common bass notes
-//     let result = "";
-// 
-//     for (let i = 0; i < numChordsDisplayed; i++) 
-//         {
-//         let randIndex;
-//         let randBassNote;
-//         
-//         if (isDisplayingAlphabet) {
-//             randIndex = getRandomInt(0, alphabetNotes.length - 1);
-//             randBassNote = alphabetNotes[randIndex];
-//         } else {
-//             randIndex = getRandomInt(0, romanNotes.length - 1);
-//             randBassNote = romanNotes[randIndex];
-//         }
-// 
-//         result += randBassNote + " ";
-// 
-//         document.getElementById(`bassNote${i + 1}`).textContent = randBassNote;
-//     }
-// 
-//     return result.trim();
-// }
-
-/**
- * Randomizes the displayed chords' bass notes
- * @contributors Adolfo, Nolan
- */
-export function randomizeChordBassNotes() {
-    for (let i = 0; i < chordProgression.getNumChords(); i++) {
-        const randIndex = getRandomInt(0, PitchClass.SUPPORTED_PITCH_CLASSES.length);
-
-        if (randIndex == PitchClass.SUPPORTED_PITCH_CLASSES.length) {
-            chordProgression.removeChordBassNote(i);
-        } else {
-            chordProgression.setChordBassNote(i, PitchClass.SUPPORTED_PITCH_CLASSES[randIndex]);
-        }
-    }
-
-    updateChordSymbolDisplay();
-    updateChordNameDisplay();
-}
-
-/**
- * Remvoes the displayed chords' bass notes
- * @contributors Adolfo, Nolan
- */
-export function removeChordBassNotes() {
-    for (let i = 0; i < chordProgression.getNumChords(); i++) {
-        chordProgression.removeChordBassNote(i);
-    }
+    isDisplayingAlphabet = !isDisplayingAlphabet;
 
     updateChordSymbolDisplay();
     updateChordNameDisplay();
@@ -348,8 +224,7 @@ export function init() {
 
     document.getElementById("randomizeChordRootNotesButton").addEventListener("click", randomizeChordRootNotes);
     document.getElementById("randomizeChordQualitiesButton").addEventListener("click", randomizeChordQualities);
-    document.getElementById("randomizeChordBassNotesButton").addEventListener("click", randomizeChordBassNotes);
-    document.getElementById("removeChordBassNotesButton").addEventListener("click", removeChordBassNotes);
+    document.getElementById("randomizeChordInversionsButton").addEventListener("click", randomizeChordInversions);
     document.getElementById("toggleChordDisplayTypeButton").addEventListener("click", toggleChordDisplayType);
     document.getElementById("addChordButton").addEventListener("click", addChord);
 

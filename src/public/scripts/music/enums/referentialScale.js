@@ -22,12 +22,12 @@ const ReferentialScale = (() => {
      * @returns {number[]} Array of intervals for the inputted referential scale in half steps
      * @contributors Nolan
      */
-    function getSteps(referentialScale) {
+    function getIntervals(referentialScale) {
         return PROPERTIES[referentialScale].steps;
     }
 
     /**
-     * List of {@link ReferentialScale}s supported by getter methods, such as {@link ReferentialScale.getSteps}.
+     * List of {@link ReferentialScale}s supported by getter methods, such as {@link ReferentialScale.getIntervals}.
      * @type ReferentialScale[]
      * @readonly
      */
@@ -35,7 +35,7 @@ const ReferentialScale = (() => {
 
     return Object.freeze({
         ...VALUES,
-        getSteps,
+        getIntervals,
         SUPPORTED_SCALES
     })
 })();

@@ -14,8 +14,8 @@
     width: 80px;
     display: grid;
     grid-template:
-        "rootNote upperFigure bassNote"
-        "rootNote lowerFigure bassNote";
+        "rootNote upperFigure bassFigure"
+        "rootNote lowerFigure bassFigure";
     place-items: center;
     grid-auto-columns: max-content;
     justify-content: center;
@@ -37,9 +37,9 @@
     grid-area: upperFigure, lowerFigure;
 }
 
-.bassNoteDisplay {
+.bassFigureDisplay {
     font-size: 3em;
     margin: 0;
     padding: 0;
-    grid-area: bassNote;
+    grid-area: bassFigure;
 }
