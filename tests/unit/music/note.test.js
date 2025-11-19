@@ -1,0 +1,2 @@
+const FILE_PATH = "../../../src/public/scripts/music/note.js"
+

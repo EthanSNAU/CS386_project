@@ -1,0 +1,1 @@
+const FILE_PATH = "../../../src/public/scripts/music/chordProgression.js"
