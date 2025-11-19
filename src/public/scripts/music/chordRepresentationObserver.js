@@ -1,10 +1,24 @@
 import { ChordQuality, ChordQualityType } from "./enums"
 import { convertToOrdinalWord } from "./numberConversion.js";
 
+// documentation imports
+import Chord from "./chord.js";
+import Scale from "./scale.js";
+
 const OCTAVE_HALF_STEP_LENGTH = 12;
 const NO_INVERSION = -1;
 
-function getInversionFromIntervals(chordIntervals, rootInversionIntervals) {
+/**
+ * Gets the inversion a chord would be in if it took on a certain quality.
+ * @param {Chord}        chord   The chord to test
+ * @param {ChordQuality} quality The chord quality to test
+ * @returns {number} The inversion the chord would be in. If no inversion is found, {@link NO_INVERSION} is returned.
+ * @contributors Nolan
+ */
+function getChordInversionInQuality(chord, quality) {
+    const chordIntervals = chord.getIntervals();
+    const rootInversionIntervals = ChordQuality.getIntervals(quality);
+
     const numBaseIntervals = rootInversionIntervals.length;
     const numIntervals = chordIntervals.length;
     if (numBaseIntervals !== numIntervals) return NO_INVERSION;
@@ -58,6 +72,8 @@ function getInversionFromIntervals(chordIntervals, rootInversionIntervals) {
     return NO_INVERSION;
 }
 
+// TODO: add ability for users to toggle between different representations (eg. Csus2 vs. Gsus4)
+
 /**
  * Gets a list of qualities/inversions (and associated attributes) that fit a chord.
  * @param {Chord} chord The chord to get quality inversions for
@@ -75,7 +91,7 @@ function getPossibleQualityInversions(chord) {
 
     // iterate through all chord qualities. If any of them match, add them to the array.
     for (const quality of ChordQuality.SUPPORTED_QUALITIES) {
-        const inversion = getInversionFromIntervals(chord.getIntervals(), ChordQuality.getIntervals(quality))
+        const inversion = getChordInversionInQuality(chord, quality);
 
         if (inversion === NO_INVERSION) continue;
 
@@ -102,17 +118,30 @@ function getPossibleQualityInversions(chord) {
     return possibleQualities;
 }
 
+/**
+ * Observes the {@link Chord} class by keeping track of a chord's symbols and names.
+ */
 export default class ChordRepresentationObserver {
     #representations
     #representationIndex
     #scale
 
+    /**
+     * Creates a {@link ChordRepresentationObserver} instance.
+     * @param {Scale} scale The scale with which to fetch pitch class representations.
+     * @contributors Nolan
+     */
     constructor(scale) {
         this.#representations = [];
         this.#representationIndex = 0;
         this.#scale = scale;
     }
 
+    /**
+     * Updates stored representations based on the inputted chord.
+     * @param {Chord} chord The chord to update the representations for
+     * @contributors Nolan
+     */
     notify(chord) {
         const possibleQualityInversions = getPossibleQualityInversions(chord);
         const scale = this.#scale;
@@ -199,6 +228,28 @@ export default class ChordRepresentationObserver {
         });
     }
 
+    /**
+     * Gets the observed chord's current representation.
+     * @returns {{
+     *  alphabetical: {
+     *      name:        string,
+     *      symbol:      string
+     *      accidental:  string,
+     *      lowerFigure: string,
+     *      upperFigure: string,
+     *      bassFigure:  string
+     *  },
+     *  roman: {
+     *      name:        string,
+     *      symbol:      string
+     *      accidental:  string,
+     *      lowerFigure: string,
+     *      upperFigure: string,
+     *      bassFigure:  string
+     *  }
+     * }} The chord's current representation
+     * @contributors Nolan
+     */
     getRepresentation() {
         return this.#representations[this.#representationIndex];
     }

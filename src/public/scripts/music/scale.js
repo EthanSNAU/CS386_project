@@ -10,7 +10,8 @@ import { convertToRoman, convertToWord } from "./numberConversion.js"
 export default class Scale {
     #rootPitchClass
     #octave // tracks the user's preferred symbols (eg. G# vs. Ab)
-    #referentialScale // tracks the notes that are used for chord labeling
+    #referentialScale
+    #referentialScalePitchClasses // tracks the notes that are used for chord labeling
 
     /**
      * Creates an instance of {@link Scale}.
@@ -20,9 +21,21 @@ export default class Scale {
      */
     constructor(rootPitchClass, referentialScale = ReferentialScale.IONIAN_MAJOR) {
         this.#rootPitchClass = rootPitchClass;
+        this.#referentialScale = referentialScale;
+        this.transposeTo(rootPitchClass); // also updates the referential scale
+    }
+
+    /**
+     * Transposes the scale's root note to a pitch class, bringing the rest of the scale with it.
+     * @param {PitchClass} pitchClass 
+     * @contributors Nolan
+     */
+    transposeTo(pitchClass) {
+        // TODO: make this more efficient instead of remaking everything from the ground-up
+        this.#rootPitchClass = pitchClass;
         this.#octave = {};
 
-        let currentPitchClassIndex = PitchClass.SUPPORTED_PITCH_CLASSES.findIndex(pitchClass => pitchClass === rootPitchClass);
+        let currentPitchClassIndex = PitchClass.SUPPORTED_PITCH_CLASSES.findIndex(pitchClass => (pitchClass === this.#rootPitchClass));
 
         const addNewOctaveNote = () => {
             const newNote = {
@@ -40,22 +53,33 @@ export default class Scale {
             currentPitchClassIndex++;
         }
 
-        for (currentPitchClassIndex = 0; PitchClass.SUPPORTED_PITCH_CLASSES[currentPitchClassIndex] != rootPitchClass; currentPitchClassIndex++) {
+        for (currentPitchClassIndex = 0; PitchClass.SUPPORTED_PITCH_CLASSES[currentPitchClassIndex] != this.#rootPitchClass; currentPitchClassIndex++) {
             addNewOctaveNote();
         }
 
-        // fill in the referential scale
-        this.#referentialScale = [rootPitchClass];
+        this.setReferentialScale(this.#referentialScale);
+    }
+
+    /**
+     * Sets the referential scale for Roman numerals.
+     * @param {ReferentialScale} referentialScale The new referential scale
+     * @contributors Nolan
+     */
+    setReferentialScale(referentialScale) {
+        this.#referentialScale = referentialScale;
+
+        // fill in the referential scale pitch classes
+        this.#referentialScalePitchClasses = [this.#rootPitchClass];
         const referentialScaleSteps = ReferentialScale.getIntervals(referentialScale);
-        let currentPitchClass = rootPitchClass;
+        let currentPitchClass = this.#rootPitchClass;
 
         for (const step of referentialScaleSteps) {
             currentPitchClass += step;
-            this.#referentialScale.push(currentPitchClass);
+            this.#referentialScalePitchClasses.push(currentPitchClass);
         }
 
-        const referentialScaleLength = this.#referentialScale.length;
-        const minReferentialScaleIndex = this.#referentialScale.indexOf(Math.min(...this.#referentialScale));
+        const referentialScaleLength = this.#referentialScalePitchClasses.length;
+        const minReferentialScaleIndex = this.#referentialScalePitchClasses.indexOf(Math.min(...this.#referentialScalePitchClasses));
 
         // fill in the roman numerals
 
@@ -69,7 +93,7 @@ export default class Scale {
             let numIterations = 0;
             let currentReferentialIndex = minReferentialScaleIndex;
 
-            while (this.#referentialScale[currentReferentialIndex] < octavePitchClass
+            while (this.#referentialScalePitchClasses[currentReferentialIndex] < octavePitchClass
                    && currentReferentialIndex < referentialScaleLength) {
                 numIterations++;
                 currentReferentialIndex++;
@@ -77,7 +101,7 @@ export default class Scale {
 
             if (currentReferentialIndex >= referentialScaleLength) {
                 currentReferentialIndex = 0;
-                while (this.#referentialScale[currentReferentialIndex] < octavePitchClass
+                while (this.#referentialScalePitchClasses[currentReferentialIndex] < octavePitchClass
                     && numIterations < referentialScaleLength) {
                     numIterations++;
                     currentReferentialIndex++;
@@ -92,7 +116,7 @@ export default class Scale {
             }
 
             // if there is an exact match, use it and continue
-            if (this.#referentialScale[currentReferentialIndex] == octavePitchClass) {
+            if (this.#referentialScalePitchClasses[currentReferentialIndex] == octavePitchClass) {
                 octaveRepresentation.romanRepresentations.push({
                     symbol: convertToRoman(currentReferentialIndex + 1),
                     name: convertToWord(currentReferentialIndex + 1),
@@ -120,7 +144,7 @@ export default class Scale {
             // TODO: if we add double sharps and double flats, use those representations instead of repeated sharps/flats
             let lowerSymbol = convertToRoman(lowerReferentialIndex + 1);
             let lowerName = convertToWord(lowerReferentialIndex + 1);
-            const numSharps = octavePitchClass - this.#referentialScale[lowerReferentialIndex];
+            const numSharps = octavePitchClass - this.#referentialScalePitchClasses[lowerReferentialIndex];
 
             for (let i = 0; i < numSharps; i++) {
                 lowerSymbol = SHARP_REPRESENTATION.symbol + lowerSymbol;
@@ -129,7 +153,7 @@ export default class Scale {
 
             let upperSymbol = convertToRoman(upperReferentialIndex + 1);
             let upperName = convertToWord(upperReferentialIndex + 1);
-            const numFlats = this.#referentialScale[upperReferentialIndex] - octavePitchClass;
+            const numFlats = this.#referentialScalePitchClasses[upperReferentialIndex] - octavePitchClass;
 
             for (let i = 0; i < numFlats; i++) {
                 upperSymbol = FLAT_REPRESENTATION.symbol + upperSymbol;

@@ -7,7 +7,7 @@ import { Accidental, PitchClass, ReferentialScale } from "./enums";
 const DEFAULT_OCTAVE = 4;
 
 /**
- * Represents a set of chords to be played in sequence. Manages chord representations.
+ * Represents a set of chords to be played in sequence.
  */
 export default class ChordProgression {
     #chords

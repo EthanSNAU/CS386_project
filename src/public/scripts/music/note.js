@@ -3,9 +3,6 @@ import { PitchClass } from "./enums";
 const DEFAULT_OCTAVE = 4;
 const OCTAVE_HALF_STEP_LENGTH = 12;
 
-// TODO: make octaves relative to the scale (?) the note lives in
-// might cause overhead
-
 /**
  * Manages the octave, pitch, and length of a pitch class.
  */

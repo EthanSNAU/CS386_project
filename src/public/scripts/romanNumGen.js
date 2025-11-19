@@ -58,6 +58,10 @@ export function updateChordDisplay(index) {
 }
 
 
+/**
+ * Updates all chord displays
+ * @contributors Nolan
+ */
 export function updateAllChordDisplays() {
     const numChords = chordProgression.getNumChords();
     for (let i = 0; i < numChords; i++) {
@@ -149,6 +153,7 @@ export function setChordRootNote(index, pitchClass) {
     updateChordDisplay(index);
 }
 
+
 /**
  * Sets a chord's root note to a random pitch classs and updates the display
  * @param {number} index Integer index of the chord to modify
@@ -157,6 +162,7 @@ export function setChordRootNote(index, pitchClass) {
 export function randomizeChordRootNote(index) {
     setChordRootNote(index, getRandomArrayElement(PitchClass.SUPPORTED_PITCH_CLASSES));
 }
+
 
 /**
  * Randomizes all the displayed chords' root notes
@@ -181,6 +187,7 @@ export function setChordQuality(index, quality) {
     updateChordDisplay(index);
 }
 
+
 /**
  * Sets a chord's quality to a random quality and updates the display
  * @param {number} index Integer index of the chord to modify
@@ -189,6 +196,7 @@ export function setChordQuality(index, quality) {
 export function randomizeChordQuality(index) {
     setChordQuality(index, getRandomArrayElement(PitchClass.SUPPORTED_PITCH_CLASSES));
 }
+
 
 /**
  * Randomizes all chords' qualities
@@ -313,8 +321,9 @@ export function hideAllChordNames() {
     }
 }
 
+
 /**
- * Hides all chord names
+ * Shows all chord names
  * @contributors Nolan
  */
 export function showAllChordNames() {
@@ -323,6 +332,7 @@ export function showAllChordNames() {
         showChordName(i);
     }
 }
+
 
 /**
  * Called on DOM load. Attaches event listeners for hydration.
