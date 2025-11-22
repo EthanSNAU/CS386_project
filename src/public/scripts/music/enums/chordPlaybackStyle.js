@@ -11,17 +11,24 @@ const ChordPlaybackStyle = (() => {
         BROKEN:        3
     });
 
+    const QUALITIES = Object.freeze({
+        [VALUES.BLOCK]:         {},
+        [VALUES.ARPEGGIO_UP]:   {},
+        [VALUES.ARPEGGIO_DOWN]: {},
+        [VALUES.BROKEN]:        {},
+    })
+
     /**
      * List of {@link ChordPlaybackStyle}s supported by getter methods such as 
      * @type ChordPlaybackStyle[]
      * @readonly
      */
-    // export const SUPPORTED_PLAYBACK_STYLES = Object.freeze(Object.keys(ChordPlaybackStyleMap).map(str => parseInt(str)));
+    const SUPPORTED_PLAYBACK_STYLES = Object.freeze(Object.keys(QUALITIES).map(str => parseInt(str)));
 
     return Object.freeze({
         ...VALUES,
-        // SUPPORTED_PLAYBACK_STYLES
-    })
+        SUPPORTED_PLAYBACK_STYLES
+    });
 })();
 
 export default ChordPlaybackStyle;

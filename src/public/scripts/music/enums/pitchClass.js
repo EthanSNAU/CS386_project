@@ -81,7 +81,7 @@ const PitchClass = (() => {
         },
 
         [VALUES.F_SHARP]: {
-            basePitch: 329.99,
+            basePitch: 369.99,
             representations: [
                 { symbol: "F", accidental: Accidental.SHARP   },
                 { symbol: "G", accidental: Accidental.FLAT    }
@@ -138,18 +138,10 @@ const PitchClass = (() => {
      * @contributors Nolan
      */
     function getRepresentations(pitchClass) {
-        const representations = structuredClone(PROPERTIES[pitchClass].representations);
-
-        for (const representation of representations) {
-            const accidentalRepresentation = Accidental.getRepresentation(representation.accidental);
-
-            representation.name = representation.symbol;
-
-            if (accidentalRepresentation.name) {
-                representation.name += " " + accidentalRepresentation.name;
-            }
-
-            representation.symbol += accidentalRepresentation.symbol;
+        const representations = [];
+        const numRepresentations = PROPERTIES[pitchClass].representations.length;
+        for (let i = 0; i < numRepresentations; i++) {
+            representations.push(getRepresentation(pitchClass, i));
         }
 
         return representations;
@@ -167,7 +159,19 @@ const PitchClass = (() => {
      * @contributors Nolan
      */
     function getRepresentation(pitchClass, index) {
-        return getRepresentations(pitchClass)[index];
+        const representation = structureClone(PROPERTIES[pitchClass].representations[index]);
+
+        const accidentalRepresentation = Accidental.getRepresentation(representation.accidental);
+
+        representation.name = representation.symbol;
+
+        if (accidentalRepresentation.name) {
+            representation.name += " " + accidentalRepresentation.name;
+        }
+
+        representation.symbol += accidentalRepresentation.symbol;
+
+        return representation;
     }
 
     /**
@@ -182,6 +186,17 @@ const PitchClass = (() => {
     }
 
     /**
+     * Returns true if the pitch class is supported by getter methods, such as {@link PitchClass.getRepresentation}.
+     * @param {PitchClass} pitchClass Pitch class to test validity
+     * @returns {boolean} True if the pitch class is supported, false otherwise
+     * @contributors Nolan
+     */
+    function isSupported(pitchClass) {
+        // Note: PitchClass.NONE returns false
+        return SUPPORTED_PITCH_CLASSES.includes(pitchClass);
+    }
+
+    /**
      * List of {@link PitchClass}es supported by pitch class getter methods, such as {@link PitchClass.getRepresentation}.
      * @type PitchClass[]
      * @readonly
@@ -193,6 +208,7 @@ const PitchClass = (() => {
         getRepresentations,
         getRepresentation,
         getPitch,
+        isSupported,
         SUPPORTED_PITCH_CLASSES
     });
 })();
