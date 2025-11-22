@@ -22,6 +22,7 @@ const ChordQuality = (() => {
     });
 
     // Note: all properties are relative to the root inversion
+    // TODO: Implement qualities that implement the prefix and lower symbol descriptors
     const PROPERTIES = Object.freeze({
         [VALUES.MAJOR_TRIAD]: {
             intervals: [4, 3],
@@ -114,7 +115,7 @@ const ChordQuality = (() => {
         // TODO: find better symbol for the suffix
         [VALUES.DIMINISHED_SEVEN]: {
             intervals: [3, 3, 3],
-            name: "diminised seven",
+            name: "diminished seven",
             symbolDescriptors: { prefix: "", suffix: "°", lower: "", upper: "7" },
             isLowercase: true,
             type: ChordQualityType.SEVENTH
@@ -176,7 +177,7 @@ const ChordQuality = (() => {
      * @contributors Nolan
      */
     function isLowercase(quality) {
-        return (PROPERTIES[quality].isLowercase);
+        return PROPERTIES[quality].isLowercase;
     }
 
     /**
