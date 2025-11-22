@@ -119,7 +119,7 @@ const PitchClass = (() => {
         },
 
         [VALUES.B]: {
-            basePitch: 492.88,
+            basePitch: 493.88,
             representations: [
                 { symbol: "B", accidental: Accidental.NATURAL },
                 { symbol: "C", accidental: Accidental.FLAT    },
