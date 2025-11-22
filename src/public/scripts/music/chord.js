@@ -12,23 +12,39 @@ export default class Chord {
     #intervals
     #playbackStyle
     #representationObserver
+    #noteFactory
+
+    /**
+     * Default function that generates notes for chords.
+     * @param {PitchClass} pitchClass Pitch class of the note
+     * @param {number}     octave     Octave of the note
+     * @returns {Note} The note object to add to the chord
+     */
+    static defaultNoteFactory = (pitchClass, octave) => new Note(pitchClass, octave);
 
     /**
      * Creates a Chord instance.
-     * @param {PitchClass}         rootNotePitchClass Pitch class of the chord's root note.
-     * @param {number}             rootNoteOctave     Octave of the chord's root note.
-     * @param {ChordQuality}       quality            The chord's quality. Major by default.
-     * @param {number}             inversion          The chord's inversion (currently unused). Root by default.
-     * @param {ChordPlaybackStyle} playbackStyle      The chord's playback style (currently unused). Block by default.
+     * @param {PitchClass}                                       rootNotePitchClass Pitch class of the chord's root note.
+     * @param {number}                                           rootNoteOctave     Octave of the chord's root note.
+     * @param {ChordQuality}                                     quality            The chord's quality. Major by default.
+     * @param {number}                                           inversion          The chord's inversion (currently unused). Root by default.
+     * @param {ChordPlaybackStyle}                               playbackStyle      The chord's playback style (currently unused). Block by default.
+     * @param {(pitchClass: PitchClass, octave: number) => Note} noteFactory        The function that builds the note objects. Defaults to {@link Chord.defaultNoteFactory}
      * @contributors Nolan
      */
-    constructor(rootNotePitchClass, rootNoteOctave = DEFAULT_OCTAVE, quality = ChordQuality.MAJOR_TRIAD, inversion = 0,
-                playbackStyle = ChordPlaybackStyle.BLOCK) {
-
+    constructor(
+        rootNotePitchClass, 
+        rootNoteOctave = DEFAULT_OCTAVE,
+        quality = ChordQuality.MAJOR_TRIAD,
+        inversion = 0,
+        playbackStyle = ChordPlaybackStyle.BLOCK,
+        noteFactory = Chord.defaultNoteFactory
+    ) {
         this.#playbackStyle = playbackStyle;
+        this.#noteFactory = noteFactory;
 
         // TODO: take into account the inversion
-        this.#notes = [new Note(rootNotePitchClass, rootNoteOctave)]
+        this.#notes = [this.#noteFactory(rootNotePitchClass, rootNoteOctave)]
 
         // add notes based on the quality
         const chordQualitySteps = ChordQuality.getIntervals(quality);
@@ -44,7 +60,7 @@ export default class Chord {
                 currentPitchClass %= OCTAVE_HALF_STEP_LENGTH;
             }
 
-            this.#notes.push(new Note(currentPitchClass, currentOctave));
+            this.#notes.push(this.#noteFactory(currentPitchClass, currentOctave));
         }
     }
 
@@ -132,7 +148,7 @@ export default class Chord {
             if (note) {
                 note.transposeTo(currentPitchClass, currentOctave);
             } else {
-                this.#notes.push(new Note(currentPitchClass, currentOctave))
+                this.#notes.push(this.#noteFactory(currentPitchClass, currentOctave))
             }
 
             stepIndex++;
