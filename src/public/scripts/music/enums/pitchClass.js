@@ -159,7 +159,7 @@ const PitchClass = (() => {
      * @contributors Nolan
      */
     function getRepresentation(pitchClass, index) {
-        const representation = structureClone(PROPERTIES[pitchClass].representations[index]);
+        const representation = structuredClone(PROPERTIES[pitchClass].representations[index]);
 
         const accidentalRepresentation = Accidental.getRepresentation(representation.accidental);
 
