@@ -1,6 +1,20 @@
+import { jest } from "@jest/globals";
+
+jest.unstable_mockModule(
+    "../../../src/public/scripts/music/chordRepresentationObserver.js",
+    () => ({
+        default: jest.fn().mockImplementation(() => {
+            notify: jest.fn()
+        })
+    })
+);
+
+const { default: ChordRepresentationObserver } = await import("../../../src/public/scripts/music/chordRepresentationObserver.js");
+
 import Chord from "../../../src/public/scripts/music/chord.js";
 import Note from "../../../src/public/scripts/music/note.js";
 import { ChordQuality, ChordPlaybackStyle, PitchClass } from "../../../src/public/scripts/music/enums";
+import { __esModule } from "@ungap/structured-clone";
 
 /* ================================================= helpers ================================================= */
 
@@ -124,8 +138,11 @@ describe("Chord.prototype.transposeTo", () => {
     const ORIGINAL_INTERVALS = [4, 3];
 
     let chord;
+    let representationObserver;
     beforeEach(() => {
         chord = new Chord(ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE);
+        representationObserver = new ChordRepresentationObserver();
+        chord.addRepresentationObserver(representationObserver);
     });
 
     test("Transposing a chord to the same position", () => {
@@ -137,7 +154,7 @@ describe("Chord.prototype.transposeTo", () => {
             { pitchClass: PitchClass.C, octave: ORIGINAL_OCTAVE + 1 },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, ORIGINAL_INTERVALS);
     });
 
@@ -150,7 +167,7 @@ describe("Chord.prototype.transposeTo", () => {
             { pitchClass: PitchClass.F,      octave: ORIGINAL_OCTAVE + 1 },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, ORIGINAL_INTERVALS);
     });
 
@@ -163,7 +180,7 @@ describe("Chord.prototype.transposeTo", () => {
             { pitchClass: PitchClass.G, octave: ORIGINAL_OCTAVE },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, ORIGINAL_INTERVALS);
     });
 
@@ -176,7 +193,7 @@ describe("Chord.prototype.transposeTo", () => {
             { pitchClass: PitchClass.A_SHARP, octave: ORIGINAL_OCTAVE - 2 },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, ORIGINAL_INTERVALS);
     });
 
@@ -189,7 +206,7 @@ describe("Chord.prototype.transposeTo", () => {
             { pitchClass: PitchClass.E,       octave: ORIGINAL_OCTAVE + 3 },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, ORIGINAL_INTERVALS);
     });
 });
@@ -203,8 +220,10 @@ describe("Chord.prototype.transposeBy", () => {
     const ORIGINAL_INTERVALS = [4, 3];
 
     let chord;
+    let representationObserver;
     beforeEach(() => {
         chord = new Chord(ORIGINAL_PITCH_CLASS, 5);
+        representationObserver = new ChordRepresentationObserver();
     });
 
     test("Transposing a chord zero half steps", () => {
@@ -216,7 +235,7 @@ describe("Chord.prototype.transposeBy", () => {
             { pitchClass: PitchClass.C, octave: ORIGINAL_OCTAVE + 1 },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, ORIGINAL_INTERVALS);
     });
 
@@ -229,7 +248,7 @@ describe("Chord.prototype.transposeBy", () => {
             { pitchClass: PitchClass.F,      octave: ORIGINAL_OCTAVE + 1 },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, ORIGINAL_INTERVALS);
     });
 
@@ -242,7 +261,7 @@ describe("Chord.prototype.transposeBy", () => {
             { pitchClass: PitchClass.G, octave: ORIGINAL_OCTAVE },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, ORIGINAL_INTERVALS);
     });
 
@@ -255,7 +274,7 @@ describe("Chord.prototype.transposeBy", () => {
             { pitchClass: PitchClass.A_SHARP, octave: ORIGINAL_OCTAVE - 2 },
         ]
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, ORIGINAL_INTERVALS);
     });
 
@@ -268,7 +287,7 @@ describe("Chord.prototype.transposeBy", () => {
             { pitchClass: PitchClass.E,       octave: ORIGINAL_OCTAVE + 3 },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, ORIGINAL_INTERVALS);
     });
 });
@@ -276,10 +295,19 @@ describe("Chord.prototype.transposeBy", () => {
 /* ================================================= tranposeBy ================================================= */
 
 describe("Chord.prototype.setQuality", () => {
+    let chord;
+    let representationObserver;
+
+    const resetChord = (pitchClass, octave, quality) => {
+        chord = new Chord(pitchClass, octave, quality);
+        representationObserver = new ChordRepresentationObserver();
+        chord.addRepresentationObserver(representationObserver);
+    };
+
     test("Setting quality its current quality", () => {
         const OCTAVE = 4;
         const QUALITY = ChordQuality.MAJOR_TRIAD;
-        const chord = new Chord(PitchClass.E, OCTAVE, QUALITY);
+        resetChord(PitchClass.E, OCTAVE, QUALITY);
         chord.setQuality(QUALITY);
 
         const EXPECTED_NOTES = [
@@ -288,13 +316,13 @@ describe("Chord.prototype.setQuality", () => {
             { pitchClass: PitchClass.B      , octave: OCTAVE },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [4, 3]);
     });
 
     test("Changing a triad to a different triad", () => {
         const OCTAVE = 1;
-        const chord = new Chord(PitchClass.B, OCTAVE, ChordQuality.MINOR_TRIAD);
+        resetChord(PitchClass.B, OCTAVE, ChordQuality.MINOR_TRIAD);
         chord.setQuality(ChordQuality.AUGMENTED_TRIAD);
 
         const EXPECTED_NOTES = [
@@ -303,13 +331,13 @@ describe("Chord.prototype.setQuality", () => {
             { pitchClass: PitchClass.G,       octave: OCTAVE + 1 },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [4, 4]);
     });
 
     test("Changing a triad to a seventh chord", () => {
         const OCTAVE = 5;
-        const chord = new Chord(PitchClass.G_FLAT, OCTAVE, ChordQuality.DIMINISHED_TRIAD);
+        resetChord(PitchClass.G_FLAT, OCTAVE, ChordQuality.DIMINISHED_TRIAD);
         chord.setQuality(ChordQuality.MAJOR_MAJOR_SEVEN);
 
         const EXPECTED_NOTES = [
@@ -319,13 +347,13 @@ describe("Chord.prototype.setQuality", () => {
             { pitchClass: PitchClass.F,      octave: OCTAVE + 1 },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [4, 3, 4]);
     });
 
     test("Changing a seventh chord to a triad", () => {
         const OCTAVE = 8;
-        const chord = new Chord(PitchClass.D, OCTAVE, ChordQuality.DIMINISHED_SEVEN);
+        resetChord(PitchClass.D, OCTAVE, ChordQuality.DIMINISHED_SEVEN);
         chord.setQuality(ChordQuality.MAJOR_TRIAD);
 
         const EXPECTED_NOTES = [
@@ -334,13 +362,13 @@ describe("Chord.prototype.setQuality", () => {
             { pitchClass: PitchClass.A,       octave: OCTAVE },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [4, 3]);
     });
 
     test("Changing a seventh chord to a different seventh chord", () => {
         const OCTAVE = 6;
-        const chord = new Chord(PitchClass.C, OCTAVE, ChordQuality.MINOR_MAJOR_SEVEN);
+        resetChord(PitchClass.C, OCTAVE, ChordQuality.MINOR_MAJOR_SEVEN);
         chord.setQuality(ChordQuality.MAJOR_MINOR_SEVEN);
 
         const EXPECTED_NOTES = [
@@ -350,7 +378,7 @@ describe("Chord.prototype.setQuality", () => {
             { pitchClass: PitchClass.B_FLAT, octave: OCTAVE },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [4, 3, 3]);
     });
 });
@@ -358,9 +386,18 @@ describe("Chord.prototype.setQuality", () => {
 /* ================================================= invert ================================================= */
 
 describe("Chord.prototype.invert", () => {
+    let chord;
+    let representationObserver;
+
+    const resetChord = (pitchClass, octave, quality) => {
+        chord = new Chord(pitchClass, octave, quality);
+        representationObserver = new ChordRepresentationObserver();
+        chord.addRepresentationObserver(representationObserver);
+    };
+
     test("Inverting a chord zero times", () => {
         const OCTAVE = 4;
-        const chord = new Chord(PitchClass.C_SHARP, OCTAVE);
+        resetChord(PitchClass.C_SHARP, OCTAVE, ChordQuality.MAJOR_TRIAD);
         chord.invert(0);
 
         const EXPECTED_NOTES = [
@@ -369,13 +406,13 @@ describe("Chord.prototype.invert", () => {
             { pitchClass: PitchClass.G_SHARP, octave: OCTAVE },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [4, 3]);
     });
 
     test("Inverting a chord up within one octave", () => {
         const OCTAVE = 3
-        const chord = new Chord(PitchClass.A, OCTAVE);
+        resetChord(PitchClass.A, OCTAVE, ChordQuality.MAJOR_TRIAD);
         chord.invert(2);
 
         const EXPECTED_NOTES = [
@@ -384,13 +421,13 @@ describe("Chord.prototype.invert", () => {
             { pitchClass: PitchClass.C_SHARP, octave: OCTAVE + 2 },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [5, 4]);
     });
 
     test("Inverting a chord down within one octave", () => {
         const OCTAVE = 5
-        const chord = new Chord(PitchClass.A, OCTAVE);
+        resetChord(PitchClass.A, OCTAVE, ChordQuality.MAJOR_TRIAD);
         chord.invert(-2);
 
         const EXPECTED_NOTES = [
@@ -399,13 +436,13 @@ describe("Chord.prototype.invert", () => {
             { pitchClass: PitchClass.A,       octave: OCTAVE },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [3, 5]);
     });
 
     test("Inverting a chord up more than one octave", () => {
         const OCTAVE = 5
-        const chord = new Chord(PitchClass.E, OCTAVE, ChordQuality.MINOR_TRIAD);
+        resetChord(PitchClass.E, OCTAVE, ChordQuality.MINOR_TRIAD);
         chord.invert(8);
 
         const EXPECTED_NOTES = [
@@ -414,13 +451,13 @@ describe("Chord.prototype.invert", () => {
             { pitchClass: PitchClass.G, octave: OCTAVE + 3 },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [5, 3]);
     });
 
     test("Inverting a chord down more than one octave", () => {
         const OCTAVE = 5
-        const chord = new Chord(PitchClass.E, OCTAVE, ChordQuality.MINOR_TRIAD);
+        resetChord(PitchClass.E, OCTAVE, ChordQuality.MINOR_TRIAD);
         chord.invert(-8);
 
         const EXPECTED_NOTES = [
@@ -429,7 +466,7 @@ describe("Chord.prototype.invert", () => {
             { pitchClass: PitchClass.E, octave: OCTAVE - 2 },
         ];
 
-        // expect(chord.notifyObservers).toHaveBeenCalledTimes(1);
+        expect(representationObserver.notify).toHaveBeenCalledTimes(1);
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [4, 5]);
     });
 });
