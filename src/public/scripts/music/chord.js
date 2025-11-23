@@ -70,6 +70,8 @@ export default class Chord {
 
             this.#notes.push(this.#noteFactory(currentPitchClass, currentOctave));
         }
+
+        this.invert(inversion);
     }
 
     /**
@@ -92,12 +94,33 @@ export default class Chord {
         return this.#notes[index].getOctave();
     }
 
+    /**
+     * Gets the number of notes in the chord.
+     * @returns {number} The integer number of notes in the chord
+     * @contributors Nolan
+     */
     getNumNotes() {
         return this.#notes.length;
     }
 
+    /**
+     * Gets the intervals between notes in the chord.
+     * @returns {number[]} An array of the number of half steps between each note. The first value is the 
+     *                     interval between the first and second note, the second value is the interval
+     *                     between the second and third note, and so on.
+     * @contributors Nolan
+     */
     getIntervals() {
-        return this.#intervals;
+        return [...this.#intervals];
+    }
+
+    /**
+     * Gets the chord's playback style.
+     * @returns {ChordPlaybackStyle} The playback style of the chord
+     * @contributors Nolan
+     */
+    getPlaybackStyle() {
+        return this.#playbackStyle;
     }
 
     /**
@@ -112,7 +135,7 @@ export default class Chord {
             note.transposeBy(numHalfSteps);
         }
 
-        this.notifyObservers(this);
+        this.notifyObservers();
     }
 
     /**
@@ -124,6 +147,8 @@ export default class Chord {
     transposeTo(pitchClass, octave = this.getOctaveAt(0)) {
         const numHalfSteps = (octave - this.getOctaveAt(0)) * OCTAVE_HALF_STEP_LENGTH + (pitchClass - this.getPitchClassAt(0));
         this.transposeBy(numHalfSteps);
+
+        this.notifyObservers();
     }
 
     /**
@@ -168,7 +193,7 @@ export default class Chord {
 
         this.#intervals = [...qualitySteps];
 
-        this.notifyObservers(this);
+        this.notifyObservers();
     }
 
     #invertUpOnce() {
@@ -224,7 +249,7 @@ export default class Chord {
             }
         }
 
-        this.notifyObservers(this);
+        this.notifyObservers();
     }
 
     /**
