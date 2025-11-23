@@ -1,7 +1,9 @@
 import Note from "./note.js"
 import { ChordPlaybackStyle, ChordQuality, PitchClass } from "./enums";
 
-const DEFAULT_OCTAVE = 4;
+// documentation imports
+import ChordRepresentationObserver from "./chordRepresentationObserver.js";
+
 const OCTAVE_HALF_STEP_LENGTH = 12;
 
 /**
@@ -13,6 +15,11 @@ export default class Chord {
     #playbackStyle
     #representationObserver
     #noteFactory
+
+    static DEFAULT_OCTAVE = 4;
+    static DEFAULT_QUALITY = ChordQuality.MAJOR_TRIAD;
+    static DEFAULT_INVERSION = 0;
+    static DEFAULT_PLAYBACK_STYLE = ChordPlaybackStyle.BLOCK;
 
     /**
      * Default function that generates notes for chords.
@@ -34,14 +41,15 @@ export default class Chord {
      */
     constructor(
         rootNotePitchClass, 
-        rootNoteOctave = DEFAULT_OCTAVE,
-        quality = ChordQuality.MAJOR_TRIAD,
-        inversion = 0,
+        rootNoteOctave = Chord.DEFAULT_OCTAVE,
+        quality = Chord.DEFAULT_QUALITY,
+        inversion = Chord.DEFAULT_INVERSION,
         playbackStyle = ChordPlaybackStyle.BLOCK,
         noteFactory = Chord.defaultNoteFactory
     ) {
         this.#playbackStyle = playbackStyle;
         this.#noteFactory = noteFactory;
+        this.#representationObserver = null;
 
         // TODO: take into account the inversion
         this.#notes = [this.#noteFactory(rootNotePitchClass, rootNoteOctave)]
@@ -219,19 +227,65 @@ export default class Chord {
         this.notifyObservers(this);
     }
 
+    /**
+     * Attaches a representation observer to the chord. If the chord already has an observer, it is overwritten.
+     * @param {ChordRepresentationObserver} observer The observer object to attach
+     * @contributors Nolan
+     */
     addRepresentationObserver(observer) {
         this.#representationObserver = observer;
         observer.notify(this);
     }
 
+    /**
+     * Removes a representation observer from a chord.
+     * @contributors Nolan
+     */
     removeRepresentationObserver() {
         this.#representationObserver = null;
     }
 
-    notifyObservers() {
-        this.#representationObserver.notify(this);
+    /**
+     * Returns true if the chord has a representation observer
+     * @returns True if the chord has a representation observer, false otherwise
+     * @contributors Nolan
+     */
+    hasRepresentationObserver() {
+        return (this.#representationObserver !== null);
     }
 
+    /**
+     * Notifies all observers attached to the chord.
+     * @contributors Nolan
+     */
+    notifyObservers() {
+        if (this.hasRepresentationObserver()) {
+            this.#representationObserver.notify(this);
+        }
+    }
+
+    /**
+     * Gets the chord's representation information.
+     * @returns {{
+     *  alphabetical: {
+     *      name:        string,
+     *      symbol:      string
+     *      accidental:  string,
+     *      lowerFigure: string,
+     *      upperFigure: string,
+     *      bassFigure:  string
+     *  },
+     *  roman: {
+     *      name:        string,
+     *      symbol:      string
+     *      accidental:  string,
+     *      lowerFigure: string,
+     *      upperFigure: string,
+     *      bassFigure:  string
+     *  }
+     * }} The chord's current representation
+     * @contributors Nolan
+     */
     getRepresentation() {
         return this.#representationObserver.getRepresentation();
     }
