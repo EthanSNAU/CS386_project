@@ -1,7 +1,8 @@
 // romanNumGen.js
-import ChordProgression from "./music/chordProgression.js";
 import Chord from "./music/chord.js";
+import ChordProgression from "./music/chordProgression.js";
 import ChordRepresentationObserver from "./music/chordRepresentationObserver.js";
+import Scale from "./music/scale.js";
 import { PitchClass, ChordQuality, ReferentialScale } from "./music/enums";
 import { getRandomArrayElement, getRandomInt, capitalizeFirstChar } from "./util.js";
 
@@ -25,7 +26,7 @@ let isDisplayingAlphabet = false;
 /**
  * Chord progression object used to manage existing chords
  */
-const chordProgression = new ChordProgression(PitchClass.C, ReferentialScale.IONIAN_MAJOR);
+const chordProgression = new ChordProgression(new Scale(PitchClass.C, ReferentialScale.IONIAN_MAJOR));
 
 
 /**

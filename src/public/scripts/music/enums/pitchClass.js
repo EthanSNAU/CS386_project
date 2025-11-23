@@ -77,8 +77,8 @@ const PitchClass = (() => {
         [VALUES.F]: {
             basePitch: 349.23,
             representations: [
-                { symbol: "E", accidental: Accidental.SHARP   },
                 { symbol: "F", accidental: Accidental.NATURAL },
+                { symbol: "E", accidental: Accidental.SHARP   },
             ]
         },
 
@@ -199,6 +199,21 @@ const PitchClass = (() => {
     }
 
     /**
+     * Returns the minimum number of half steps you'd need to take to go from one pitch class to another.
+     * Doesn't take into account the octave.
+     * @param {PitchClass} basePitchClass   Starting pitch class
+     * @param {PitchClass} targetPitchClass End pitch class
+     * @returns {number} Number of half steps to go from basePitchClass to targetPitchClass. Positive values 
+     *                   indicate upwards half steps while negative values mean downwards half steps
+     */
+    function getMinInterval(basePitchClass, targetPitchClass) {
+        const OCTAVE_HALF_STEP_LENGTH = 12;
+        let interval = targetPitchClass - basePitchClass;
+        if (interval < 0) interval += OCTAVE_HALF_STEP_LENGTH;
+        return interval;
+    }
+
+    /**
      * List of {@link PitchClass}es supported by pitch class getter methods, such as {@link PitchClass.getRepresentation}.
      * @type PitchClass[]
      * @readonly
@@ -211,6 +226,7 @@ const PitchClass = (() => {
         getRepresentation,
         getPitch,
         isSupported,
+        getMinInterval,
         SUPPORTED_PITCH_CLASSES
     });
 })();

@@ -128,7 +128,7 @@ const A_MAJOR_OCTAVE = {
             accidental: Accidental.NATURAL
         },
         alphabetical: {
-            name: "F#",
+            name: "F sharp",
             symbol: "F#",
             accidental: Accidental.SHARP
         }
@@ -151,7 +151,7 @@ const A_MAJOR_OCTAVE = {
         roman: {
             name: "seven",
             symbol: "VII",
-            accidental: Accidental.SHARP
+            accidental: Accidental.NATURAL
         },
         alphabetical: {
             name: "G sharp",
@@ -291,7 +291,7 @@ const A_NATURAL_MINOR_OCTAVE = {
             accidental: Accidental.SHARP
         },
         alphabetical: {
-            name: "F#",
+            name: "F sharp",
             symbol: "F#",
             accidental: Accidental.SHARP
         }
@@ -380,7 +380,7 @@ describe("Scale.prototype.setReferentialScale", () => {
         );
     });
 
-    test("Setting the referential scale to something different", () => {
+    test("Changing the referential scale", () => {
         scale.setReferentialScale(ReferentialScale.IONIAN_NATURAL_MINOR);
         expectScaleToBe(
             scale, ReferentialScale.IONIAN_NATURAL_MINOR, A_NATURAL_MINOR_REFERENTIAL_SCALE_PITCH_CLASSES,
