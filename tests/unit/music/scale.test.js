@@ -391,6 +391,7 @@ describe("Scale.prototype.setReferentialScale", () => {
 
 /* ================================================= transposeTo ================================================= */
 
+// TODO: assert that transposing must also have called setReferentialScale once
 describe("Scale.prototype.transposeTo", () => {
     test("Transposing to the same root note", () => {
         const scale = new Scale(PitchClass.A, ReferentialScale.IONIAN_MAJOR);
