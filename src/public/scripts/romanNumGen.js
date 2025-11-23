@@ -26,7 +26,7 @@ let isDisplayingAlphabet = false;
 /**
  * Chord progression object used to manage existing chords
  */
-const chordProgression = new ChordProgression(new Scale(PitchClass.C, ReferentialScale.IONIAN_MAJOR));
+const chordProgression = new ChordProgression(new Scale(PitchClass.A, ReferentialScale.IONIAN_MAJOR));
 
 
 /**

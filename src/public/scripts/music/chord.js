@@ -62,7 +62,8 @@ export default class Chord {
         let currentOctave = rootNoteOctave;
 
         for (const step of chordQualitySteps) {
-            currentPitchClass = (currentPitchClass + step) % OCTAVE_HALF_STEP_LENGTH;
+            currentPitchClass += step;
+
             if (currentPitchClass >= OCTAVE_HALF_STEP_LENGTH) {
                 currentOctave += Math.trunc(currentPitchClass / OCTAVE_HALF_STEP_LENGTH);
                 currentPitchClass %= OCTAVE_HALF_STEP_LENGTH;
@@ -145,10 +146,16 @@ export default class Chord {
      * @contributors Nolan
      */
     transposeTo(pitchClass, octave = this.getOctaveAt(0)) {
-        const numHalfSteps = (octave - this.getOctaveAt(0)) * OCTAVE_HALF_STEP_LENGTH + (pitchClass - this.getPitchClassAt(0));
+        for (const note of this.#notes) {
+            console.log(note);
+        }
+        const numHalfSteps = PitchClass.getInterval(this.getPitchClassAt(0), this.getOctaveAt(0), pitchClass, octave);
+
         this.transposeBy(numHalfSteps);
 
-        this.notifyObservers();
+        for (const note of this.#notes) {
+            console.log(note);
+        }
     }
 
     /**

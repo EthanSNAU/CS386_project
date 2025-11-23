@@ -156,7 +156,7 @@ export default class Scale {
             // TODO: if we add double sharps and double flats, use those representations instead of repeated sharps/flats
             let lowerSymbol = convertToRoman(lowerReferentialIndex + 1);
             let lowerName = convertToWord(lowerReferentialIndex + 1);
-            const numSharps = PitchClass.getMinInterval(this.#referentialScalePitchClasses[lowerReferentialIndex], octavePitchClass);
+            const numSharps = PitchClass.getMinUpwardInterval(this.#referentialScalePitchClasses[lowerReferentialIndex], octavePitchClass);
 
             for (let i = 0; i < numSharps; i++) {
                 lowerSymbol = SHARP_REPRESENTATION.symbol + lowerSymbol;
@@ -165,7 +165,7 @@ export default class Scale {
 
             let upperSymbol = convertToRoman(upperReferentialIndex + 1);
             let upperName = convertToWord(upperReferentialIndex + 1);
-            const numFlats = PitchClass.getMinInterval(octavePitchClass, this.#referentialScalePitchClasses[upperReferentialIndex]);
+            const numFlats = PitchClass.getMinUpwardInterval(octavePitchClass, this.#referentialScalePitchClasses[upperReferentialIndex]);
 
             for (let i = 0; i < numFlats; i++) {
                 upperSymbol = FLAT_REPRESENTATION.symbol + upperSymbol;

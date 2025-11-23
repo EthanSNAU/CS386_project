@@ -59,10 +59,23 @@ export default class Note {
      * @contributors Nolan
      */
     transposeBy(numHalfSteps) {
-        let newPitchClass = (this.#pitchClass + numHalfSteps) % OCTAVE_HALF_STEP_LENGTH;
-        while (newPitchClass < 0) newPitchClass += OCTAVE_HALF_STEP_LENGTH;
-        const newOctave = this.#octave + Math.trunc(numHalfSteps / OCTAVE_HALF_STEP_LENGTH);
-        this.transposeTo(newPitchClass, newOctave);
+        let newPitchClass = this.#pitchClass + numHalfSteps;
+        let octaveDiff = 0;
+
+        // TODO: make this more efficient (i'm too lazy to do math)
+        if (newPitchClass < 0) {
+            while (newPitchClass < 0) { // technically redundant but it makes the code more readable imo
+                newPitchClass += OCTAVE_HALF_STEP_LENGTH;
+                octaveDiff--;
+            }
+        } else if (newPitchClass > OCTAVE_HALF_STEP_LENGTH) {
+            while (newPitchClass > OCTAVE_HALF_STEP_LENGTH) {
+                newPitchClass -= OCTAVE_HALF_STEP_LENGTH;
+                octaveDiff++;
+            }
+        }
+
+        this.transposeTo(newPitchClass, this.#octave + octaveDiff);
     }
 
     /**

@@ -21,6 +21,7 @@ const expectChordToBe = (chord, notes, playbackStyle, intervals) => {
 /* ================================================= constructor ================================================= */
 
 // Note: The Note class IS NOT MOCKED because Chord instances only produce meaningful results when Note instances exist
+// TODO: check that observers are notified
 
 describe("Chord.constructor", () => {
     test("Creating a Chord instance by only giving a pitch class", () => {
@@ -40,9 +41,9 @@ describe("Chord.constructor", () => {
         const chord = new Chord(PitchClass.B, OCTAVE);
 
         const EXPECTED_NOTES = [
-            { pitchClass: PitchClass.B,       octave: Chord.DEFAULT_OCTAVE     },
-            { pitchClass: PitchClass.D_SHARP, octave: Chord.DEFAULT_OCTAVE + 1 },
-            { pitchClass: PitchClass.F_SHARP, octave: Chord.DEFAULT_OCTAVE + 1 },
+            { pitchClass: PitchClass.B,       octave: OCTAVE     },
+            { pitchClass: PitchClass.D_SHARP, octave: OCTAVE + 1 },
+            { pitchClass: PitchClass.F_SHARP, octave: OCTAVE + 1 },
         ];
 
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [4, 3]);
@@ -54,10 +55,10 @@ describe("Chord.constructor", () => {
         const chord = new Chord(PitchClass.G, OCTAVE, QUALITY);
 
         const EXPECTED_NOTES = [
-            { pitchClass: PitchClass.G, octave: Chord.DEFAULT_OCTAVE     },
-            { pitchClass: PitchClass.B, octave: Chord.DEFAULT_OCTAVE     },
-            { pitchClass: PitchClass.D, octave: Chord.DEFAULT_OCTAVE + 1 },
-            { pitchClass: PitchClass.F, octave: Chord.DEFAULT_OCTAVE + 1 },
+            { pitchClass: PitchClass.G, octave: OCTAVE     },
+            { pitchClass: PitchClass.B, octave: OCTAVE     },
+            { pitchClass: PitchClass.D, octave: OCTAVE + 1 },
+            { pitchClass: PitchClass.F, octave: OCTAVE + 1 },
         ];
 
         expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [4, 3, 3]);
@@ -71,12 +72,12 @@ describe("Chord.constructor", () => {
 
 
         const EXPECTED_NOTES = [
-            { pitchClass: PitchClass.D_FLAT, octave: OCTAVE     },
+            { pitchClass: PitchClass.D_FLAT, octave: OCTAVE + 1 },
             { pitchClass: PitchClass.E_FLAT, octave: OCTAVE + 1 },
             { pitchClass: PitchClass.A_FLAT, octave: OCTAVE + 1 },
         ];
 
-        expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [5, 5]);
+        expectChordToBe(chord, EXPECTED_NOTES, Chord.DEFAULT_PLAYBACK_STYLE, [2, 5]);
     });
 
     test("Creating a Chord instance by giving a pitch class, octave, quality, inversion, and playback style", () => {
@@ -246,7 +247,7 @@ describe("Chord.prototype.transposeBy", () => {
     });
 
     test("Transposing to a lower pitch class and lower octave", () => {
-        chord.transposeTo(-26);
+        chord.transposeBy(-26);
 
         const EXPECTED_NOTES = [
             { pitchClass: PitchClass.D_SHARP, octave: ORIGINAL_OCTAVE - 2 },
@@ -259,7 +260,7 @@ describe("Chord.prototype.transposeBy", () => {
     });
 
     test("Transposing to a higher pitch class and higher octave", () => {
-        chord.transposeTo(28);
+        chord.transposeBy(28);
 
         const EXPECTED_NOTES = [
             { pitchClass: PitchClass.A,       octave: ORIGINAL_OCTAVE + 2 },
