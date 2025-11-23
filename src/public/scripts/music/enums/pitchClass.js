@@ -7,6 +7,7 @@ import Accidental from "./accidental.js";
  */
 const PitchClass = (() => {
     const VALUES = Object.freeze({
+        C_FLAT:  11,
         C:       0,
         C_SHARP: 1,
         D_FLAT:  1,
@@ -26,6 +27,7 @@ const PitchClass = (() => {
         A_SHARP: 10,
         B_FLAT:  10,
         B:       11,
+        B_SHARP: 0,
 
         NONE:    -1,
     });

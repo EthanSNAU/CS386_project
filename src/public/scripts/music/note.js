@@ -52,7 +52,7 @@ export default class Note {
     }
 
     /**
-     * Transposes the note relative to its current state.
+     * Transposes the note relative to its current position.
      * @param {number} numHalfSteps The number of half steps to transpose the note by. Negative values tranpose down while
      *                              positive values transpose up. The target pitch class must be in {@link PitchClass.SUPPORTED_PITCH_CLASSES} 
      *                              to work.

@@ -2,7 +2,8 @@ import { Accidental, PitchClass, ReferentialScale } from "./enums";
 import { convertToRoman, convertToWord } from "./numberConversion.js"
 
 // TODO: add ability for users to toggle between different symbols (eg. G# vs. Ab)
-// TODO: add ability to switch to different referential scale
+
+const OCTAVE_HALF_STEP_LENGTH = 12;
 
 /**
  * Manages the alphabetical and Roman numeral representations of all pitch classes.
@@ -13,13 +14,15 @@ export default class Scale {
     #referentialScale
     #referentialScalePitchClasses // tracks the notes that are used for chord labeling
 
+    static DEFAULT_REFERENTIAL_SCALE = ReferentialScale.IONIAN_MAJOR;
+
     /**
      * Creates an instance of {@link Scale}.
-     * @param {PitchClass} pitchClass Pitch class to represent the beginning of the scale
+     * @param {PitchClass} rootPitchClass Pitch class to represent the root of the scale
      * @param {ReferentialScale} referentialScale Referential scale for Roman numeral conversion
      * @contributors Nolan
      */
-    constructor(rootPitchClass, referentialScale = ReferentialScale.IONIAN_MAJOR) {
+    constructor(rootPitchClass, referentialScale = DEFAULT_REFERENTIAL_SCALE) {
         this.#rootPitchClass = rootPitchClass;
         this.#referentialScale = referentialScale;
         this.transposeTo(rootPitchClass); // also updates the referential scale
@@ -58,6 +61,17 @@ export default class Scale {
         }
 
         this.setReferentialScale(this.#referentialScale);
+    }
+
+    /**
+     * Transposes the scale relative to its current position.
+     * @param {number} numHalfSteps The number of half steps to transpose the scale by. Negative values tranpose down while
+     *                              positive values transpose up. The target pitch class must be in {@link PitchClass.SUPPORTED_PITCH_CLASSES} 
+     *                              to work.
+     * @contributors Nolan
+     */
+    transposeBy(numHalfSteps) {
+        this.transposeTo((this.#rootPitchClass + numHalfSteps) % OCTAVE_HALF_STEP_LENGTH);
     }
 
     /**
@@ -222,5 +236,23 @@ export default class Scale {
      */
     getRootPitchClass() {
         return this.#rootPitchClass;
+    }
+
+    /**
+     * Gets the scale's referential scale.
+     * @returns {ReferentialScale} The scale's referential scale.
+     * @contributors Nolan
+     */
+    getReferentialScale() {
+        return this.#referentialScale;
+    }
+
+    /**
+     * Gets a list of pitch classes that belong in the scale's referential scale.
+     * @returns {PitchClass[]} List of pitch classes in the scale's referential scale, ordered by interval (first element = root)
+     * @contributors Nolan
+     */
+    getReferentialScalePitchClasses() {
+        return this.#referentialScalePitchClasses;
     }
 }

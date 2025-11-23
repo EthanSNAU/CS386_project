@@ -3,7 +3,7 @@ import { PitchClass } from "../../../src/public/scripts/music/enums";
 
 /* ================================================= helpers ================================================= */
 
-const expectNoteToHave = (note, pitchClass, octave, pitch) => {
+const expectNoteToBe = (note, pitchClass, octave, pitch) => {
     expect(note.getPitchClass()).toBe(pitchClass);
     expect(note.getOctave()).toBe(octave);
     expect(note.getPitch()).toBe(pitch);
@@ -17,7 +17,7 @@ describe("Note.constructor", () => {
         const EXPECTED_PITCH = 369.99; // DO NOT use the PitchClass API
 
         const note = new Note(pitchClass);
-        expectNoteToHave(note, pitchClass, Note.DEFAULT_OCTAVE, EXPECTED_PITCH);
+        expectNoteToBe(note, pitchClass, Note.DEFAULT_OCTAVE, EXPECTED_PITCH);
     });
 
     test("Create a Note instance by assigning both a pitch class and octave", () => {
@@ -26,7 +26,7 @@ describe("Note.constructor", () => {
         const EXPECTED_PITCH = 369.99 * 2; // DO NOT use the PitchClass API
 
         const note = new Note(PITCH_CLASS, OCTAVE);
-        expectNoteToHave(note, PITCH_CLASS, OCTAVE, EXPECTED_PITCH);
+        expectNoteToBe(note, PITCH_CLASS, OCTAVE, EXPECTED_PITCH);
     });
 })
 
@@ -43,52 +43,49 @@ describe("Note.prototype.transposeTo", () => {
         note = new Note(ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE);
     });
 
+    test("Transposing to the same pitch class and octave", () => {
+        note.transposeTo(ORIGINAL_PITCH_CLASS);
+        expectNoteToBe(note, ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE, ORIGINAL_PITCH);
+    })
+
     test("Transposing to a higher pitch class without specifying an octave", () => {
         note.transposeTo(PitchClass.A);
-
-        expectNoteToHave(note, PitchClass.A, ORIGINAL_OCTAVE, 440);
+        expectNoteToBe(note, PitchClass.A, ORIGINAL_OCTAVE, 440);
     });
 
     test("Transposing to a lower pitch class without specifying an octave", () => {
         note.transposeTo(PitchClass.E_FLAT);
-
-        expectNoteToHave(note, PitchClass.E_FLAT, ORIGINAL_OCTAVE, 311.13);
+        expectNoteToBe(note, PitchClass.E_FLAT, ORIGINAL_OCTAVE, 311.13);
     });
 
     test("Transposing to a higher octave with the same pitch class", () => {
         note.transposeTo(ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE + 1);
-
-        expectNoteToHave(note, ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE + 1, ORIGINAL_PITCH * 2);
+        expectNoteToBe(note, ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE + 1, ORIGINAL_PITCH * 2);
     });
 
     test("Transposing to a lower octave with the same pitch class", () => {
         note.transposeTo(ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE - 1);
-
-        expectNoteToHave(note, ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE - 1, ORIGINAL_PITCH / 2);
+        expectNoteToBe(note, ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE - 1, ORIGINAL_PITCH / 2);
     });
 
     test("Transposing to a lower pitch class and lower octave", () => {
         note.transposeTo(PitchClass.C, ORIGINAL_OCTAVE - 1);
-
-        expectNoteToHave(note, PitchClass.C, ORIGINAL_OCTAVE - 1, 261.63 / 2);
+        expectNoteToBe(note, PitchClass.C, ORIGINAL_OCTAVE - 1, 261.63 / 2);
     });
 
     test("Transposing to a higher pitch class and lower octave", () => {
         note.transposeTo(PitchClass.B, ORIGINAL_OCTAVE - 1);
-
-        expectNoteToHave(note, PitchClass.B, ORIGINAL_OCTAVE - 1, 493.88 / 2);
+        expectNoteToBe(note, PitchClass.B, ORIGINAL_OCTAVE - 1, 493.88 / 2);
     });
 
     test("Transposing to a lower pitch class and higher octave", () => {
         note.transposeTo(PitchClass.D, ORIGINAL_OCTAVE + 1);
-
-        expectNoteToHave(note, PitchClass.D, ORIGINAL_OCTAVE + 1, 293.66 * 2);
+        expectNoteToBe(note, PitchClass.D, ORIGINAL_OCTAVE + 1, 293.66 * 2);
     });
 
     test("Transposing to a higher pitch class and higher octave", () => {
         note.transposeTo(PitchClass.A_FLAT, ORIGINAL_OCTAVE + 1);
-
-        expectNoteToHave(note, PitchClass.A_FLAT, ORIGINAL_OCTAVE + 1, 415.3 * 2);
+        expectNoteToBe(note, PitchClass.A_FLAT, ORIGINAL_OCTAVE + 1, 415.3 * 2);
     });
 });
 
@@ -105,45 +102,38 @@ describe("Note.prototype.transposeBy", () => {
         note = new Note(ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE);
     });
 
-    test("Transposing up within the same octave", () => {
-        const TRANSPOSE_LENGTH = 3;
-        note.transposeBy(TRANSPOSE_LENGTH);
+    test("Transposing zero half steps", () => {
+        note.transposeBy(0);
+        expectNoteToBe(note, ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE, ORIGINAL_PITCH);
+    });
 
-        expectNoteToHave(note, PitchClass.A, ORIGINAL_OCTAVE, 440);
+    test("Transposing up within the same octave", () => {
+        note.transposeBy(3);
+        expectNoteToBe(note, PitchClass.A, ORIGINAL_OCTAVE, 440);
     });
 
     test("Transposing down within the same octave", () => {
-        const TRANSPOSE_LENGTH = -3;
-        note.transposeBy(TRANSPOSE_LENGTH);
-
-        expectNoteToHave(note, PitchClass.E_FLAT, ORIGINAL_OCTAVE, 311.13);
+        note.transposeBy(-3);
+        expectNoteToBe(note, PitchClass.E_FLAT, ORIGINAL_OCTAVE, 311.13);
     });
 
     test("Transposing exactly one octave up", () => {
-        const TRANSPOSE_LENGTH = 12;
-        note.transposeBy(TRANSPOSE_LENGTH);
-
-        expectNoteToHave(note, ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE + 1, ORIGINAL_PITCH * 2);
+        note.transposeBy(12);
+        expectNoteToBe(note, ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE + 1, ORIGINAL_PITCH * 2);
     });
 
     test("Transposing exactly one octave down", () => {
-        const TRANSPOSE_LENGTH = -12;
-        note.transposeBy(TRANSPOSE_LENGTH);
-
-        expectNoteToHave(note, ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE - 1, ORIGINAL_PITCH / 2);
+        note.transposeBy(-12);
+        expectNoteToBe(note, ORIGINAL_PITCH_CLASS, ORIGINAL_OCTAVE - 1, ORIGINAL_PITCH / 2);
     });
 
     test("Transposing more than one octave up", () => {
-        const TRANSPOSE_LENGTH = 27;
-        note.transposeBy(TRANSPOSE_LENGTH);
-
-        expectNoteToHave(note, PitchClass.A, ORIGINAL_OCTAVE + 2, 1760);
+        note.transposeBy(27);
+        expectNoteToBe(note, PitchClass.A, ORIGINAL_OCTAVE + 2, 1760);
     });
 
     test("Transposing more than one octave down", () => {
-        const TRANSPOSE_LENGTH = -27;
-        note.transposeBy(TRANSPOSE_LENGTH);
-
-        expectNoteToHave(note, PitchClass.E_FLAT, ORIGINAL_OCTAVE - 2, 311.13 / 4);
+        note.transposeBy(-27);
+        expectNoteToBe(note, PitchClass.E_FLAT, ORIGINAL_OCTAVE - 2, 311.13 / 4);
     });
 });
