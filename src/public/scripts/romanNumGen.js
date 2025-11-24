@@ -76,6 +76,10 @@ export function updateAllChordDisplays() {
  * @contributors Nolan, Ethan, Ben
  */
 export function addChord() {
+
+    const minNumInversions = -2;
+    const maxNumInversions = 2;
+    
     const numChords = chordProgression.getNumChords();
     if (numChords >= MAX_CHORDS) return;
 
@@ -140,12 +144,19 @@ export function addChord() {
         }
     });
     
+
+    let changeInversion = document.createElement('button');
+
+    changeInversion.addEventListener("click", () => {
+    randomizeChordInversion(numChords, minNumInversions, maxNumInversions)});
+
     let newChordDisplay = document.createElement("div");
     newChordDisplay.id = `chord${numChords}`;
     newChordDisplay.className = `chordDisplay`;
     newChordDisplay.appendChild(newChordSymbolDisplay);
     newChordDisplay.appendChild(newChordNameDisplay);
     newChordDisplay.appendChild(chordNameButton);
+    newChordDisplay.appendChild(changeInversion);
 
     const chordProgressionDisplay = document.getElementById("chordProgressionDisplay");
     chordProgressionDisplay.appendChild(newChordDisplay);
