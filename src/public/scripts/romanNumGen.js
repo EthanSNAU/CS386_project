@@ -2,8 +2,7 @@
 import Chord from "./music/chord.js";
 import ChordProgression from "./music/chordProgression.js";
 import ChordRepresentationObserver from "./music/chordRepresentationObserver.js";
-import Scale from "./music/scale.js";
-import { PitchClass, ChordQuality, ReferentialScale } from "./music/enums";
+import { PitchClass, ChordQuality, ChordQualityType, ReferentialScale } from "./music/enums";
 import { getRandomArrayElement, getRandomInt, capitalizeFirstChar } from "./util.js";
 
 /**
@@ -22,6 +21,11 @@ export const MAX_CHORDS = 7;
  * True if the chord progression is displaying alphabetical symbols/names, false otherwise
  */
 let isDisplayingAlphabet = false;
+
+/**
+ * Variable to track which chord is being clicked
+ */
+let selectedChordIndex = null;
 
 /**
  * Chord progression object used to manage existing chords
@@ -151,6 +155,7 @@ export function addChord() {
     randomizeChordInversion(numChords, minNumInversions, maxNumInversions)});
 
     let newChordDisplay = document.createElement("div");
+    newChordDisplay.addEventListener("click", () => {selectedChordIndex = numChords;});
     newChordDisplay.id = `chord${numChords}`;
     newChordDisplay.className = `chordDisplay`;
     newChordDisplay.appendChild(newChordSymbolDisplay);
@@ -301,33 +306,52 @@ export function invertChord(index, numInversions) {
     updateChordDisplay(index);
 }
 
-
 /**
- * Sets a chord's quality to a random quality and updates the display
+ * Randomizes an individual chord's inversion based on its quality type
+ * Triads: 0–2  (root, 1st, 2nd inversion)
+ * Sevenths: 0–3 (root, 1st, 2nd, 3rd inversion)
+ * Other types: defaults to 0
  * @param {number} index Integer index of the chord to modify
- * @param {number} minNumInversions The minimum number of times to invert the chord. Can be negative.
- * @param {number} maxNumInversions The maximum number of times to invert the chord. Can be negative.
- * @contributors Nolan
+ * @contributors Chris
  */
-export function randomizeChordInversion(index, minNumInversions, maxNumInversions) {
-    invertChord(index, getRandomInt(minNumInversions, maxNumInversions));
+export function randomizeChordInversionsAuto(index) {
+    const chord = chordProgression.getChord(index);
+    const quality = chord.getQuality();
+    const type = ChordQuality.getType(quality);
+
+    let maxInversion;
+    if (type === ChordQualityType.TRIAD) {
+        maxInversion = 2;
+    } else if (type === ChordQualityType.SEVENTH) {
+        maxInversion = 3;
+    } else {
+        maxInversion = 0;
+    }
+
+    const randomInversion = getRandomInt(0, maxInversion);
+
+    invertChord(index, randomInversion);
 }
 
+/**
+ * Randomized the inversion of the currently selected chord
+ * @contributors Chris
+ */
+export function randomizeSelectedChordInversion() {
+    if (selectedChordIndex === null) return;
+    randomizeChordInversionsAuto(selectedChordIndex);
+}
 
 /**
  * Randomly inverts all chords
- * @contributors Nolan
+ * @contributors Nolan, Chris
  */
 export function randomizeAllChordInversions() {
-    const minNumInversions = -2;
-    const maxNumInversions = 2;
     const numChords = chordProgression.getNumChords();
-
     for (let i = 0; i < numChords; i++) {
-        randomizeChordInversion(i, minNumInversions, maxNumInversions);
+        randomizeChordInversionsAuto(i);
     }
 }
-
 
 /**
  * Toggles the current display mode between alphabetical and Roman numeral and updates all chord displays
@@ -473,7 +497,7 @@ export function init() {
 
     document.getElementById("randomizeChordRootNotesButton").addEventListener("click", randomizeAllChordRootNotes);
     document.getElementById("randomizeChordQualitiesButton").addEventListener("click", randomizeAllChordQualities);
-    document.getElementById("randomizeChordInversionsButton").addEventListener("click", randomizeAllChordInversions);
+    document.getElementById("randomSingleChordInversionButton").addEventListener("click", randomizeSelectedChordInversion);
     document.getElementById("toggleChordDisplayTypeButton").addEventListener("click", toggleChordDisplayType);
     document.getElementById("addChordButton").addEventListener("click", addChord);
     document.getElementById("hideChordNamesButton").addEventListener("click", hideAllChordNames);
