@@ -7,6 +7,7 @@ import Accidental from "./accidental.js";
  */
 const PitchClass = (() => {
     const VALUES = Object.freeze({
+        C_FLAT:  11,
         C:       0,
         C_SHARP: 1,
         D_FLAT:  1,
@@ -26,6 +27,7 @@ const PitchClass = (() => {
         A_SHARP: 10,
         B_FLAT:  10,
         B:       11,
+        B_SHARP: 0,
 
         NONE:    -1,
     });
@@ -75,8 +77,8 @@ const PitchClass = (() => {
         [VALUES.F]: {
             basePitch: 349.23,
             representations: [
-                { symbol: "E", accidental: Accidental.SHARP   },
                 { symbol: "F", accidental: Accidental.NATURAL },
+                { symbol: "E", accidental: Accidental.SHARP   },
             ]
         },
 
@@ -119,7 +121,7 @@ const PitchClass = (() => {
         },
 
         [VALUES.B]: {
-            basePitch: 492.88,
+            basePitch: 493.88,
             representations: [
                 { symbol: "B", accidental: Accidental.NATURAL },
                 { symbol: "C", accidental: Accidental.FLAT    },
@@ -196,6 +198,47 @@ const PitchClass = (() => {
         return SUPPORTED_PITCH_CLASSES.includes(pitchClass);
     }
 
+    const OCTAVE_HALF_STEP_LENGTH = 12;
+
+    /**
+     * Returns the minimum number of upwards half steps between two pitch classes.
+     * Doesn't take into account the octave.
+     * @param {PitchClass} basePitchClass   Starting pitch class
+     * @param {PitchClass} targetPitchClass End pitch class
+     * @returns {number} Minimum number of upward half steps between basePitchClass to targetPitchClass.
+     */
+    function getMinUpwardInterval(basePitchClass, targetPitchClass) {
+        let interval = targetPitchClass - basePitchClass;
+        if (interval < 0) interval += OCTAVE_HALF_STEP_LENGTH;
+        return interval;
+    }
+
+    /**
+     * Returns the minimum number of downward half steps between two pitch classes.
+     * Doesn't take into account the octave.
+     * @param {PitchClass} basePitchClass   Starting pitch class
+     * @param {PitchClass} targetPitchClass End pitch class
+     * @returns {number} Minimum number of downward half steps between basePitchClass to targetPitchClass.
+     */
+    function getMinDownwardInterval(basePitchClass, targetPitchClass) {
+        const upwardInterval = getMinUpwardInterval(basePitchClass, targetPitchClass);
+        if (upwardInterval === 0) return 0;
+        return OCTAVE_HALF_STEP_LENGTH - upwardInterval;
+    }
+
+    /**
+     * Returns the number of half steps from one note to another.
+     * @param   {PitchClass} basePitchClass    Starting pitch class
+     * @param   {number}     baseOctave        Starting octave
+     * @param   {PitchClass} targetPitchClass  Ending pitch class
+     * @param   {number}     targetOctave      Ending octave
+     * @returns {number} Number of half steps between the two notes. Positive values indicate upwards
+     *                   half steps while negative values indicate downward half steps.
+     */
+    function getInterval(basePitchClass, baseOctave, targetPitchClass, targetOctave) {
+        return (targetOctave - baseOctave) * OCTAVE_HALF_STEP_LENGTH + (targetPitchClass - basePitchClass);
+    }
+
     /**
      * List of {@link PitchClass}es supported by pitch class getter methods, such as {@link PitchClass.getRepresentation}.
      * @type PitchClass[]
@@ -209,6 +252,9 @@ const PitchClass = (() => {
         getRepresentation,
         getPitch,
         isSupported,
+        getMinUpwardInterval,
+        getMinDownwardInterval,
+        getInterval,
         SUPPORTED_PITCH_CLASSES
     });
 })();
