@@ -1,13 +1,17 @@
 /* ------------------------------------------- Imports ------------------------------------------- */
-const express = require('express'); // Local web server hosting
-const path = require('path'); // File path utilities
-const ejs = require('ejs'); // EJS rendering engine
-const fs = require('fs') // file system
+import express from "express";
+import path from "path";
+import ejs from "ejs";
+import fs from "fs"
+import { fileURLToPath } from "url";
 
 /* ------------------------------------------- Setup ------------------------------------------- */
 const app = express(); // create Express instance
 const PORT = 3000;
 const URL = 'http://localhost:' + PORT;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const STATIC_DIR = path.join(__dirname, 'public');
 const STATIC_SCRIPTS_DIR_NAME = 'scripts';

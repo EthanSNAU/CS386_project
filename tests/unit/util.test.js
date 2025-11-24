@@ -1,9 +1,8 @@
-const FILE_PATH = "../../src/public/scripts/util.js";
+import { getRandomInt, getRandomArrayElement, capitalizeFirstChar } from "../../src/public/scripts/util.js";
+
 const NUM_ITERATIONS = 100;
 
 /* ================================================= getRandomInt ================================================= */
-
-import { getRandomInt } from FILE_PATH;
 
 describe(`getRandomInt`, () => {
     let lowerBound = 1;
@@ -40,8 +39,6 @@ describe(`getRandomInt`, () => {
 
 /* ================================================= getRandomArrayElement ================================================= */
 
-import { getRandomArrayElement } from FILE_PATH;
-
 describe("getRandomArrayElement", () => {
     test("Get a random element from null", () => {
         expect(getRandomArrayElement(null)).toBe(null);
@@ -60,8 +57,6 @@ describe("getRandomArrayElement", () => {
 });
 
 /* ================================================= capitalizeFirstChar ================================================= */
-
-import { capitalizeFirstChar } from FILE_PATH;
 
 describe("capitalizeFirstChar", () => {
     test("Capitalize an empty string", () => {

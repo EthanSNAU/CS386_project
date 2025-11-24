@@ -1,9 +1,6 @@
 import Chord from "./chord.js";
 import Scale from "./scale.js";
 
-// documentation imports
-import { Accidental, PitchClass, ReferentialScale } from "./enums";
-
 const DEFAULT_OCTAVE = 4;
 
 /**
@@ -16,12 +13,11 @@ export default class ChordProgression {
     
     /**
      * Creates a ChordProgression instance.
-     * @param {PitchClass}       scaleRootPitchClass Pitch class of the referential scale's root note
-     * @param {ReferentialScale} referentialScale    Referential scale type
+     * @param {Scale} scale {@link Scale} for the chord progression to be in
      * @contributors Nolan
      */
-    constructor(scaleRootPitchClass, referentialScale) {
-        this.#scale = new Scale(scaleRootPitchClass, referentialScale);
+    constructor(scale) {
+        this.#scale = scale
         this.#chords = [];
         this.#chordRepresentations = [];
     }
@@ -52,7 +48,7 @@ export default class ChordProgression {
     /**
      * Adds a new chord to the progression.
      * @param {number} chordIndex The new chord's location in the chord progression
-     * @param {chord}  chord      The chord to add
+     * @param {Chord}  chord      The chord to add
      * @contributors Nolan
      */
     addChord(chordIndex, chord) {

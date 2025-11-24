@@ -1,6 +1,5 @@
 import { PitchClass } from "./enums";
 
-const DEFAULT_OCTAVE = 4;
 const OCTAVE_HALF_STEP_LENGTH = 12;
 
 /**
@@ -12,13 +11,15 @@ export default class Note {
     #octave
     #length // unused for now
 
+    static DEFAULT_OCTAVE = 4;
+
     /**
      * Creates a Note instance.
      * @param {PitchClass} pitchClass Pitch class for the note to play
      * @param {number} octave Octave for the note to play in
      * @contributors Nolan
      */
-    constructor(pitchClass, octave = DEFAULT_OCTAVE) {
+    constructor(pitchClass, octave = Note.DEFAULT_OCTAVE) {
         this.#pitchClass = pitchClass;
         this.#octave = octave;
         this.#pitch = PitchClass.getPitch(pitchClass, octave);
@@ -43,17 +44,38 @@ export default class Note {
     }
 
     /**
-     * Transposes the note relative to its current state.
+     * Gets the note's pitch/frequency.
+     * @returns The note's pitch in Hz.
+     */
+    getPitch() {
+        return this.#pitch;
+    }
+
+    /**
+     * Transposes the note relative to its current position.
      * @param {number} numHalfSteps The number of half steps to transpose the note by. Negative values tranpose down while
      *                              positive values transpose up. The target pitch class must be in {@link PitchClass.SUPPORTED_PITCH_CLASSES} 
      *                              to work.
      * @contributors Nolan
      */
     transposeBy(numHalfSteps) {
-        let newPitchClass = (this.#pitchClass + numHalfSteps) % OCTAVE_HALF_STEP_LENGTH;
-        while (newPitchClass < 0) newPitchClass += OCTAVE_HALF_STEP_LENGTH;
-        const newOctave = this.#octave + Math.trunc(numHalfSteps / OCTAVE_HALF_STEP_LENGTH);
-        this.transposeTo(newPitchClass, newOctave);
+        let newPitchClass = this.#pitchClass + numHalfSteps;
+        let octaveDiff = 0;
+
+        // TODO: make this more efficient (i'm too lazy to do math)
+        if (newPitchClass < 0) {
+            while (newPitchClass < 0) { // technically redundant but it makes the code more readable imo
+                newPitchClass += OCTAVE_HALF_STEP_LENGTH;
+                octaveDiff--;
+            }
+        } else if (newPitchClass > OCTAVE_HALF_STEP_LENGTH) {
+            while (newPitchClass > OCTAVE_HALF_STEP_LENGTH) {
+                newPitchClass -= OCTAVE_HALF_STEP_LENGTH;
+                octaveDiff++;
+            }
+        }
+
+        this.transposeTo(newPitchClass, this.#octave + octaveDiff);
     }
 
     /**

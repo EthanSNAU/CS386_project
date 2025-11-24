@@ -1,7 +1,8 @@
 // romanNumGen.js
-import ChordProgression from "./music/chordProgression.js";
 import Chord from "./music/chord.js";
+import ChordProgression from "./music/chordProgression.js";
 import ChordRepresentationObserver from "./music/chordRepresentationObserver.js";
+import Scale from "./music/scale.js";
 import { PitchClass, ChordQuality, ReferentialScale } from "./music/enums";
 import { getRandomArrayElement, getRandomInt, capitalizeFirstChar } from "./util.js";
 
@@ -25,7 +26,7 @@ let isDisplayingAlphabet = false;
 /**
  * Chord progression object used to manage existing chords
  */
-const chordProgression = new ChordProgression(PitchClass.C, ReferentialScale.IONIAN_MAJOR);
+const chordProgression = new ChordProgression(new Scale(PitchClass.A, ReferentialScale.IONIAN_MAJOR));
 
 
 /**
@@ -78,7 +79,7 @@ export function addChord() {
 
     const minNumInversions = -2;
     const maxNumInversions = 2;
-
+    
     const numChords = chordProgression.getNumChords();
     if (numChords >= MAX_CHORDS) return;
 
@@ -143,15 +144,25 @@ export function addChord() {
         }
     });
     
+
+    let changeInversion = document.createElement('button');
+
+    changeInversion.addEventListener("click", () => {
+    randomizeChordInversion(numChords, minNumInversions, maxNumInversions)});
+
     let newChordDisplay = document.createElement("div");
     newChordDisplay.id = `chord${numChords}`;
     newChordDisplay.className = `chordDisplay`;
     newChordDisplay.appendChild(newChordSymbolDisplay);
     newChordDisplay.appendChild(newChordNameDisplay);
     newChordDisplay.appendChild(chordNameButton);
+    newChordDisplay.appendChild(changeInversion);
 
     const chordProgressionDisplay = document.getElementById("chordProgressionDisplay");
     chordProgressionDisplay.appendChild(newChordDisplay);
+
+    const cycleRootButton = createChangeRootButton(numChords);
+    newChordDisplay.appendChild(cycleRootButton);
 
     updateChordDisplay(numChords);
 }
@@ -209,9 +220,62 @@ export function setChordQuality(index, quality) {
  * @contributors Nolan
  */
 export function randomizeChordQuality(index) {
-    setChordQuality(index, getRandomArrayElement(PitchClass.SUPPORTED_PITCH_CLASSES));
+    const randomQuality = getRandomArrayElement (ChordQuality.SUPPORTED_QUALITIES);
+    setChordQuality(index, randomQuality);
 }
 
+/**
+ * Sets a chord's quality to a random triad quality and updates the display
+ * @param {number} index Integer index of the chord to modify
+ * @contributors Chris
+ */
+export function randomizeChordQualityTriadOnly(index) {
+    const triads = ChordQuality.SUPPORTED_QUALITIES.filter(
+        q => ChordQuality.getType(q) === ChordQuality.TRIAD
+    );
+    setChordQuality(index, getRandomArrayElement(triads));
+}
+
+/**
+ * Sets a chord's quality to a random seventh quality and updates the display
+ * @param {number} index Integer index of the chord to modify
+ * @contributors Chris
+ */
+export function randomizeChordQualitySeventhOnly(index) {
+    const sevenths = ChordQuality.SUPPORTED_QUALITIES.filter(
+        q => ChordQuality.getType(q) === ChordQuality.SEVENTH
+    );
+    setChordQuality(index, getRandomArrayElement(sevenths));
+}
+
+/**
+ * Sets a chord's quality to a random quality from a user-provided list
+ * @param {number} index Integer index of the chord to modify
+ * @param {ChordQuality[]} allowedQualities Array of allowed chord qualities
+ * @contributors Chris
+ */
+export function randomizeChordQualityFromList(index, allowedQualities) {
+    setChordQuality(index, getRandomArrayElement(allowedQualities));
+}
+
+/**
+ * Sets a chord's quality using weighted random selection and updates the display
+ * @param {number} index Integer index of the chord to modify
+ * @param {{quality: ChordQuality, weight: number}[]} weights Array of weighted chord qualities
+ * @contributors Chris
+ */
+export function randomizeChordQualityWeighted(index, weights) {
+    const total = weights.reduce((sum, w) => sum + w.weight, 0);
+    let r = Math.random() * total;
+
+    for (const w of weights) {
+        if (r < w.weight) {
+            setChordQuality(index, w.quality);
+            return;
+        }
+        r -= w.weight;
+    }
+}
 
 /**
  * Randomizes all chords' qualities
@@ -351,6 +415,52 @@ export function showAllChordNames() {
     }
 }
 
+/**
+ * Creates a "Change Root" button for a chord and and changes the note on click
+ * @param {number} index The index of the chord
+ * @returns {HTMLButtonElement} The button element
+ * @contributors Adolfo
+ */
+export function createChangeRootButton(index) {
+    const container = document.createElement("div");
+    container.className = "changeRootContainer";
+
+    const button = document.createElement("button");
+    button.textContent = "Change Root";
+    button.className = "cycleRootButton";
+
+    const selector = document.createElement("div");
+    selector.className = "rootSelector";
+    selector.style.display = "none";
+    selector.addEventListener("click", (e) => e.stopPropagation());
+
+    PitchClass.SUPPORTED_PITCH_CLASSES.forEach((pc) => {
+        const pcButton = document.createElement("button");
+        pcButton.textContent = pc?.symbol ?? String(pc);
+        pcButton.className = "rootOptionButton";
+        pcButton.addEventListener("click", () => {
+            setChordRootNote(index, pc);
+            selector.style.display = "none";
+            button.classList.remove("active");
+        });
+        selector.appendChild(pcButton);
+    });
+
+    button.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const show = selector.style.display === "none";
+        selector.style.display = show ? "block" : "none";
+        button.classList.toggle("active", show);
+    });
+
+    document.addEventListener("click", () => {
+        selector.style.display = "none";
+        button.classList.remove("active");
+    });
+
+    container.append(button, selector);
+    return container;
+}
 
 /**
  * Called on DOM load. Attaches event listeners for hydration.

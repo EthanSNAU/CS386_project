@@ -2,7 +2,8 @@ import { Accidental, PitchClass, ReferentialScale } from "./enums";
 import { convertToRoman, convertToWord } from "./numberConversion.js"
 
 // TODO: add ability for users to toggle between different symbols (eg. G# vs. Ab)
-// TODO: add ability to switch to different referential scale
+
+const OCTAVE_HALF_STEP_LENGTH = 12;
 
 /**
  * Manages the alphabetical and Roman numeral representations of all pitch classes.
@@ -13,13 +14,15 @@ export default class Scale {
     #referentialScale
     #referentialScalePitchClasses // tracks the notes that are used for chord labeling
 
+    static DEFAULT_REFERENTIAL_SCALE = ReferentialScale.IONIAN_MAJOR;
+
     /**
      * Creates an instance of {@link Scale}.
-     * @param {PitchClass} pitchClass Pitch class to represent the beginning of the scale
+     * @param {PitchClass} rootPitchClass Pitch class to represent the root of the scale
      * @param {ReferentialScale} referentialScale Referential scale for Roman numeral conversion
      * @contributors Nolan
      */
-    constructor(rootPitchClass, referentialScale = ReferentialScale.IONIAN_MAJOR) {
+    constructor(rootPitchClass, referentialScale = Scale.DEFAULT_REFERENTIAL_SCALE) {
         this.#rootPitchClass = rootPitchClass;
         this.#referentialScale = referentialScale;
         this.transposeTo(rootPitchClass); // also updates the referential scale
@@ -53,11 +56,26 @@ export default class Scale {
             currentPitchClassIndex++;
         }
 
-        for (currentPitchClassIndex = 0; PitchClass.SUPPORTED_PITCH_CLASSES[currentPitchClassIndex] != this.#rootPitchClass; currentPitchClassIndex++) {
+        for (currentPitchClassIndex = 0; PitchClass.SUPPORTED_PITCH_CLASSES[currentPitchClassIndex] < this.#rootPitchClass; currentPitchClassIndex++) {
             addNewOctaveNote();
         }
 
         this.setReferentialScale(this.#referentialScale);
+    }
+
+    /**
+     * Transposes the scale relative to its current position.
+     * @param {number} numHalfSteps The number of half steps to transpose the scale by. Negative values tranpose down while
+     *                              positive values transpose up. The target pitch class must be in {@link PitchClass.SUPPORTED_PITCH_CLASSES} 
+     *                              to work.
+     * @contributors Nolan
+     */
+    transposeBy(numHalfSteps) {
+        let newPitchClass = (this.#rootPitchClass + numHalfSteps) % OCTAVE_HALF_STEP_LENGTH;
+        if (newPitchClass < 0) {
+            newPitchClass += OCTAVE_HALF_STEP_LENGTH;
+        }
+        this.transposeTo(newPitchClass);
     }
 
     /**
@@ -74,7 +92,7 @@ export default class Scale {
         let currentPitchClass = this.#rootPitchClass;
 
         for (const step of referentialScaleSteps) {
-            currentPitchClass += step;
+            currentPitchClass = (currentPitchClass + step) % OCTAVE_HALF_STEP_LENGTH;
             this.#referentialScalePitchClasses.push(currentPitchClass);
         }
 
@@ -92,6 +110,7 @@ export default class Scale {
             // (implement binary search for optimization later)
             let numIterations = 0;
             let currentReferentialIndex = minReferentialScaleIndex;
+            octaveRepresentation.romanRepresentations = [];
 
             while (this.#referentialScalePitchClasses[currentReferentialIndex] < octavePitchClass
                    && currentReferentialIndex < referentialScaleLength) {
@@ -106,13 +125,6 @@ export default class Scale {
                     numIterations++;
                     currentReferentialIndex++;
                 }
-            }
-
-            // if we've exhausted all options, then the octave pitch class is greater than all pitch classes
-            // in the referential scale, which is erroneous
-            if (numIterations >= referentialScaleLength) {
-                console.error("[Scale.prototype.constructor()] Error: Erroneous pitch class detected in the octave.");
-                return;
             }
 
             // if there is an exact match, use it and continue
@@ -144,7 +156,7 @@ export default class Scale {
             // TODO: if we add double sharps and double flats, use those representations instead of repeated sharps/flats
             let lowerSymbol = convertToRoman(lowerReferentialIndex + 1);
             let lowerName = convertToWord(lowerReferentialIndex + 1);
-            const numSharps = octavePitchClass - this.#referentialScalePitchClasses[lowerReferentialIndex];
+            const numSharps = PitchClass.getMinUpwardInterval(this.#referentialScalePitchClasses[lowerReferentialIndex], octavePitchClass);
 
             for (let i = 0; i < numSharps; i++) {
                 lowerSymbol = SHARP_REPRESENTATION.symbol + lowerSymbol;
@@ -153,7 +165,7 @@ export default class Scale {
 
             let upperSymbol = convertToRoman(upperReferentialIndex + 1);
             let upperName = convertToWord(upperReferentialIndex + 1);
-            const numFlats = this.#referentialScalePitchClasses[upperReferentialIndex] - octavePitchClass;
+            const numFlats = PitchClass.getMinUpwardInterval(octavePitchClass, this.#referentialScalePitchClasses[upperReferentialIndex]);
 
             for (let i = 0; i < numFlats; i++) {
                 upperSymbol = FLAT_REPRESENTATION.symbol + upperSymbol;
@@ -222,5 +234,23 @@ export default class Scale {
      */
     getRootPitchClass() {
         return this.#rootPitchClass;
+    }
+
+    /**
+     * Gets the scale's referential scale.
+     * @returns {ReferentialScale} The scale's referential scale.
+     * @contributors Nolan
+     */
+    getReferentialScale() {
+        return this.#referentialScale;
+    }
+
+    /**
+     * Gets a list of pitch classes that belong in the scale's referential scale.
+     * @returns {PitchClass[]} List of pitch classes in the scale's referential scale, ordered by interval (first element = root)
+     * @contributors Nolan
+     */
+    getReferentialScalePitchClasses() {
+        return this.#referentialScalePitchClasses;
     }
 }

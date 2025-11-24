@@ -234,7 +234,7 @@ export default class ChordRepresentationObserver {
      *  alphabetical: {
      *      name:        string,
      *      symbol:      string
-     *      accidental:  string,
+     *      accidental:  Accidental,
      *      lowerFigure: string,
      *      upperFigure: string,
      *      bassFigure:  string
@@ -242,7 +242,7 @@ export default class ChordRepresentationObserver {
      *  roman: {
      *      name:        string,
      *      symbol:      string
-     *      accidental:  string,
+     *      accidental:  Accidental,
      *      lowerFigure: string,
      *      upperFigure: string,
      *      bassFigure:  string
