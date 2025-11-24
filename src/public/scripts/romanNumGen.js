@@ -75,6 +75,10 @@ export function updateAllChordDisplays() {
  * @contributors Nolan, Ethan, Ben
  */
 export function addChord() {
+
+    const minNumInversions = -2;
+    const maxNumInversions = 2;
+
     const numChords = chordProgression.getNumChords();
     if (numChords >= MAX_CHORDS) return;
 
