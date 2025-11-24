@@ -1,7 +1,9 @@
 import Note from "./note.js"
 import { ChordPlaybackStyle, ChordQuality, PitchClass } from "./enums";
 
-const DEFAULT_OCTAVE = 4;
+// documentation imports
+import ChordRepresentationObserver from "./chordRepresentationObserver.js";
+
 const OCTAVE_HALF_STEP_LENGTH = 12;
 
 /**
@@ -12,23 +14,45 @@ export default class Chord {
     #intervals
     #playbackStyle
     #representationObserver
+    #noteFactory
+
+    static DEFAULT_OCTAVE = 4;
+    static DEFAULT_QUALITY = ChordQuality.MAJOR_TRIAD;
+    static DEFAULT_INVERSION = 0;
+    static DEFAULT_PLAYBACK_STYLE = ChordPlaybackStyle.BLOCK;
+
+    /**
+     * Default function that generates notes for chords.
+     * @param {PitchClass} pitchClass Pitch class of the note
+     * @param {number}     octave     Octave of the note
+     * @returns {Note} The note object to add to the chord
+     */
+    static defaultNoteFactory = (pitchClass, octave) => new Note(pitchClass, octave);
 
     /**
      * Creates a Chord instance.
-     * @param {PitchClass}         rootNotePitchClass Pitch class of the chord's root note.
-     * @param {number}             rootNoteOctave     Octave of the chord's root note.
-     * @param {ChordQuality}       quality            The chord's quality. Major by default.
-     * @param {number}             inversion          The chord's inversion (currently unused). Root by default.
-     * @param {ChordPlaybackStyle} playbackStyle      The chord's playback style (currently unused). Block by default.
+     * @param {PitchClass}                                       rootNotePitchClass Pitch class of the chord's root note.
+     * @param {number}                                           rootNoteOctave     Octave of the chord's root note.
+     * @param {ChordQuality}                                     quality            The chord's quality. Major by default.
+     * @param {number}                                           inversion          The chord's inversion (currently unused). Root by default.
+     * @param {ChordPlaybackStyle}                               playbackStyle      The chord's playback style (currently unused). Block by default.
+     * @param {(pitchClass: PitchClass, octave: number) => Note} noteFactory        The function that builds the note objects. Defaults to {@link Chord.defaultNoteFactory}
      * @contributors Nolan
      */
-    constructor(rootNotePitchClass, rootNoteOctave = DEFAULT_OCTAVE, quality = ChordQuality.MAJOR_TRIAD, inversion = 0,
-                playbackStyle = ChordPlaybackStyle.BLOCK) {
-
+    constructor(
+        rootNotePitchClass, 
+        rootNoteOctave = Chord.DEFAULT_OCTAVE,
+        quality = Chord.DEFAULT_QUALITY,
+        inversion = Chord.DEFAULT_INVERSION,
+        playbackStyle = ChordPlaybackStyle.BLOCK,
+        noteFactory = Chord.defaultNoteFactory
+    ) {
         this.#playbackStyle = playbackStyle;
+        this.#noteFactory = noteFactory;
+        this.#representationObserver = null;
 
         // TODO: take into account the inversion
-        this.#notes = [new Note(rootNotePitchClass, rootNoteOctave)]
+        this.#notes = [this.#noteFactory(rootNotePitchClass, rootNoteOctave)]
 
         // add notes based on the quality
         const chordQualitySteps = ChordQuality.getIntervals(quality);
@@ -38,14 +62,17 @@ export default class Chord {
         let currentOctave = rootNoteOctave;
 
         for (const step of chordQualitySteps) {
-            currentPitchClass = (currentPitchClass + step) % OCTAVE_HALF_STEP_LENGTH;
+            currentPitchClass += step;
+
             if (currentPitchClass >= OCTAVE_HALF_STEP_LENGTH) {
                 currentOctave += Math.trunc(currentPitchClass / OCTAVE_HALF_STEP_LENGTH);
                 currentPitchClass %= OCTAVE_HALF_STEP_LENGTH;
             }
 
-            this.#notes.push(new Note(currentPitchClass, currentOctave));
+            this.#notes.push(this.#noteFactory(currentPitchClass, currentOctave));
         }
+
+        this.invert(inversion);
     }
 
     /**
@@ -68,12 +95,33 @@ export default class Chord {
         return this.#notes[index].getOctave();
     }
 
+    /**
+     * Gets the number of notes in the chord.
+     * @returns {number} The integer number of notes in the chord
+     * @contributors Nolan
+     */
     getNumNotes() {
         return this.#notes.length;
     }
 
+    /**
+     * Gets the intervals between notes in the chord.
+     * @returns {number[]} An array of the number of half steps between each note. The first value is the 
+     *                     interval between the first and second note, the second value is the interval
+     *                     between the second and third note, and so on.
+     * @contributors Nolan
+     */
     getIntervals() {
-        return this.#intervals;
+        return [...this.#intervals];
+    }
+
+    /**
+     * Gets the chord's playback style.
+     * @returns {ChordPlaybackStyle} The playback style of the chord
+     * @contributors Nolan
+     */
+    getPlaybackStyle() {
+        return this.#playbackStyle;
     }
 
     /**
@@ -88,7 +136,7 @@ export default class Chord {
             note.transposeBy(numHalfSteps);
         }
 
-        this.notifyObservers(this);
+        this.notifyObservers();
     }
 
     /**
@@ -98,7 +146,8 @@ export default class Chord {
      * @contributors Nolan
      */
     transposeTo(pitchClass, octave = this.getOctaveAt(0)) {
-        const numHalfSteps = (octave - this.getOctaveAt(0)) * OCTAVE_HALF_STEP_LENGTH + (pitchClass - this.getPitchClassAt(0));
+        const numHalfSteps = PitchClass.getInterval(this.getPitchClassAt(0), this.getOctaveAt(0), pitchClass, octave);
+
         this.transposeBy(numHalfSteps);
     }
 
@@ -132,7 +181,7 @@ export default class Chord {
             if (note) {
                 note.transposeTo(currentPitchClass, currentOctave);
             } else {
-                this.#notes.push(new Note(currentPitchClass, currentOctave))
+                this.#notes.push(this.#noteFactory(currentPitchClass, currentOctave))
             }
 
             stepIndex++;
@@ -144,7 +193,7 @@ export default class Chord {
 
         this.#intervals = [...qualitySteps];
 
-        this.notifyObservers(this);
+        this.notifyObservers();
     }
 
     #invertUpOnce() {
@@ -200,22 +249,68 @@ export default class Chord {
             }
         }
 
-        this.notifyObservers(this);
+        this.notifyObservers();
     }
 
+    /**
+     * Attaches a representation observer to the chord. If the chord already has an observer, it is overwritten.
+     * @param {ChordRepresentationObserver} observer The observer object to attach
+     * @contributors Nolan
+     */
     addRepresentationObserver(observer) {
         this.#representationObserver = observer;
         observer.notify(this);
     }
 
+    /**
+     * Removes a representation observer from a chord.
+     * @contributors Nolan
+     */
     removeRepresentationObserver() {
         this.#representationObserver = null;
     }
 
-    notifyObservers() {
-        this.#representationObserver.notify(this);
+    /**
+     * Returns true if the chord has a representation observer
+     * @returns True if the chord has a representation observer, false otherwise
+     * @contributors Nolan
+     */
+    hasRepresentationObserver() {
+        return (this.#representationObserver !== null);
     }
 
+    /**
+     * Notifies all observers attached to the chord.
+     * @contributors Nolan
+     */
+    notifyObservers() {
+        if (this.hasRepresentationObserver()) {
+            this.#representationObserver.notify(this);
+        }
+    }
+
+    /**
+     * Gets the chord's representation information.
+     * @returns {{
+     *  alphabetical: {
+     *      name:        string,
+     *      symbol:      string
+     *      accidental:  string,
+     *      lowerFigure: string,
+     *      upperFigure: string,
+     *      bassFigure:  string
+     *  },
+     *  roman: {
+     *      name:        string,
+     *      symbol:      string
+     *      accidental:  string,
+     *      lowerFigure: string,
+     *      upperFigure: string,
+     *      bassFigure:  string
+     *  }
+     * }} The chord's current representation
+     * @contributors Nolan
+     */
     getRepresentation() {
         return this.#representationObserver.getRepresentation();
     }

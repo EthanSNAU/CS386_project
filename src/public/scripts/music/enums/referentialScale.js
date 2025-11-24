@@ -23,7 +23,7 @@ const ReferentialScale = (() => {
      * @contributors Nolan
      */
     function getIntervals(referentialScale) {
-        return PROPERTIES[referentialScale].steps;
+        return [...PROPERTIES[referentialScale].steps];
     }
 
     /**
