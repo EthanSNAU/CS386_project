@@ -130,8 +130,14 @@ export function addChord() {
     newChordNameDisplay.className = "chordNameDisplay";
 
     let chordNameButton = document.createElement('button');
-    chordNameButton.addEventListener("click", () => {hideChordName(numChords)});
-    chordNameButton.addEventListener("click", () => {showChordName(numChords)});
+
+    chordNameButton.addEventListener("click", () => {
+        if (chordNameButton.classList.toggle("active")) {
+            showChordName(numChords);
+        } else {
+            hideChordName(numChords);
+        }
+    });
     
     let newChordDisplay = document.createElement("div");
     newChordDisplay.id = `chord${numChords}`;
