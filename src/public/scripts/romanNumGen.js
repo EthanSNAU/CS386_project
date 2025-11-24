@@ -194,9 +194,62 @@ export function setChordQuality(index, quality) {
  * @contributors Nolan
  */
 export function randomizeChordQuality(index) {
-    setChordQuality(index, getRandomArrayElement(PitchClass.SUPPORTED_PITCH_CLASSES));
+    const randomQuality = getRandomArrayElement (ChordQuality.SUPPORTED_QUALITIES);
+    setChordQuality(index, randomQuality);
 }
 
+/**
+ * Sets a chord's quality to a random triad quality and updates the display
+ * @param {number} index Integer index of the chord to modify
+ * @contributors Chris
+ */
+export function randomizeChordQualityTriadOnly(index) {
+    const triads = ChordQuality.SUPPORTED_QUALITIES.filter(
+        q => ChordQuality.getType(q) === ChordQuality.TRIAD
+    );
+    setChordQuality(index, getRandomArrayElement(triads));
+}
+
+/**
+ * Sets a chord's quality to a random seventh quality and updates the display
+ * @param {number} index Integer index of the chord to modify
+ * @contributors Chris
+ */
+export function randomizeChordQualitySeventhOnly(index) {
+    const sevenths = ChordQuality.SUPPORTED_QUALITIES.filter(
+        q => ChordQuality.getType(q) === ChordQuality.SEVENTH
+    );
+    setChordQuality(index, getRandomArrayElement(sevenths));
+}
+
+/**
+ * Sets a chord's quality to a random quality from a user-provided list
+ * @param {number} index Integer index of the chord to modify
+ * @param {ChordQuality[]} allowedQualities Array of allowed chord qualities
+ * @contributors Chris
+ */
+export function randomizeChordQualityFromList(index, allowedQualities) {
+    setChordQuality(index, getRandomArrayElement(allowedQualities));
+}
+
+/**
+ * Sets a chord's quality using weighted random selection and updates the display
+ * @param {number} index Integer index of the chord to modify
+ * @param {{quality: ChordQuality, weight: number}[]} weights Array of weighted chord qualities
+ * @contributors Chris
+ */
+export function randomizeChordQualityWeighted(index, weights) {
+    const total = weights.reduce((sum, w) => sum + w.weight, 0);
+    let r = Math.random() * total;
+
+    for (const w of weights) {
+        if (r < w.weight) {
+            setChordQuality(index, w.quality);
+            return;
+        }
+        r -= w.weight;
+    }
+}
 
 /**
  * Randomizes all chords' qualities
