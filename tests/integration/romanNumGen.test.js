@@ -1,1 +1,0 @@
-const FILE_PATH = "../../src/public/scripts/romanNumGen.js";

@@ -146,16 +146,9 @@ export default class Chord {
      * @contributors Nolan
      */
     transposeTo(pitchClass, octave = this.getOctaveAt(0)) {
-        for (const note of this.#notes) {
-            console.log(note);
-        }
         const numHalfSteps = PitchClass.getInterval(this.getPitchClassAt(0), this.getOctaveAt(0), pitchClass, octave);
 
         this.transposeBy(numHalfSteps);
-
-        for (const note of this.#notes) {
-            console.log(note);
-        }
     }
 
     /**
