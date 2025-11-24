@@ -150,6 +150,9 @@ export function addChord() {
     const chordProgressionDisplay = document.getElementById("chordProgressionDisplay");
     chordProgressionDisplay.appendChild(newChordDisplay);
 
+    const cycleRootButton = createChangeRootButton(numChords);
+    newChordDisplay.appendChild(cycleRootButton);
+
     updateChordDisplay(numChords);
 }
 
@@ -401,6 +404,52 @@ export function showAllChordNames() {
     }
 }
 
+/**
+ * Creates a "Change Root" button for a chord and and changes the note on click
+ * @param {number} index The index of the chord
+ * @returns {HTMLButtonElement} The button element
+ * @contributors Adolfo
+ */
+export function createChangeRootButton(index) {
+    const container = document.createElement("div");
+    container.className = "changeRootContainer";
+
+    const button = document.createElement("button");
+    button.textContent = "Change Root";
+    button.className = "cycleRootButton";
+
+    const selector = document.createElement("div");
+    selector.className = "rootSelector";
+    selector.style.display = "none";
+    selector.addEventListener("click", (e) => e.stopPropagation());
+
+    PitchClass.SUPPORTED_PITCH_CLASSES.forEach((pc) => {
+        const pcButton = document.createElement("button");
+        pcButton.textContent = pc?.symbol ?? String(pc);
+        pcButton.className = "rootOptionButton";
+        pcButton.addEventListener("click", () => {
+            setChordRootNote(index, pc);
+            selector.style.display = "none";
+            button.classList.remove("active");
+        });
+        selector.appendChild(pcButton);
+    });
+
+    button.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const show = selector.style.display === "none";
+        selector.style.display = show ? "block" : "none";
+        button.classList.toggle("active", show);
+    });
+
+    document.addEventListener("click", () => {
+        selector.style.display = "none";
+        button.classList.remove("active");
+    });
+
+    container.append(button, selector);
+    return container;
+}
 
 /**
  * Called on DOM load. Attaches event listeners for hydration.
